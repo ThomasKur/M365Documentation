@@ -68,20 +68,15 @@ $docnew | Write-M365DocWord -FullDocumentationPath "c:\temp\$($doc.CreationDate.
 
 Other options of the Optimize-M365Doc command are:
 
-- UseTranslationFiles
-If available the function will translate property names with the name in the UI. W
+- *UseTranslationFiles:* If available the function will translate property names with the name in the UI. W
 Note:
 These Translations need to be created manually, only a few are translated yet. If you are willing
 to support this project. You can do this by [translating the json files](https://github.com/ThomasKur/M365Documentation/blob/master/AddTranslation.md) which are mentioned to you when you generate the documentation in your tenant.
 
-- UseCamelCase
-If no tranlsation is available for a property or the -UseTranslationFiles switch was not used, then property names are beautified based on Caml case standard.
+- *UseCamelCase:* If no tranlsation is available for a property or the -UseTranslationFiles switch was not used, then property names are beautified based on Caml case standard.
 
-- MaxStringLengthSettings
-Values with texts longer than the amount of characters specified by this property then they are trimmed.
+- *MaxStringLengthSettings:* Values with texts longer than the amount of characters specified by this property then they are trimmed.
 
-- ExcludeEmptyValues
-Properties with empty values are removed from the output.
+- *ExcludeEmptyValues:* Properties with empty values are removed from the output.
 
-- ExcludeProperties
-Properties with these names are skipped and remove from the output. This can be helpful to remove for example the id or created by property.
+- *ExcludeProperties:* Properties with these names are skipped and remove from the output. This can be helpful to remove for example the id or created by property.
