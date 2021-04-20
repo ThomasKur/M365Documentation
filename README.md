@@ -1,6 +1,6 @@
 # Microsoft 365 Automatic Documentation
 
-<img align="right" src="https://github.com/ThomasKur/M365Documentation/raw/master/Logo/M365DocumentationLogo.png" width="300px" alt="Automatic M365 Documentation Logo">Automatic Microsoft 365 Documentation to simplify the life of admins and consultants. You can automatically document systems like:
+<img align="right" src="https://github.com/ThomasKur/M365Documentation/raw/main/Logo/M365DocumentationLogo.png" width="300px" alt="Automatic M365 Documentation Logo">Automatic Microsoft 365 Documentation to simplify the life of admins and consultants. You can automatically document systems like:
 
 - Microsoft Endpoint Manager / Intune
 - Azure AD
@@ -81,7 +81,6 @@ The following entities are documented:
 - Azure AD Conditional Access Policies
 - Translate referenced id's to real object names (users, groups, roles and applications)
 
-
 ## Issues / Feedback
 
 For any issues or feedback related to this module, please register for GitHub, and post your inquiry to this project's issue tracker.
@@ -95,9 +94,5 @@ For any issues or feedback related to this module, please register for GitHub, a
 @MScholtes for the Transponse-Object example <https://github.com/MScholtes/TechNet-Gallery>
 
 @MEM_MVP for the continious feedback and translations
-
-@dads07a for adding Application protection Policies to the documentation
-
-@mirkocolemberg for the help and testing of the script.
 
 ![Created by baseVISION](https://www.basevision.ch/wp-content/uploads/2015/12/baseVISION-Logo_RGB.png)
