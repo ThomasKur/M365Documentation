@@ -1,6 +1,6 @@
 ﻿$ModulePath = ".\PSModule\M365Documentation"
-$Icon = "https://github.com/ThomasKur/M365Documentation/raw/master/Logo/M365DocumentationLogo.png"
-$License = "https://github.com/ThomasKur/M365Documentation/blob/master/LICENSE"
+$Icon = "https://raw.githubusercontent.com/ThomasKur/M365Documentation/main/Logo/M365DocumentationLogo.png"
+$License = "https://github.com/ThomasKur/M365Documentation/blob/main/LICENSE"
 #region UI 
 $yes = New-Object System.Management.Automation.Host.ChoiceDescription "&Yes","Description."
 $no = New-Object System.Management.Automation.Host.ChoiceDescription "&No","Description."
@@ -79,7 +79,7 @@ Test-ModuleManifest -Path "$ModulePath\M365Documentation.psd1" -ErrorAction Stop
     $cert = get-item Cert:\CurrentUser\My\* -CodeSigningCert | Out-GridView -OutputMode Single
     $PSFiles = Get-ChildItem -Path $env:TEMP\M365Documentation -Recurse | Where-Object {$_.Extension -eq ".ps1" -or $_.Extension -eq ".psm1"}
     foreach($PSFile in $PSFiles){
-        Set-AuthenticodeSignature -Certificate $cert -TimestampServer http://timestamp.globalsign.com/scripts/timstamp.dll -FilePath ($PSFile.FullName) -Verbose
+        Set-AuthenticodeSignature -Certificate $cert -TimestampServer http://timestamp.digicert.com -FilePath ($PSFile.FullName) -Verbose
     }
 #endregion
 $PSGallerAPIKey = Read-Host "Insert PSGallery API Key"
