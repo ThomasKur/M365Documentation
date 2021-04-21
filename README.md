@@ -11,7 +11,7 @@ This is the successor to the IntuneDocumentation module and has much more option
 
 - Output to Json
   - Backup your configuration and create documentation later
-  - Compare your configuration over time for example with http://www.jsondiff.com/
+  - Compare your configuration over time for example with <http://www.jsondiff.com/>
 - Output to CSV
 - Flexible Authentication with MSAL.PS
   - Support for Certificate and Secret based Authentication
@@ -87,12 +87,13 @@ For any issues or feedback related to this module, please register for GitHub, a
 
 ## Thanks to
 
+@MEM_MVP for the continious feedback and 10000 translations!!!! Thank you!
+
 @Microsoftgraph for the PowerShell Examples: <https://github.com/microsoftgraph/powershell-intune-samples>
 
-@guidooliveira for the PSWord Module, which enables the creation of the Word file. <https://github.com/guidooliveira/PSWord>
+@guidooliveira / @PrzemyslawKlys for the PSWriteWord Module, which enables the creation of the Word file. <https://github.com/EvotecIT/PSWriteWord>
 
 @MScholtes for the Transponse-Object example <https://github.com/MScholtes/TechNet-Gallery>
 
-@MEM_MVP for the continious feedback and translations
 
 ![Created by baseVISION](https://www.basevision.ch/wp-content/uploads/2015/12/baseVISION-Logo_RGB.png)
