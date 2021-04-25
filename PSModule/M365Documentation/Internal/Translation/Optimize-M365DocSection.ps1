@@ -177,7 +177,9 @@ Function Optimize-M365DocSection(){
                 if($null -eq $Value){
                     $Value = ""
                 } else {
-                    $value = $value.Trim()
+                    if($value.GetType().Name -ne "Boolean" -and $value.GetType().Name -ne "System.Boolean"){
+                        $value = $value.Trim()
+                    }
                 }
                 
                 try{
