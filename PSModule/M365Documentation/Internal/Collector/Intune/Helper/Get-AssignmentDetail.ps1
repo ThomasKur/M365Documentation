@@ -20,10 +20,19 @@ Function Get-AssignmentDetail(){
 
             if($Assignments.count -gt 1){
                 foreach($Assignment in $Assignments){
-                    $ExtendedInfo += Get-AssignmentDetailSingle -Assignment $Assignment
+                    try{
+                        $ExtendedInfo += Get-AssignmentDetailSingle -Assignment $Assignment
+                    } catch {
+                        Write-Warning -Message "Assignment not documented, most often caused because AAD group was deleted."
+                    }
+                    
                 }
             } else {
-                $ExtendedInfo += Get-AssignmentDetailSingle -Assignment $Assignments
+                try{
+                    $ExtendedInfo += Get-AssignmentDetailSingle -Assignment $Assignments
+                } catch {
+                    Write-Warning -Message "Assignment not documented, most often caused because AAD group was deleted."
+                }
             }
             if($null -ne $ExtendedInfo){
                 $DocSecAssignment.Objects = $ExtendedInfo 
