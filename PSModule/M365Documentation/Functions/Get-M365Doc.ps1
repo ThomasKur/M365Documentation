@@ -52,11 +52,11 @@ Function Get-M365Doc(){
 
     #>
     [OutputType('Doc')]
-    [CmdletBinding()]
+    [CmdletBinding(DefaultParameterSetName="Online-Exclude")]
     Param(
  
-        [Parameter(ParameterSetName = "Online-Exclude",Mandatory)]
-        [Parameter(ParameterSetName = "Online-Include",Mandatory)]
+        [Parameter(ParameterSetName="Online-Exclude",Mandatory=$true)]
+        [Parameter(ParameterSetName="Online-Include",Mandatory=$true)]
         [ArgumentCompleter(
             {
                 
@@ -77,7 +77,7 @@ Function Get-M365Doc(){
         )]
         [string[]]$Components,
 
-        [Parameter(ParameterSetName = "Online-Exclude",Mandatory)]
+        [Parameter(ParameterSetName="Online-Exclude",Mandatory=$false)]
         [ArgumentCompleter(
             {
                 
@@ -93,7 +93,7 @@ Function Get-M365Doc(){
         )]
         [string[]]$ExcludeSections,
 
-        [Parameter(ParameterSetName = "Online-Include",Mandatory)]
+        [Parameter(ParameterSetName="Online-Include",Mandatory=$true)]
         [ArgumentCompleter(
             {
                 
@@ -109,7 +109,7 @@ Function Get-M365Doc(){
         )]
         [string[]]$IncludeSections,
 
-        [Parameter(ParameterSetName = "Backup",Mandatory)]
+        [Parameter(ParameterSetName="Backup",Mandatory=$true)]
         [ValidateScript({
             if($_ -notmatch "(\.json)"){
                 throw "The file specified in the path argument must be a valid M365 documentation backup of type json."
