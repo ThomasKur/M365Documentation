@@ -1,14 +1,14 @@
-Function Get-MdmConfigurationProfile(){
+Function Get-MdmWindowsUpdate(){
     <#
     .SYNOPSIS
-    This function is used to get the all configuration profiles from the Beta Graph API REST interface
+    This function is used to get the all Windows Update configuration profiles from the Beta Graph API REST interface
     .DESCRIPTION
-    The function connects to the Graph API Interface and gets the configuration profiles
+    The function connects to the Graph API Interface and gets the Windows Update configuration profiles
     .EXAMPLE
-    Get-MdmConfigurationProfile
-    Returns the configuration profiles configured in Intune
+    Get-MdmWindowsUpdate
+    Returns the Windows Update configuration profiles configured in Intune
     .NOTES
-    NAME: Get-MdmConfigurationProfile
+    NAME: Get-MdmWindowsUpdate
     #>
     [OutputType('DocSection')]
     [cmdletbinding()]
@@ -16,13 +16,13 @@ Function Get-MdmConfigurationProfile(){
 
     $DocSec = New-Object DocSection
 
-    $DocSec.Title = "Device Configuration"
-    $DocSec.Text = "This section contains a list of all device configuration profiles available in Intune."
+    $DocSec.Title = "Windows Update Configuration"
+    $DocSec.Text = "This section contains a list of all Windows Update configuration profiles available in Intune."
 
     $ReturnObj = @()
 
     $Policies = Invoke-DocGraph -Path "/deviceManagement/deviceConfigurations" -Beta 
-    foreach($Policy in ($Policies.Value | Where-Object { $_.'@odata.type' -ne "#microsoft.graph.windowsUpdateForBusinessConfiguration"})){
+    foreach($Policy in ($Policies.Value | Where-Object { $_.'@odata.type' -eq "#microsoft.graph.windowsUpdateForBusinessConfiguration"})){
         $PolicyA = (Invoke-DocGraph -Path "/deviceManagement/deviceConfigurations/$($Policy.Id)/assignments" -Beta).value
         
         $DocSecSingle = New-Object DocSection
