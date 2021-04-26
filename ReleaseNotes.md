@@ -1,5 +1,14 @@
 # Release Notes
 
+## 3.0.1 - 26.04.2021 - Thomas Kurth
+
+- Fix ParameterDefault on Get-M365Doc
+- Add try catch when getting Azure AD groups
+- Bugix trim when value is a boolean
+- Update translations
+- Extend Azure AD Documentation
+- Separate Windows Update from Configuration Profile
+
 ## 3.0.0 - 19.04.2021 - Thomas Kurth
 
 - Migrated from IntuneDocumentation to M365Documentation module

@@ -80,6 +80,10 @@ The following entities are documented:
 
 - Azure AD Conditional Access Policies
 - Translate referenced id's to real object names (users, groups, roles and applications)
+- Domains
+- Feature Rollout Policy
+- Organizational Settings
+- Administrative Units
 
 ## Issues / Feedback
 
