@@ -68,10 +68,10 @@ $docnew | Write-M365DocWord -FullDocumentationPath "c:\temp\$($doc.CreationDate.
 
 Other options of the Optimize-M365Doc command are:
 
-- *UseTranslationFiles:* If available the function will translate property names with the name in the UI. W
+- *UseTranslationFiles:* If available the function will translate property names with the name in the UI.
 Note:
 These Translations need to be created manually, only a few are translated yet. If you are willing
-to support this project. You can do this by [translating the json files](https://github.com/ThomasKur/M365Documentation/blob/master/AddTranslation.md) which are mentioned to you when you generate the documentation in your tenant.
+to support this project. You can do this with the help of Invoke-M365DocTranslationUI.
 
 - *UseCamelCase:* If no tranlsation is available for a property or the -UseTranslationFiles switch was not used, then property names are beautified based on Caml case standard.
 
