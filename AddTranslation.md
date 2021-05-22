@@ -1,6 +1,6 @@
 # Add translations
 
-When using the parameter UseTranslationBeta the api names will be translated to the labels used in the Intune Portal. Some of the Intune Configuration Profiles are not translated due to high effort which is needed to do this. But you can help translating them and make the project better for everybody. 
+When using the parameter UseTranslationBeta the api names will be translated to the labels used in the Microsoft Portals. Some of the documented objects are not translated due to high effort which is needed to do this. But you can help translating them and make the project better for everybody.
 
 |  Image  |  Description |
 |--- |--- |
