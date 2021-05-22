@@ -1,4 +1,17 @@
-﻿
+﻿$dllFolders = @('Dll')
+
+# Importing all Dll's required for the module from the subfolders.
+ForEach ($folder in $dllFolders) {
+    $folderPath = Join-Path -Path $PSScriptRoot -ChildPath $folder
+    If (Test-Path -Path $folderPath)
+    {
+        Write-Verbose -Message "Importing from $folder"
+        $dlls = Get-ChildItem -Path $folderPath -Recurse -Filter '*.dll'
+        Add-Type -Path $dlls.FullName
+    } else {
+         Write-Warning "Path $folderPath not found. Some parts of the module will not work."
+    }
+}
 
 $functionFolders = @('Functions', 'Internal')
 

@@ -135,7 +135,7 @@ Function Get-M365Doc(){
         # Authentication
         # verify token
         if (-not ($script:token -and $script:token.ExpiresOn.LocalDateTime -ge $(Get-Date))) {
-            throw "Please connect first via Connect-Documentation"
+            throw "Please connect first via Connect-M365Doc"
         }
 
         $Data = New-Object Doc

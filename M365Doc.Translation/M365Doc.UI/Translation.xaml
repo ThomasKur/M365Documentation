@@ -1,0 +1,99 @@
+﻿<Window x:Class="M365Doc.UI.Translation"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:M365Doc.UI"
+        mc:Ignorable="d"
+        Title="Microsoft 365 Automatic Documentation - Translation Helper #WPNinjaS" Height="450" Width="800">
+    <Window.Resources>
+        <Style x:Key="BackgroundStyle" TargetType="DataGridCell">
+            <Setter Property="IsTabStop" Value="False"/>
+            <Setter Property="Focusable" Value="False"/>
+            <Setter Property="Background" Value="LightGray" />
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding DataType}" Value="System.Boolean">
+                    <Setter Property="IsTabStop" Value="True"/>
+                    <Setter Property="Focusable" Value="True"/>
+                    <Setter Property="Background" Value="Transparent"/>
+                    <Setter Property="Foreground" Value="Black"/>
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+    </Window.Resources>
+    <Grid >
+        <DockPanel>
+            <Menu DockPanel.Dock="Top">
+                <MenuItem Header="_File">
+                    <MenuItem Header="_Save for local testing" Click="SaveLocal_Click"/>
+                    <MenuItem Header="_Submit to Community"/>
+                    <MenuItem Header="_Close"/>
+                </MenuItem>
+                <MenuItem Header="_About">
+                    <MenuItem Header="_License"  Click="License_Click"/>
+                    <MenuItem Header="_Info" Click="Info_Click"/>
+                </MenuItem>
+            </Menu>
+            <TabControl>
+                <TabItem Header="1 - Start">
+                    <Border Padding="10">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition></ColumnDefinition>
+                                <ColumnDefinition></ColumnDefinition>
+                            </Grid.ColumnDefinitions>
+                            <Label Grid.Column="0" Content="Select data type to translate:"></Label>
+                            <ComboBox Grid.Column="1" x:Name="OdataFileTypes" ItemsSource="{Binding TranslationFileCollection}"  DisplayMemberPath="ClassName" SelectionChanged="OdataFileTypes_SelectionChanged" VerticalAlignment="Top" />
+                        </Grid>
+                    </Border>
+                </TabItem>
+                <TabItem Header="2 - Translate">
+                    <Border Padding="10">
+                        <DockPanel LastChildFill="True" >
+                            <Label DockPanel.Dock="Top">Translation tips can be found on the projects github repo.</Label>
+                            <DataGrid MinHeight="200px" ItemsSource="{Binding TranslationElementCollection}" AutoGenerateColumns="False" VerticalScrollBarVisibility="Auto" CellEditEnding="Translation_CellEditEnding">
+                                <DataGrid.Columns>
+                                    <DataGridTextColumn Binding="{Binding Id}" Header="Id" IsReadOnly="True" />
+                                    <DataGridTextColumn Binding="{Binding Section}" Header="Section"/>
+                                    <DataGridTextColumn Binding="{Binding Name}" Header="Name"/>
+                                    <DataGridTextColumn Binding="{Binding DataType}" Header="DataType" IsReadOnly="True" />
+                                    <DataGridTextColumn Binding="{Binding ValueTrue}" Header="Value True" CellStyle="{StaticResource BackgroundStyle}"/>
+                                    <DataGridTextColumn Binding="{Binding ValueFalse}" Header="Value False" CellStyle="{StaticResource BackgroundStyle}"/>
+                                </DataGrid.Columns>
+                            </DataGrid>
+
+                        </DockPanel>
+                    </Border>
+                </TabItem>
+                <TabItem Header="3 - Test">
+                    <Border Padding="10">
+                        <StackPanel>
+                            <Button Content="Save for local testing" Click="SaveLocal_Click"/>
+                            <Label Content="Rerun the PowerShell command to create your documentation again and check if the change is as wished."/>
+                        </StackPanel>
+                    </Border>
+                </TabItem>
+                <TabItem Header="4 - Submit">
+                    <Border Padding="10">
+                        <Grid VerticalAlignment="Top">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition></ColumnDefinition>
+                                <ColumnDefinition></ColumnDefinition>
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition></RowDefinition>
+                                <RowDefinition></RowDefinition>
+                                <RowDefinition></RowDefinition>
+                            </Grid.RowDefinitions>
+                            <Label Grid.Row="0" Grid.Column="0" Content="Your Twitter handle (Optional, to be named as Contributor):"></Label>
+                            <TextBox Grid.Row="0" Grid.Column="1" x:Name="TwitterHandle" TextWrapping="NoWrap"/>
+                            <Label Grid.Row="1" Grid.Column="0" Content="Your Mail address (Optional, if there any questions from my side):"></Label>
+                            <TextBox Grid.Row="1" Grid.Column="1" x:Name="MailHandle" TextWrapping="NoWrap"/>
+                            <Button Grid.Row="2" Grid.Column="1" Content="Submit to Community" Click="SubmitToCommunity_Click"/>
+                        </Grid>
+                    </Border>
+                </TabItem>
+            </TabControl>
+        </DockPanel>
+    </Grid>
+</Window>

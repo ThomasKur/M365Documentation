@@ -92,12 +92,13 @@ Function Optimize-M365Doc(){
         ########################################################
         
         if($Script:NewTranslationFiles.Count -gt 0 -and $UseTranslationFiles){
-            Write-Information "You used the option to translate API properties. Some of the configurations of your tenant could not be translated because translations are missing."
+            $Message = "You used the option to translate API properties. Some of the configurations of your tenant could not be translated because translations are missing."
             foreach($file in ($Script:NewTranslationFiles | Select-Object -Unique)){
-                Write-Information " - $($file.Replace('Internal\..\',''))"
+                $Message = $Message + [System.Environment]::NewLine + " - $(Split-Path $file -leaf)"
             }
-            Write-Information "You can support the project by translating and submitting the files as issue on the project page. Then it will be included for the future."
-            Write-Information "Follow the guide here https://github.com/ThomasKur/IntuneDocumentation/blob/master/AddTranslation.md" 
+            $Message = $Message + [System.Environment]::NewLine + [System.Environment]::NewLine + "These Translations need to be created manually, only a few are translated yet. If you are willing to support this project. You can do this with the help of Invoke-M365DocTranslationUI."
+            $Message = $Message + [System.Environment]::NewLine + "Follow the guide here https://github.com/ThomasKur/M365Documentation/blob/main/AddTranslation.md" 
+            Write-Warning $Message
         }
         
         Write-Information "End Script $Scriptname"

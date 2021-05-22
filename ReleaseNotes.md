@@ -1,5 +1,9 @@
 # Release Notes
 
+## 3.0.2 - 26.04.2021 - Thomas Kurth
+
+- Add Translation UI which helps users to simply contribute to the project (Invoke-M365DocTranslationUI).
+
 ## 3.0.1 - 26.04.2021 - Thomas Kurth
 
 - Fix ParameterDefault on Get-M365Doc
