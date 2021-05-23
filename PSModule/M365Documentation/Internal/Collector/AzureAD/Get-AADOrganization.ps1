@@ -18,7 +18,7 @@ Function Get-AADOrganization(){
 
     $DocSec.Title = "Organization"
     $DocSec.Text = "Lists all Organizational settings."
-    $DocSec.Objects = (Invoke-DocGraph -Path "/organization").Value
+    $DocSec.Objects = (Invoke-DocGraph -Path "/organization?`$select=id,deletedDateTime,businessPhones,city,country,countryLetterCode,createdDateTime,displayName,isMultipleDataLocationsForServicesEnabled,marketingNotificationEmails,onPremisesLastSyncDateTime,onPremisesSyncEnabled,postalCode,preferredLanguage,securityComplianceNotificationMails,securityComplianceNotificationPhones,state,street,technicalNotificationMails,tenantType,directorySizeQuota,privacyProfile").Value
     $DocSec.Transpose = $true
 
     if($null -eq $DocSec.Objects){
@@ -27,4 +27,5 @@ Function Get-AADOrganization(){
         return $DocSec
     }
     
+
 }

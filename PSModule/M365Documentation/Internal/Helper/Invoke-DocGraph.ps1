@@ -24,7 +24,10 @@ Function Invoke-DocGraph(){
         [string]$BaseUrl = "https://graph.microsoft.com/",
 
         [Parameter(Mandatory=$false,ParameterSetName = "Path")]
-        [switch]$Beta
+        [switch]$Beta,
+
+        [Parameter(Mandatory=$false,ParameterSetName = "Path")]
+        [string]$AcceptLanguage
 
     )
     if($PSCmdlet.ParameterSetName -eq "Path"){
@@ -37,7 +40,11 @@ Function Invoke-DocGraph(){
     }
 
     try{
-        $value = Invoke-RestMethod -Headers @{Authorization = "Bearer $($script:token.AccessToken)" } -Uri  $FullUrl -Method Get -ErrorAction Stop
+        $header = @{Authorization = "Bearer $($script:token.AccessToken)"}
+        if($AcceptLanguage){
+            $header.Add("Accept-Language",$AcceptLanguage)
+        }
+        $value = Invoke-RestMethod -Headers $header -Uri  $FullUrl -Method Get -ErrorAction Stop
     } catch {
         
         if($_.Exception.Response.StatusCode -eq "Forbidden"){
