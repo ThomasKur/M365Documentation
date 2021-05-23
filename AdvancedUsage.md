@@ -4,6 +4,25 @@ This section covers advanced scenarios of the documentation solution.
 
 ## Custom App registration for silent execution
 
+Per default the module will use an app registration hosted in my tenant, which is completely free to use. But sometimes companies have restrictions and would like to create their own app registrations, especially when the documentation should be generated silently.
+
+You can create the app registration on your own with these permission. If you can't grant specific permissions, then the documentation module will still work but the part which requires the permission will not be documented.
+
+Current list of scopes:
+"AccessReview.Read.All","Agreement.Read.All","AppCatalog.Read.All","Application.Read.All","CloudPC.Read.All","ConsentRequest.Read.All","Device.Read.All","DeviceManagementApps.Read.All","DeviceManagementConfiguration.Read.All","DeviceManagementManagedDevices.Read.All","DeviceManagementRBAC.Read.All","DeviceManagementServiceConfig.Read.All","Directory.Read.All","Domain.Read.All","Organization.Read.All","Policy.Read.All","Policy.ReadWrite.AuthenticationMethod","Policy.ReadWrite.FeatureRollout","PrintConnector.Read.All","Printer.Read.All","PrinterShare.Read.All","PrintSettings.Read.All","PrivilegedAccess.Read.AzureAD","PrivilegedAccess.Read.AzureADGroup","PrivilegedAccess.Read.AzureResources","User.Read"
+
+```powershell
+
+$p = New-M365DocAppRegistration
+$p | fl
+
+ClientID               : d5cf6364-82f7-4024-9ac1-73a9fd2a6ec3
+ClientSecret           : S03AESdMlhLQIPYYw/cYtLkGkQS0H49jXh02AS6Ek0U=
+ClientSecretExpiration : 21.07.2025 21:39:02
+TenantId               : d873f16a-73a2-4ccf-9d36-67b8243ab99a
+
+
+```
 
 ## Output to Json
 

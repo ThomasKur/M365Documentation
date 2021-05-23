@@ -82,6 +82,10 @@ The following entities are documented:
 - Translate referenced id's to real object names (users, groups, roles and applications)
 - Domains
 - Feature Rollout Policy
+- Authentication policies
+- Role Assignments
+- Mobile Device Management Policies
+- Subscriptions / SKU
 - Organizational Settings
 - Administrative Units
 

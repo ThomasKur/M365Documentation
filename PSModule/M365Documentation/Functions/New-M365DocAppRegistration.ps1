@@ -1,10 +1,10 @@
-Function New-DocumentationAppRegistration(){
+Function New-M365DocAppRegistration(){
     <#
     .DESCRIPTION
-    This script will create an App registration(WPNinjas.eu Automatic Documentation) in Azure AD. Global Admin privileges are required during execution of this function. Afterwards the created clint secret can be used to execute the Intunde Documentation silently. 
+    This script will create an App registration (WPNinjas.eu Automatic Documentation) in Azure AD. Global Admin privileges are required during execution of this function. Afterwards the created clint secret can be used to execute the Intunde Documentation silently. 
 
     .EXAMPLE
-    $p = New-DocumentationAppRegistration
+    $p = New-M365DocAppRegistration
     $p | fl
 
     ClientID               : d5cf6364-82f7-4024-9ac1-73a9fd2a6ec3
@@ -25,10 +25,6 @@ Function New-DocumentationAppRegistration(){
         [int]
         $TokenLifetimeDays = 365
     )
-    ## Manual Variable Definition
-    ########################################################
-    #$DebugPreference = "Continue"
-    $ScriptName = "DocumentIntuneAppRegistration"
     
 
     #region Initialization
@@ -49,16 +45,7 @@ Function New-DocumentationAppRegistration(){
     ########################################################
     
     $displayName = "WPNinjas.eu Automatic Documentation"
-    $appPermissionsRequired = @('Policy.Read.All',
-                                    'Directory.Read.All',
-                                    'DeviceManagementServiceConfig.Read.All',
-                                    'DeviceManagementRBAC.Read.All',
-                                    'DeviceManagementManagedDevices.Read.All',
-                                    'DeviceManagementConfiguration.Read.All',
-                                    'DeviceManagementApps.Read.All',
-                                    'Device.Read.All',
-                                    'Agreement.Read.All',
-                                    'Application.Read.All')
+    $appPermissionsRequired = @("AccessReview.Read.All","Agreement.Read.All","AppCatalog.Read.All","Application.Read.All","CloudPC.Read.All","ConsentRequest.Read.All","Device.Read.All","DeviceManagementApps.Read.All","DeviceManagementConfiguration.Read.All","DeviceManagementManagedDevices.Read.All","DeviceManagementRBAC.Read.All","DeviceManagementServiceConfig.Read.All","Directory.Read.All","Domain.Read.All","Organization.Read.All","Policy.Read.All","Policy.ReadWrite.AuthenticationMethod","Policy.ReadWrite.FeatureRollout","PrintConnector.Read.All","Printer.Read.All","PrinterShare.Read.All","PrintSettings.Read.All","PrivilegedAccess.Read.AzureAD","PrivilegedAccess.Read.AzureADGroup","PrivilegedAccess.Read.AzureResources","User.Read"    )
     $targetServicePrincipalName = 'Microsoft Graph'
 
     if (!(Get-AzureADApplication -SearchString $displayName)) {
