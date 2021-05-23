@@ -13,5 +13,5 @@ import-module "$scriptPath\M365Documentation\M365Documentation.psm1" -force
 #$bkp = Get-M365Doc -BackupFile "c:\temp\$($doc.CreationDate.ToString("yyyyMMddHHmm"))-WPNinjas-Doc.json"
 #$bkp | Write-M365DocWord -FullDocumentationPath "c:\temp\$($bkp.CreationDate.ToString("yyyyMMddHHmm"))-WPNinjas-DocBkp.docx"
 
-Invoke-M365DocTranslationUI
+
 Write-Host "Created Documentation"
