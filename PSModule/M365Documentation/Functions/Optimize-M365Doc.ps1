@@ -81,7 +81,9 @@ Function Optimize-M365Doc(){
         foreach($Section in $Data.SubSections){
             $progress++
             Write-Progress -Id 5 -Activity "Translating documentation" -Status "Translate section" -CurrentOperation $Section.Title -PercentComplete (($progress / $Data.SubSections.count) * 100)
-            $DataNew.SubSections += Optimize-M365DocSection -Section $Section -UseTranslationFiles:$UseTranslationFiles -UseCamelCase:$UseCamelCase -MaxStringLengthSettings $MaxStringLengthSettings -ExcludeEmptyValues:$ExcludeEmptyValues -ExcludeProperties $ExcludeProperties
+            if($Section){
+                $DataNew.SubSections += Optimize-M365DocSection -Section $Section -UseTranslationFiles:$UseTranslationFiles -UseCamelCase:$UseCamelCase -MaxStringLengthSettings $MaxStringLengthSettings -ExcludeEmptyValues:$ExcludeEmptyValues -ExcludeProperties $ExcludeProperties
+            }
         }
 
         Write-Progress -Id 5 -Activity "Translating documentation" -Status "Finished translation" -Completed

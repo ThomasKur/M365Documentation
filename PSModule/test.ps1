@@ -1,6 +1,6 @@
 $scriptPath = split-path -parent $MyInvocation.MyCommand.Definition
 import-module "$scriptPath\M365Documentation\M365Documentation.psm1" -force 
-#Connect-M365Doc
+Connect-M365Doc
 #$doc = Get-M365Doc -Components Intune
 
 #$doc | Write-M365DocWord -FullDocumentationPath "c:\temp\$($doc.CreationDate.ToString("yyyyMMddHHmm"))-WPNinjas-Doc.docx"

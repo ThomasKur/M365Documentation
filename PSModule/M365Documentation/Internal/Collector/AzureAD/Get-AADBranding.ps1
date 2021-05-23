@@ -20,7 +20,7 @@ Function Get-AADBranding(){
     $DocSec.Text = "Organizations can customize their Azure AD sign-in pages which appear when users sign in to their organization's tenant-specific apps, or when Azure AD identifies the user's tenant from their username. A developer can also read the company's branding information and customize their app experience to tailor it specifically for the signed-in user using their company's branding."
     try{
         $org = Invoke-DocGraph -Path "/organization"
-        $DocSec.Objects = Invoke-DocGraph -Path "/organization/$($org.value.id)/branding" -AcceptLanguage "en"
+        $DocSec.Objects = Invoke-DocGraph -Path "/organization/$($org.value.id)/branding"
     } catch {}
     $DocSec.Transpose = $true
     if($null -eq $DocSec.Objects){

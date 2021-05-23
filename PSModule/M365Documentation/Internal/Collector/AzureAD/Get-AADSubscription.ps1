@@ -18,8 +18,8 @@ Function Get-AADSubscription(){
 
     $DocSec.Title = "Subscriptions"
     $DocSec.Text = "Contains information about Subscription/Online Services that a company is subscribed to."
-    $DocSec.Objects = (Invoke-DocGraph -Path "/subscribedSkus")
-    $DocSec.Transpose = $true
+    $DocSec.Objects = (Invoke-DocGraph -Path "/subscribedSkus").value
+    $DocSec.Transpose = $false
 
     if($null -eq $DocSec.Objects){
         return $null

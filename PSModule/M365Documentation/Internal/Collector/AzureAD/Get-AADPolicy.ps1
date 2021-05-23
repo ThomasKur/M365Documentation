@@ -19,6 +19,7 @@ Function Get-AADPolicy(){
     $DocSec.Title = "AAD Policies"
     $DocSec.Text = ""
     $DocSec.Transpose = $false
+    $DocSec.SubSections = @()
 
     # Authentication Flow Policy
     $DocSecSingle = New-Object DocSection
@@ -72,18 +73,6 @@ Function Get-AADPolicy(){
     $DocSecSingle.SubSections = @()
     try{
         $DocSecSingle.Objects = (Invoke-DocGraph -Path "/policies/activityBasedTimeoutPolicies" -Beta).value
-    } catch {}
-    $DocSecSingle.Transpose = $true
-    $DocSec.SubSections += $DocSecSingle
-
-    
-    # Role Management Policy
-    $DocSecSingle = New-Object DocSection
-    $DocSecSingle.Title = "Role Management Policy"
-    $DocSecSingle.Text = "A unifiedRoleManagementPolicy specifies the various policies associated with a scope and role definition."
-    $DocSecSingle.SubSections = @()
-    try{
-        $DocSecSingle.Objects = (Invoke-DocGraph -Path "/policies/roleManagementPolicies" -Beta).value
     } catch {}
     $DocSecSingle.Transpose = $true
     $DocSec.SubSections += $DocSecSingle
@@ -148,7 +137,7 @@ Function Get-AADPolicy(){
     $DocSecSingle.Transpose = $true
     $DocSec.SubSections += $DocSecSingle
 
-    if($null -eq $DocSec.Objects){
+    if($null -eq $DocSec.SubSections){
         return $null
     } else {
         return $DocSec
