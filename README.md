@@ -1,4 +1,4 @@
-# Microsoft 365 Automatic Documentation
+# Automatic Microsoft 365 Documentation
 
 <img align="right" src="https://github.com/ThomasKur/M365Documentation/raw/main/Logo/M365DocumentationLogo.png" width="300px" alt="Automatic M365 Documentation Logo">Automatic Microsoft 365 Documentation to simplify the life of admins and consultants. You can automatically document systems like:
 

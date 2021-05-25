@@ -54,7 +54,8 @@ switch ($result) {
             -RequiredModules @("MSAL.PS","PSWriteWord") `
             -IconUri $Icon `
             -ModuleVersion $SuggestedNewVersion `
-            -Prerelease  "alpha"
+            -ExternalModuleDependencies @("MSAL.PS","PSWriteWord")  `
+            -RequireLicenseAcceptance
     }
     1{
         Write-Host "You selected no. The version will not be increased."
@@ -64,7 +65,8 @@ switch ($result) {
             -RequiredModules @("MSAL.PS","PSWriteWord") `
             -IconUri $Icon `
             -ModuleVersion $CurrentVersion `
-            -Prerelease "alpha"
+            -ExternalModuleDependencies @("MSAL.PS","PSWriteWord") `
+            -RequireLicenseAcceptance
         
     }
     2{
@@ -82,5 +84,5 @@ Test-ModuleManifest -Path "$ModulePath\M365Documentation.psd1" -ErrorAction Stop
         Set-AuthenticodeSignature -Certificate $cert -TimestampServer http://timestamp.digicert.com -FilePath ($PSFile.FullName) -Verbose
     }
 #endregion
-$PSGallerAPIKey = Read-Host "Insert PSGallery API Key"
+#$PSGallerAPIKey = Read-Host "Insert PSGallery API Key"
 #Publish-Module -Path $env:TEMP\M365Documentation -NuGetApiKey $PSGallerAPIKey -IconUri $Icon -LicenseUri $License -Verbose

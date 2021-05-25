@@ -2,7 +2,19 @@
 
 This section covers advanced scenarios of the documentation solution.
 
-## Custom App registration for silent execution
+## Connect to your tenant
+
+### Connect with interactive authentication (Supports MFA)
+
+The simplest way to connect is by using the following command which will prompt you to enter your credentials in the well known Microsoft dialogs.
+
+```powershell
+
+Connect-M365Doc
+
+```
+
+### Silent execution (Custom App registration)
 
 Per default the module will use an app registration hosted in my tenant, which is completely free to use. But sometimes companies have restrictions and would like to create their own app registrations, especially when the documentation should be generated silently.
 
@@ -17,14 +29,66 @@ $p = New-M365DocAppRegistration
 $p | fl
 
 ClientID               : d5cf6364-82f7-4024-9ac1-73a9fd2a6ec3
-ClientSecret           : S03AESdMlhLQIPYYw/cYtLkGkQS0H49jXh02AS6Ek0U=
-ClientSecretExpiration : 21.07.2025 21:39:02
+ClientSecret           : S02AESdMlhLQIPYYw/cYtLkHkQS0H49jXh02AS6Ek0U=
+ClientSecretExpiration : 21.07.2023 21:39:02
 TenantId               : d873f16a-73a2-4ccf-9d36-67b8243ab99a
 
 
 ```
 
-## Output to Json
+After the successfull creation of an app registration in AzureAD you can use the following command to connect:
+
+```powershell
+
+Connect-M365Doc -ClientId '00000000-0000-0000-0000-000000000000' -ClientSecret (ConvertTo-SecureString 'SuperSecretString' -AsPlainText -Force) -TenantId '00000000-0000-0000-0000-000000000000'
+
+```
+
+### Others
+
+The Connect-M365Doc command is built around the MSAL.PS (Get-MsalToken) module which allows to use any authentication methods Azure AD supports. Because of that it is possible to provide just an authentication token which should be used by the module:
+
+```powershell
+
+[Microsoft.Identity.Client.AuthenticationResult]$yourtoken = Get-MsalToken
+
+Connect-M365Doc -token $yourtoken
+
+```
+
+## Data Collection
+
+### Online Collection
+
+The default case to create a documentation is collecting all information directly from Microsoft Graph. This can be done viua the following commands:
+
+```powershell
+
+Connect-M365Doc
+$doc = Get-M365Doc -Components Intune -ExcludeSections "MobileAppDetailed"
+
+```
+
+It's important to know that this command can take some minutes and I suggest collecting only the data you really need. Therefore the command supports selecting the Component (AzureAD, Intune, ...) and withtin these components selecting just a few sections. For example I exclude (-ExcludeSections) normally the MobileAppDetailed section because this one takes a lot of time and is in most cases not required. But you can also just collect specific sections with the -IncludeSections parameter.
+
+### Import Json File
+
+You can import a previous exported JSON file. This can be useful if you want to recreate the documentation offline without collecting all information again. In this example you can see that it is not required to execute the Conmnect-M365Doc.
+
+```powershell
+
+# Import existing configuration
+$bkp = Get-M365Doc -BackupFile "c:\temp\20210503-WPNinjas-Doc.json"
+
+# Create word file from Json file
+$bkp | Write-M365DocWord -FullDocumentationPath "c:\temp\$($bkp.CreationDate.ToString("yyyyMMddHHmm"))-WPNinjas-DocBkp.docx"
+
+
+```
+
+## Output
+
+### Output to Json
 
 Outputing the documentation to JSON allows you to reimport the documentation at a later time and recreate a word file or to compare the json files between multiple dates.
 
@@ -39,7 +103,7 @@ $doc | Write-M365DocJson -FullDocumentationPath "c:\temp\$($doc.CreationDate.ToS
 
 ```
 
-## Output to CSV
+### Output to CSV
 
 Outputing the data to CSV files, one per Section can be used if you document for example Conditional Access.
 
@@ -50,21 +114,6 @@ $doc = Get-M365Doc -Components Intune -ExcludeSections "MobileAppDetailed"
 
 # JSON export
 $doc | Write-M365DocCSV -FullDocumentationPath "c:\temp\"
-
-```
-
-## Import Json File
-
-You can import a previous exported JSON file. This can be useful if you want to recreate the documentation offline without collecting all information again.
-
-```powershell
-
-# Import existing configuration
-$bkp = Get-M365Doc -BackupFile "c:\temp\20210503-WPNinjas-Doc.json"
-
-# Create word file from Json file
-$bkp | Write-M365DocWord -FullDocumentationPath "c:\temp\$($bkp.CreationDate.ToString("yyyyMMddHHmm"))-WPNinjas-DocBkp.docx"
-
 
 ```
 
@@ -99,3 +148,5 @@ to support this project. You can do this with the help of Invoke-M365DocTranslat
 - *ExcludeEmptyValues:* Properties with empty values are removed from the output.
 
 - *ExcludeProperties:* Properties with these names are skipped and remove from the output. This can be helpful to remove for example the id or created by property.
+
+
