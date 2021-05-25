@@ -18,9 +18,8 @@ Function Get-AADIdentityProvider(){
 
     $DocSec.Title = "Identity Providers"
     $DocSec.Text = "Represents an Azure Active Directory (Azure AD) identity provider. The identity provider can be Microsoft, Google, Facebook, Amazon, LinkedIn, or Twitter. The following Identity Providers are in Preview: Weibo, QQ, WeChat, GitHub and any OpenID Connect supported providers."
-    try{
-        $DocSec.Objects = (Invoke-DocGraph -Path "/identity/identityProviders" -Beta).Value
-    } catch {}
+
+    $DocSec.Objects = (Invoke-DocGraph -Path "/identity/identityProviders" -Beta).Value
     $DocSec.Transpose = $false
     if($null -eq $DocSec.Objects){
         return $null

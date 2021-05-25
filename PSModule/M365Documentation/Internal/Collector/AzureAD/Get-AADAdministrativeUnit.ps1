@@ -1,4 +1,4 @@
-Function Get-AADAdministrativeUnits(){
+Function Get-AADAdministrativeUnit(){
     <#
     .SYNOPSIS
     This function is used to get the Administrative Units from the Beta Graph API REST interface
@@ -8,7 +8,7 @@ Function Get-AADAdministrativeUnits(){
     Get-AADAdministrativeUnits
     Returns the Administrative units defined in Azure AD.
     .NOTES
-    NAME: Get-AADAdministrativeUnits
+    NAME: Get-AADAdministrativeUnit
     #>
     [OutputType('DocSection')]
     [cmdletbinding()]

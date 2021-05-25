@@ -27,9 +27,7 @@ Function Get-AADDirectoryRole(){
         $DocSecSingle.Title = $Role.displayName
         $DocSecSingle.Text = $Role.description
         $DocSecSingle.SubSections = @()
-        try{
-            $DocSecSingle.Objects = (Invoke-DocGraph -Path "/directoryRoles/$($Role.id)/members?`$select=displayName,userPrincipalName").Value | Add-ODataTypeToObject -DataType "#microsoft.graph.directoryObject"
-        } catch {}
+        $DocSecSingle.Objects = (Invoke-DocGraph -Path "/directoryRoles/$($Role.id)/members?`$select=displayName,userPrincipalName").Value | Add-ODataTypeToObject -DataType "#microsoft.graph.directoryObject"
         $DocSecSingle.Transpose = $false
         $DocSec.SubSections += $DocSecSingle
     }

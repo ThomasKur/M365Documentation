@@ -28,7 +28,9 @@ Function Get-AADPolicy(){
     $DocSecSingle.SubSections = @()
     try{
         $DocSecSingle.Objects = (Invoke-DocGraph -Path "/policies/authenticationFlowsPolicy").value
-    } catch {}
+    } catch {
+        Write-Verbose "Failed to get Auth Flow Policy Configuration. This may be because it is not configured in your tenant."
+    }
     $DocSecSingle.Transpose = $true
     $DocSec.SubSections += $DocSecSingle
 
@@ -39,7 +41,9 @@ Function Get-AADPolicy(){
     $DocSecSingle.SubSections = @()
     try{
         $DocSecSingle.Objects = (Invoke-DocGraph -Path "/policies/mobileDeviceManagementPolicies" -Beta).value
-    } catch {}
+    } catch {
+        Write-Verbose "Failed to get MDM Policy Configuration. This may be because it is not configured in your tenant."
+    }
     $DocSecSingle.Transpose = $true
     $DocSec.SubSections += $DocSecSingle
 
@@ -50,7 +54,9 @@ Function Get-AADPolicy(){
     $DocSecSingle.SubSections = @()
     try{
         $DocSecSingle.Objects = (Invoke-DocGraph -Path "/policies/permissionGrantPolicies" -Beta).value
-    } catch {}
+    } catch {
+        Write-Verbose "Failed to get Permission Grant Policy Configuration. This may be because it is not configured in your tenant."
+    }
     $DocSecSingle.Transpose = $true
     $DocSec.SubSections += $DocSecSingle
 
@@ -62,7 +68,9 @@ Function Get-AADPolicy(){
     $DocSecSingle.SubSections = @()
     try{
         $DocSecSingle.Objects = (Invoke-DocGraph -Path "/policies/homeRealmDiscoveryPolicies" -Beta).value
-    } catch {}
+    } catch {
+        Write-Verbose "Failed to get Home Realm Discovery Policy Configuration. This may be because it is not configured in your tenant."
+    }
     $DocSecSingle.Transpose = $true
     $DocSec.SubSections += $DocSecSingle
 
@@ -73,7 +81,9 @@ Function Get-AADPolicy(){
     $DocSecSingle.SubSections = @()
     try{
         $DocSecSingle.Objects = (Invoke-DocGraph -Path "/policies/activityBasedTimeoutPolicies" -Beta).value
-    } catch {}
+    } catch {
+        Write-Verbose "Failed to get Activity Based Timeout Policy Configuration. This may be because it is not configured in your tenant."
+    }
     $DocSecSingle.Transpose = $true
     $DocSec.SubSections += $DocSecSingle
 
@@ -88,7 +98,9 @@ Function Get-AADPolicy(){
     $DocSecSingle.SubSections = @()
     try{
         $DocSecSingle.Objects = (Invoke-DocGraph -Path "/policies/tokenIssuancePolicies" -Beta).value
-    } catch {}
+    } catch {
+        Write-Verbose "Failed to get Toke Issuance Policy Configuration. This may be because it is not configured in your tenant."
+    }
     $DocSecSingle.Transpose = $true
     $DocSec.SubSections += $DocSecSingle
 
@@ -100,7 +112,9 @@ Function Get-AADPolicy(){
     $DocSecSingle.SubSections = @()
     try{
         $DocSecSingle.Objects = (Invoke-DocGraph -Path "/policies/tokenLifetimePolicies" -Beta).value
-    } catch {}
+    } catch {
+        Write-Verbose "Failed to get Token Lifetime Policy Configuration. This may be because it is not configured in your tenant."
+    }
     $DocSecSingle.Transpose = $true
     $DocSec.SubSections += $DocSecSingle
 
@@ -111,7 +125,9 @@ Function Get-AADPolicy(){
     $DocSecSingle.SubSections = @()
     try{
         $DocSecSingle.Objects = (Invoke-DocGraph -Path "/policies/identitySecurityDefaultsEnforcementPolicy" -Beta)
-    } catch {}
+    } catch {
+        Write-Verbose "Failed to get Security Defaults Policy Configuration. This may be because it is not configured in your tenant."
+    }
     $DocSecSingle.Transpose = $true
     $DocSec.SubSections += $DocSecSingle
 
@@ -122,7 +138,9 @@ Function Get-AADPolicy(){
     $DocSecSingle.SubSections = @()
     try{
         $DocSecSingle.Objects = (Invoke-DocGraph -Path "/identity/continuousAccessEvaluationPolicy" -Beta)
-    } catch {}
+    } catch {
+        Write-Verbose "Failed to get Continuous Access Evaluation (CAE) Policy Configuration. This may be because it is not configured in your tenant."
+    }
     $DocSecSingle.Transpose = $true
     $DocSec.SubSections += $DocSecSingle
 
@@ -133,7 +151,22 @@ Function Get-AADPolicy(){
     $DocSecSingle.SubSections = @()
     try{
         $DocSecSingle.Objects = (Invoke-DocGraph -Path "/policies/authorizationPolicy/authorizationPolicy" -Beta)
-    } catch {}
+    } catch {
+        Write-Verbose "Failed to get Authorization Policy Configuration. This may be because it is not configured in your tenant."
+    }
+    $DocSecSingle.Transpose = $true
+    $DocSec.SubSections += $DocSecSingle
+
+    # Feature Rollout Policy
+    $DocSecSingle = New-Object DocSection
+    $DocSecSingle.Title = "Feature rollout policy"
+    $DocSecSingle.Text = "Creating a feature rollout policy helps tenant administrators to pilot features of Azure AD with a specific group before enabling features for entire organization. This minimizes the impact and helps administrators to test and rollout authentication related features gradually."
+    $DocSecSingle.SubSections = @()
+    try{
+        $DocSecSingle.Objects = (Invoke-DocGraph -Path "/policies/featureRolloutPolicies" -Beta)
+    } catch {
+        Write-Verbose "Failed to get Feature rollout Policy Configuration. This may be because it is not configured in your tenant."
+    }
     $DocSecSingle.Transpose = $true
     $DocSec.SubSections += $DocSecSingle
 

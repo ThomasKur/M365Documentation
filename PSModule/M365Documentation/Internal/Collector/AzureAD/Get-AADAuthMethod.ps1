@@ -28,7 +28,9 @@ Function Get-AADAuthMethod(){
     $DocSecSingle.SubSections = @()
     try{
         $DocSecSingle.Objects = (Invoke-DocGraph -Path "/policies/authenticationMethodsPolicy/authenticationMethodConfigurations/fido2" -Beta).Value
-    } catch {}
+    } catch {
+        Write-Verbose "Failed to get FIDO2 Configuration. This may be because it is not configured in your tenant."
+    }
     $DocSecSingle.Transpose = $true
     $DocSec.SubSections += $DocSecSingle
 
@@ -38,7 +40,9 @@ Function Get-AADAuthMethod(){
     $DocSecSingle.SubSections = @()
     try{
         $DocSecSingle.Objects = (Invoke-DocGraph -Path "/policies/authenticationMethodsPolicy/authenticationMethodConfigurations/microsoftAuthenticator" -Beta).Value
-    } catch {}
+    } catch {
+        Write-Verbose "Failed to get MS Authenticator Configuration. This may be because it is not configured in your tenant."
+    }
     $DocSecSingle.Transpose = $true
     $DocSec.SubSections += $DocSecSingle
 
@@ -48,7 +52,9 @@ Function Get-AADAuthMethod(){
     $DocSecSingle.SubSections = @()
     try{
         $DocSecSingle.Objects = (Invoke-DocGraph -Path "/policies/authenticationMethodsPolicy/authenticationMethodConfigurations/TemporaryAccessPass" -Beta)
-    } catch {}
+    } catch {
+        Write-Verbose "Failed to get Temporary Access Pass Configuration. This may be because it is not configured in your tenant."
+    }
     $DocSecSingle.Transpose = $true
     $DocSec.SubSections += $DocSecSingle
 
@@ -58,7 +64,9 @@ Function Get-AADAuthMethod(){
     $DocSecSingle.SubSections = @()
     try{
         $DocSecSingle.Objects = (Invoke-DocGraph -Path "/policies/authenticationMethodsPolicy/authenticationMethodConfigurations/email" -Beta)
-    } catch {}
+    } catch {
+        Write-Verbose "Failed to get OneTime Auth Configuration. This may be because it is not configured in your tenant."
+    }
     $DocSecSingle.Transpose = $true
     $DocSec.SubSections += $DocSecSingle
 
@@ -68,7 +76,9 @@ Function Get-AADAuthMethod(){
     $DocSecSingle.SubSections = @()
     try{
         $DocSecSingle.Objects = (Invoke-DocGraph -Path "/policies/authenticationMethodsPolicy/authenticationMethodConfigurations/sms" -Beta)
-    } catch {}
+    } catch {
+        Write-Verbose "Failed to get Text Message Auth Configuration. This may be because it is not configured in your tenant."
+    }
     $DocSecSingle.Transpose = $true
     $DocSec.SubSections += $DocSecSingle
 

@@ -21,7 +21,9 @@ Function Get-AADBranding(){
     try{
         $org = Invoke-DocGraph -Path "/organization"
         $DocSec.Objects = Invoke-DocGraph -Path "/organization/$($org.value.id)/branding"
-    } catch {}
+    } catch {
+        Write-Verbose "Failed to get Branding Configuration. This may be because it is not configured in your tenant."
+    }
     $DocSec.Transpose = $true
     if($null -eq $DocSec.Objects){
         return $null
