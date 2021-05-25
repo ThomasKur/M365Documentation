@@ -84,5 +84,5 @@ Test-ModuleManifest -Path "$ModulePath\M365Documentation.psd1" -ErrorAction Stop
         Set-AuthenticodeSignature -Certificate $cert -TimestampServer http://timestamp.digicert.com -FilePath ($PSFile.FullName) -Verbose
     }
 #endregion
-#$PSGallerAPIKey = Read-Host "Insert PSGallery API Key"
-#Publish-Module -Path $env:TEMP\M365Documentation -NuGetApiKey $PSGallerAPIKey -IconUri $Icon -LicenseUri $License -Verbose
+$PSGallerAPIKey = Read-Host "Insert PSGallery API Key"
+Publish-Module -Path $env:TEMP\M365Documentation -NuGetApiKey $PSGallerAPIKey -IconUri $Icon -LicenseUri $License -Verbose
