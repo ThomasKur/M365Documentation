@@ -18,6 +18,9 @@ Function Optimize-M365Doc(){
     .PARAMETER ExcludeEmptyValues
     Properties with empty values are removed from the output.
 
+    .PARAMETER ExcludeValues
+    All values are replaced with an empty string.
+
     .PARAMETER ExcludeProperties
     Properties with these names are skipped and remove from the output. This can be helpful to remove for example the id or created by property.
 
@@ -45,6 +48,7 @@ Function Optimize-M365Doc(){
         [switch]$UseCamelCase,
         [int]$MaxStringLengthSettings = 350,
         [switch]$ExcludeEmptyValues,
+        [switch]$ExcludeValues,
         [String[]]$ExcludeProperties
     )
     Begin {
@@ -82,7 +86,7 @@ Function Optimize-M365Doc(){
             $progress++
             Write-Progress -Id 5 -Activity "Translating documentation" -Status "Translate section" -CurrentOperation $Section.Title -PercentComplete (($progress / $Data.SubSections.count) * 100)
             if($Section){
-                $DataNew.SubSections += Optimize-M365DocSection -Section $Section -UseTranslationFiles:$UseTranslationFiles -UseCamelCase:$UseCamelCase -MaxStringLengthSettings $MaxStringLengthSettings -ExcludeEmptyValues:$ExcludeEmptyValues -ExcludeProperties $ExcludeProperties
+                $DataNew.SubSections += Optimize-M365DocSection -Section $Section -UseTranslationFiles:$UseTranslationFiles -UseCamelCase:$UseCamelCase -MaxStringLengthSettings $MaxStringLengthSettings -ExcludeEmptyValues:$ExcludeEmptyValues -ExcludeValues:$ExcludeValues -ExcludeProperties $ExcludeProperties
             }
         }
 

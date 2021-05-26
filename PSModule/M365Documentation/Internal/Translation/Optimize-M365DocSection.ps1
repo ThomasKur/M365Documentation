@@ -6,6 +6,10 @@ Function Optimize-M365DocSection(){
     .PARAMETER Data
     M365 documentation section object which should be optimized.
 
+    
+    .PARAMETER ExcludeValues
+    All values are replaced with an empty string.
+
     .EXAMPLE 
     $docNew = Optimize-M365DocSection -Section $DocSection
 
@@ -23,6 +27,7 @@ Function Optimize-M365DocSection(){
         [switch]$UseCamelCase,
         [int]$MaxStringLengthSettings = 350,
         [switch]$ExcludeEmptyValues,
+        [switch]$ExcludeValues,
         [String[]]$ExcludeProperties
     )
     Begin {
@@ -51,7 +56,7 @@ Function Optimize-M365DocSection(){
         ########################################################
 
         foreach($Section2 in $Section.SubSections){
-            $DataNew.SubSections += Optimize-M365DocSection -Section $Section2 -UseTranslationFiles:$UseTranslationFiles -UseCamelCase:$UseCamelCase -MaxStringLengthSettings $MaxStringLengthSettings -ExcludeEmptyValues:$ExcludeEmptyValues -ExcludeProperties $ExcludeProperties
+            $DataNew.SubSections += Optimize-M365DocSection -Section $Section2 -UseTranslationFiles:$UseTranslationFiles -UseCamelCase:$UseCamelCase -MaxStringLengthSettings $MaxStringLengthSettings -ExcludeEmptyValues:$ExcludeEmptyValues -ExcludeValues:$ExcludeValues -ExcludeProperties $ExcludeProperties
         }
 
         foreach($Object in $Section.Objects){
@@ -180,6 +185,9 @@ Function Optimize-M365DocSection(){
                     if($value.GetType().Name -ne "Boolean" -and $value.GetType().Name -ne "System.Boolean"){
                         $value = $value.Trim()
                     }
+                }
+                if($ExcludeValues){
+                    $Value = ""
                 }
                 
                 try{

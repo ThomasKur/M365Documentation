@@ -54,8 +54,7 @@ switch ($result) {
             -RequiredModules @("MSAL.PS","PSWriteWord") `
             -IconUri $Icon `
             -ModuleVersion $SuggestedNewVersion `
-            -ExternalModuleDependencies @("MSAL.PS","PSWriteWord")  `
-            -RequireLicenseAcceptance
+            -ExternalModuleDependencies @("MSAL.PS","PSWriteWord")  
     }
     1{
         Write-Host "You selected no. The version will not be increased."
@@ -65,8 +64,7 @@ switch ($result) {
             -RequiredModules @("MSAL.PS","PSWriteWord") `
             -IconUri $Icon `
             -ModuleVersion $CurrentVersion `
-            -ExternalModuleDependencies @("MSAL.PS","PSWriteWord") `
-            -RequireLicenseAcceptance
+            -ExternalModuleDependencies @("MSAL.PS","PSWriteWord") 
         
     }
     2{

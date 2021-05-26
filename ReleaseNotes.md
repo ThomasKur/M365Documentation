@@ -1,5 +1,9 @@
 # Release Notes
 
+## 3.0.3 - 26.05.2021 - Thomas Kurth
+
+- The Optimize-M365Doc command supports now the -ExcludeValues parameter which will create an empty documentation. 
+
 ## 3.0.2 - 26.04.2021 - Thomas Kurth
 
 - Add Translation UI which helps users to simply contribute to the project (Invoke-M365DocTranslationUI).
