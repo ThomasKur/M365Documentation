@@ -147,4 +147,6 @@ to support this project. You can do this with the help of Invoke-M365DocTranslat
 
 - *ExcludeEmptyValues:* Properties with empty values are removed from the output.
 
+- *ExcludeValues:* This removes all values from the documentation which is helpful if you wish to discuss and define the planned settings before a proiject starts.
+
 - *ExcludeProperties:* Properties with these names are skipped and remove from the output. This can be helpful to remove for example the id or created by property.
