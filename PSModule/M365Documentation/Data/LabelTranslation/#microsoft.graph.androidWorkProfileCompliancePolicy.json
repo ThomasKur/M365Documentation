@@ -1,0 +1,141 @@
+{
+  "@odata.type": {
+    "Section": "Metadata",
+    "Name": "OData Type",
+    "DataType": "System.String"
+  },
+  "roleScopeTagIds": {
+    "Section": "Metadata",
+    "Name": "Role Scopes Tags",
+    "DataType": "System.Object[]"
+  },
+  "id": {
+    "Section": "Metadata",
+    "Name": "ID",
+    "DataType": "System.String"
+  },
+  "createdDateTime": {
+    "Section": "Metadata",
+    "Name": "Created at",
+    "DataType": "System.String"
+  },
+  "lastModifiedDateTime": {
+    "Section": "Metadata",
+    "Name": "Modified at",
+    "DataType": "System.String"
+  },
+  "displayName": {
+    "Section": "Metadata",
+    "Name": "Displayname",
+    "DataType": "System.String"
+  },
+  "version": {
+    "Section": "Metadata",
+    "Name": "Version",
+    "DataType": "System.Int32"
+  },
+  "passwordRequired": {
+    "Section": "System Security",
+    "Name": "Require a password to unlock mobile devices",
+    "DataType": "System.Boolean",
+    "ValueTrue": "Block",
+    "ValueFalse": "Not Configured"
+  },
+  "passwordRequiredType": {
+    "Section": "System Security",
+    "Name": "Required password type",
+    "DataType": "System.String"
+  },
+  "securityPreventInstallAppsFromUnknownSources": {
+    "Section": "System Security / Device Security",
+    "Name": "Block apps from unknown sources",
+    "DataType": "System.Boolean",
+    "ValueTrue": "Block",
+    "ValueFalse": "Not Configured"
+  },
+  "securityDisableUsbDebugging": {
+    "Section": "System Security / Device Security",
+    "Name": "Block USB debugging on device",
+    "DataType": "System.Boolean",
+    "ValueTrue": "Block",
+    "ValueFalse": "Not Configured"
+  },
+  "securityRequireVerifyApps": {
+    "Section": "System Security / Device Security",
+    "Name": "Require the Android Verify apps feature is turned on",
+    "DataType": "System.Boolean",
+    "ValueTrue": "Block",
+    "ValueFalse": "Not Configured"
+  },
+  "deviceThreatProtectionEnabled": {
+    "Section": "Device Health",
+    "Name": "Device Threat Protection enabled",
+    "DataType": "System.Boolean",
+    "ValueTrue": "Block",
+    "ValueFalse": "Not Configured"
+  },
+  "deviceThreatProtectionRequiredSecurityLevel": {
+    "Section": "Device Health",
+    "Name": "Require the device to be at or under the Device Threat Level",
+    "DataType": "System.String"
+  },
+  "advancedThreatProtectionRequiredSecurityLevel": {
+    "Section": "Device Health",
+    "Name": "Require the device to be at or under the Advanced Threat Level",
+    "DataType": "System.String"
+  },
+  "securityBlockJailbrokenDevices": {
+    "Section": "Device Health",
+    "Name": "Rooted devices",
+    "DataType": "System.Boolean",
+    "ValueTrue": "Block",
+    "ValueFalse": "Not Configured"
+  },
+  "storageRequireEncryption": {
+    "Section": "System Security / Encryption",
+    "Name": "Require encryption of data storage on device",
+    "DataType": "System.Boolean",
+    "ValueTrue": "Block",
+    "ValueFalse": "Not Configured"
+  },
+  "securityRequireSafetyNetAttestationBasicIntegrity": {
+    "Section": "Device Health / Google Play Protect",
+    "Name": "SafetyNet attestation - Check basic integrity",
+    "DataType": "System.Boolean",
+    "ValueTrue": "Block",
+    "ValueFalse": "Not Configured"
+  },
+  "securityRequireSafetyNetAttestationCertifiedDevice": {
+    "Section": "Device Health / Google Play Protect",
+    "Name": "SafetyNet attestation - Check basic integrity & certified devices",
+    "DataType": "System.Boolean",
+    "ValueTrue": "Block",
+    "ValueFalse": "Not Configured"
+  },
+  "securityRequireGooglePlayServices": {
+    "Section": "Device Health / Google Play Protect",
+    "Name": "Google Play Services is configured",
+    "DataType": "System.Boolean",
+    "ValueTrue": "Block",
+    "ValueFalse": "Not Configured"
+  },
+  "securityRequireUpToDateSecurityProviders": {
+    "Section": "Device Health / Google Play Protect",
+    "Name": "Require up to date security providers",
+    "DataType": "System.Boolean",
+    "ValueTrue": "Block",
+    "ValueFalse": "Not Configured"
+  },
+  "securityRequireCompanyPortalAppIntegrity": {
+    "Section": "System Security / Device Security",
+    "Name": "Company Portal app runtime integrity",
+    "DataType": "System.Boolean",
+    "ValueTrue": "Block",
+    "ValueFalse": "Not Configured"
+  },
+  "securityRequiredAndroidSafetyNetEvaluationType": {
+    "Section": "Device Health / Google Play Protect",
+    "Name": "SafetyNet attestation - Evaluation Type",
+    "DataType": "System.String"
+  }
+}
