@@ -24,7 +24,7 @@ Function Connect-M365Doc(){
         [parameter(Mandatory=$true, ParameterSetName='PublicClient-Silent')]
         [guid]$ClientID,
         [parameter(Mandatory=$true, ParameterSetName='PublicClient-Silent')]
-        [string]$ClientSecret,
+        [Security.SecureString]$ClientSecret,
         [parameter(Mandatory=$true, ParameterSetName='PublicClient-Silent')]
         [guid]$TenantId ,
         [parameter(Mandatory=$false, ParameterSetName='Interactive')]
