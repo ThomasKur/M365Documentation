@@ -1,5 +1,11 @@
 # Release Notes
 
+## 3.1.0 - 18.07.2021 - Thomas Kurth
+
+- Add Cloud Print as new collector
+- Bugfix #4 Connect with Secure String
+- Add IdentityProvider.Read.All to scopes as it is required by the AzureAD part
+
 ## 3.0.3 - 26.05.2021 - Thomas Kurth
 
 - The Optimize-M365Doc command supports now the -ExcludeValues parameter which will create an empty documentation. 
