@@ -4,6 +4,7 @@
 
 - Microsoft Endpoint Manager / Intune
 - Azure AD
+- Microsoft Cloud Print
 
 _This list will expand in the near future._
 
@@ -88,6 +89,14 @@ The following entities are documented:
 - Subscriptions / SKU
 - Organizational Settings
 - Administrative Units
+
+### Cloud Print
+
+The following entities are documented:
+
+- Printers
+- Connectors
+- Printer Shares
 
 ## Issues / Feedback
 
