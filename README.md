@@ -5,6 +5,7 @@
 - Microsoft Endpoint Manager / Intune
 - Azure AD
 - Microsoft Cloud Print
+- Microsoft Information protection
 
 _This list will expand in the near future._
 
@@ -97,6 +98,12 @@ The following entities are documented:
 - Printers
 - Connectors
 - Printer Shares
+
+### Microsoft Information Protection
+
+The following entities are documented:
+
+- Labels
 
 ## Issues / Feedback
 

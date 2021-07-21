@@ -3,6 +3,7 @@
 ## 3.1.0 - 18.07.2021 - Thomas Kurth
 
 - Add Cloud Print as new collector
+- Add Information Protection as new collector (Only working when running with app registration)
 - Bugfix #4 Connect with Secure String
 - Add IdentityProvider.Read.All to scopes as it is required by the AzureAD part
 
