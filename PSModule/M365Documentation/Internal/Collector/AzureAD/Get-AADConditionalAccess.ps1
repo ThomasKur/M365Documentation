@@ -75,7 +75,7 @@ Function Get-AADConditionalAccess(){
         }
         $ResultCAPolicy | Add-Member Noteproperty "C_UsersIncludeGroups" ($IncludeGroups -join [System.Environment]::NewLine)
 
-        $ExcludeApps = @()
+        $ExcludeGroups = @()
         foreach($group in $CAPolicy.conditions.users.excludeGroups){
             $ExcludeGroups += (Invoke-DocGraph -Path "/groups/$($group)").displayName
         }
