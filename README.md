@@ -6,6 +6,7 @@
 - Azure AD
 - Microsoft Cloud Print
 - Microsoft Information protection
+- Windows 365 (CloudPC)
 
 _This list will expand in the near future._
 
@@ -104,6 +105,13 @@ The following entities are documented:
 The following entities are documented:
 
 - Labels
+
+### Windows 365 (CloudPC)
+
+- Device Images
+- Provisioning Profiles
+- User Settings
+- On-premises Connections
 
 ## Issues / Feedback
 
