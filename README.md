@@ -31,7 +31,7 @@ The required modules are fully available in the PowerShell Gallery and therefore
 
 Install-Module MSAL.PS
 Install-Module PSWriteWord
-Install-Module M365Documentation -AllowPrerelease
+Install-Module M365Documentation
 
 ```
 
