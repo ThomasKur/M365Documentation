@@ -62,7 +62,7 @@ Function Connect-M365Doc(){
             # Connect to Microsoft Intune PowerShell App
             $params = @{
                 ClientId    = "37f82fa9-674e-4cae-9286-4b21eb9a6389"
-                RedirectUri = "msal37f82fa9-674e-4cae-9286-4b21eb9a6389://auth"
+                RedirectUri = "http://localhost"
             }
 
             # Verify token
