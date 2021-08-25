@@ -112,7 +112,7 @@ Outputing the data to CSV files, one per Section can be used if you document for
 Connect-M365Doc
 $doc = Get-M365Doc -Components Intune -ExcludeSections "MobileAppDetailed"
 
-# JSON export
+# CSV export
 $doc | Write-M365DocCSV -FullDocumentationPath "c:\temp\"
 
 ```
