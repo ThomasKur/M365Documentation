@@ -1,5 +1,9 @@
 # Release Notes
 
+## 3.1.1 - 16.08.2021 - Thomas Kurth
+
+- Update Redirect URI in COnnect-M365Doc to support PowerShell 7 / .NET Core
+
 ## 3.1.0 - 18.07.2021 - Thomas Kurth
 
 - Add Cloud Print as new collector
