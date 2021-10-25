@@ -127,4 +127,6 @@ For any issues or feedback related to this module, please register for GitHub, a
 
 @MScholtes for the Transponse-Object example <https://github.com/MScholtes/TechNet-Gallery>
 
+@ylepine for the contribution to support Intune Settings catalog
+
 ![Created by baseVISION](https://www.basevision.ch/wp-content/uploads/2015/12/baseVISION-Logo_RGB.png)
