@@ -92,7 +92,7 @@ Function New-M365DocAppRegistration(){
         ClientSecretExpiration = $appPwd.EndDate
         TenantId = (Get-AzureADCurrentSessionInfo).TenantId
     }
-    Write-Log -Type Warn -Message "Please close the Powershellsession and reopen Powershell. Otherwise the connection may fail."
+    Write-Log -Type Warn -Message "Please close the Powershell session and reopen it. Otherwise the connection may fail."
     Write-Log "End Script $Scriptname"
     #endregion
 }
