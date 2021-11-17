@@ -1,10 +1,13 @@
 # Release Notes
 
+## 3.1.2 - 26.10.2021 - Thomas Kurth
+
+- Add support for Intune Settings Catalog (Provided by @ylepine)
+- #2 add warning to restart Powershell after the creation of a new app registrations
+
 ## 3.1.1 - 16.08.2021 - Thomas Kurth
 
 - Update Redirect URI in Connect-M365Doc to support PowerShell 7 / .NET Core
-- Add support for Intune Settings Catalog (Provided by @ylepine)
-- #2 add warning to restart Powershell after the creation of a new app registrations
 
 ## 3.1.0 - 18.07.2021 - Thomas Kurth
 
