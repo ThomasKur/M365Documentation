@@ -19,6 +19,7 @@ Function Write-DocumentationCsvSection(){
     if($Data.Objects -or $Data.SubSections){
         
         if($Data.Objects){
+            $Path = $Path.Split([IO.Path]::GetInvalidFileNameChars()) -join ''
             $Data.Objects | ConvertTo-Csv -NoTypeInformation -Delimiter ";" | Out-File -FilePath "$CsvPath\$Path.csv"
         }
         foreach($Section in $Data.SubSections){
