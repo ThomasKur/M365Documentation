@@ -52,6 +52,9 @@ Function Get-AssignmentDetailSingle(){
             MemberCount = $MemberCount
             GroupType = $GType
             DynamicRule = $DynamicRule
+            Intent = "-"
+            Source = ""
+            AssignType = "Include"
         }
     } else {
 
@@ -67,27 +70,24 @@ Function Get-AssignmentDetailSingle(){
             MemberCount = "-"
             GroupType = "BuilIn"
             DynamicRule = "-"
+            Intent = "-"
+            Source = ""
+            AssignType = "Include"
         }
     } 
 
     #Intent if Available
     if($null -ne $Assignment.intent){
-        $returnObj | Add-Member -MemberType NoteProperty -Name "Intent" -Value $Assignment.intent
-    } else {
-        $returnObj | Add-Member -MemberType NoteProperty -Name "Intent" -Value "-"
-    }
+        $returnObj.Intent = $Assignment.intent
+    } 
     # Source
     if($null -ne $Assignment.source){
-        $returnObj | Add-Member -MemberType NoteProperty -Name "Source" -Value $Assignment.source
-    } else {
-        $returnObj | Add-Member -MemberType NoteProperty -Name "Source" -Value "-"
-    }
+        $returnObj.Source = $Assignment.source
+    } 
     # Include or Exclude
-    if($Assignment.'@odata.type' -imatch 'exclusion'){
-        $returnObj | Add-Member -MemberType NoteProperty -Name "Type" -Value "Exclude"
-    } else {
-        $returnObj | Add-Member -MemberType NoteProperty -Name "Type" -Value "Include"
-    }
+    if($Assignment.target.'@odata.type' -like "*exclu*"){
+        $returnObj.AssignType = "Exclude"
+    } 
 
     $returnObj
 }
