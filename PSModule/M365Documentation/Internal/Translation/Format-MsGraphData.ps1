@@ -27,6 +27,8 @@ Function Format-MsGraphData(){
     $Value = $Value -replace "windows","win"
     $Value = $Value -replace "StoreforBusiness","SfB"
     $Value = $Value -replace "@odata.",""
+    if($null -ne $Value -and $Value -match "@{type=image"){
+        $Value = "[Image File]"
     if($null -ne $Value -and $Value -match "@{*"){
         $Value = $Value -replace "@{",""
         $Value = $Value -replace "}",""
