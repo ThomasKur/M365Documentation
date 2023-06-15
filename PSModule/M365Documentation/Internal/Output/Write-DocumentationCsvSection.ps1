@@ -20,7 +20,7 @@ Function Write-DocumentationCsvSection(){
         
         if($Data.Objects){
             $Path = $Path.Split([IO.Path]::GetInvalidFileNameChars()) -join ''
-            $Data.Objects | ConvertTo-Csv -NoTypeInformation -Delimiter ";" | Out-File -FilePath "$CsvPath\$Path.csv"
+            $Data.Objects | ConvertTo-Csv -NoTypeInformation -Delimiter ";" | Out-File -LiteralPath "$CsvPath\$Path.csv"
         }
         foreach($Section in $Data.SubSections){
             Write-DocumentationCsvSection -CsvPath $CsvPath -Data $Section -Path "$Path-$($Section.Title)"
