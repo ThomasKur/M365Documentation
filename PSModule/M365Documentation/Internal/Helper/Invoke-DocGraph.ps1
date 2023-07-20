@@ -49,7 +49,9 @@ Function Invoke-DocGraph(){
         
         if($_.Exception.Response.StatusCode -eq "Forbidden"){
             throw "Used application does not have sufficiant permission to access: $FullUrl"
-        } else {
+        } elseif ($_.Exception.Response.StatusCode -eq "NotFound" -and $_.Exception.Response.ResponseUri -like "https://graph.microsoft.com/v1.0/groups*"){
+            Write-Debug "Some Profiles/Apps are assigned to groups which do no longer exist. They are not displayed in the output $($_.Exception.Response.ResponseUri)."
+        }  else  {
             Write-Error $_
         }
     }
