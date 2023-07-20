@@ -186,7 +186,7 @@ Function Optimize-M365DocSection(){
                         $value = $value.Trim()
                     }
                 }
-                if($ExcludeValues){
+                if(($ExcludeValues -and $p.Name -in @("Value","ValueName") -and $DataNew.Title -eq "Settings") -or ($ExcludeValues -and $DataNew.Title -ne "Settings")){
                     $Value = ""
                 }
                 
