@@ -46,7 +46,7 @@ Function Get-MobileApp(){
     } 
     $DocSec.Objects = $Intune_Apps | Sort-Object Publisher,DisplayName
     $DocSec.Transpose = $false
-    if(-not $AppGroups){
+    if($null -ne $AppGroups -and $AppGroups.Count -gt 0){
         $DocSec2 = New-Object DocSection
         $DocSec2.Title = "Groups used to assign apps"
         $DocSec2.Text = $null
