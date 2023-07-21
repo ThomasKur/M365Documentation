@@ -1,5 +1,12 @@
 # Release Notes
 
+## 3.2.0 21.07.2023
+
+- Add support for Markdown generation including TOC (Preview)
+- Bugfix #32 Special chars in filename
+- Improvement by remove base64 image exports #26
+- Bugfix ExcludeValues parameter (Optimize-M365Doc) issue which removed not just values for Intune Settings Catalog items are documented.
+
 ## 3.1.2 - 26.10.2021 - Thomas Kurth
 
 - Add support for Intune Settings Catalog (Provided by @ylepine)

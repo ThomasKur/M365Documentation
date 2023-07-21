@@ -2,8 +2,8 @@
 
 <img align="right" src="https://github.com/ThomasKur/M365Documentation/raw/main/Logo/M365DocumentationLogo.png" width="300px" alt="Automatic M365 Documentation Logo">Automatic Microsoft 365 Documentation to simplify the life of admins and consultants. You can automatically document systems like:
 
-- Microsoft Endpoint Manager / Intune
-- Azure AD
+- Microsoft Intune
+- Microsoft Entra ID (Azure AD)
 - Microsoft Cloud Print
 - Microsoft Information protection
 - Windows 365 (CloudPC)
@@ -16,6 +16,7 @@ This is the successor to the IntuneDocumentation module and has much more option
   - Backup your configuration and create documentation later
   - Compare your configuration over time for example with <http://www.jsondiff.com/>
 - Output to CSV
+- Output to Markdown/MD
 - Flexible Authentication with MSAL.PS
   - Support for Certificate and Secret based Authentication
 
