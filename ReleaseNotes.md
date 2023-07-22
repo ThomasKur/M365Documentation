@@ -1,5 +1,9 @@
 # Release Notes
 
+## 3.2.1 22.07.2023
+
+- Bugfix Custom Application Registration Creation (New-M365DocAppRegistration) #12 #28
+  
 ## 3.2.0 21.07.2023
 
 - Add support for Markdown generation including TOC (Preview)
