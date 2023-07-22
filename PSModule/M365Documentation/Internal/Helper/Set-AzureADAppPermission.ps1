@@ -17,10 +17,9 @@ Function Set-AzureADAppPermission
         $RoleAssignments = @()
         Foreach ($AppPermission in $appPermissionsRequired) {
             $RoleAssignment = $targetSp.AppRoles | Where-Object { $_.Value -eq $AppPermission}
-            Write-Verbose ('Role Assignment found: {0}' -f $RoleAssignment)
             $RoleAssignments += $RoleAssignment
         }
-        <#
+
         $ResourceAccessObjects = New-Object 'System.Collections.Generic.List[Microsoft.Open.AzureAD.Model.ResourceAccess]'
         foreach ($RoleAssignment in $RoleAssignments) {
             $resourceAccess = New-Object -TypeName "Microsoft.Open.AzureAD.Model.ResourceAccess"
@@ -33,11 +32,9 @@ Function Set-AzureADAppPermission
         $requiredResourceAccess.ResourceAccess = $ResourceAccessObjects
 
         # set the required resource access
-        Write-Verbose ('Setting required resource access for child app {0}' -f $childApp.DisplayName)
-        $requiredResourceAccess
         Set-AzureADApplication -ObjectId $childApp.ObjectId -RequiredResourceAccess $requiredResourceAccess 
         Start-Sleep -s 1
-        #>
+
         # grant the required resource access
         foreach ($RoleAssignment in $RoleAssignments) {
             Write-Verbose ('Granting admin consent for App Role: {0}' -f $($RoleAssignment.Value))
