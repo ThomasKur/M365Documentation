@@ -122,7 +122,7 @@ function Format-MarkdownTableListStyle {
             foreach ($Prop in $Props) {
                 $EscapedPropName = Invoke-EscapeMarkdown($Prop.Name)
                 $EscapedPropValue = Invoke-EscapeMarkdown($CurrentObject.($($Prop.Name)))
-                $Output += "|$EscapedPropName|$EscapedPropValue`r`n"
+                $Output += "|$EscapedPropName|$EscapedPropValue|`r`n"
                 $TempOutput | Add-Member -MemberType NoteProperty $Prop.Name -Value $CurrentObject.($($Prop.Name)) -Force
             }
     

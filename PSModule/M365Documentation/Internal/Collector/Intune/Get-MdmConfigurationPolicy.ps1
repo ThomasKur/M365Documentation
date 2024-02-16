@@ -60,7 +60,7 @@ Function Get-MdmConfigurationPolicy(){
         return $SettingValues
     }
 
-    $Policies = Invoke-DocGraph -Path (Join-Path -Path "/deviceManagement/ConfigurationPolicies" -ChildPath '?$filter=technologies eq ''mdm''') -Beta
+    $Policies = Invoke-DocGraph -Path "/deviceManagement/ConfigurationPolicies" -Beta  #-ChildPath '?$filter=technologies eq ''mdm'''
 
     foreach($Policy in $Policies.Value) {
         $PolicyA = (Invoke-DocGraph -Path "/deviceManagement/ConfigurationPolicies/$($Policy.Id)/assignments" -Beta).value
