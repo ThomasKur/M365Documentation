@@ -11,15 +11,15 @@ function Invoke-TransposeObject {
 	.OUTPUTS
 	Transposed object
 	.EXAMPLE
-	dir | Transpose-Object | Out-GridView
+	dir | Invoke-TransposeObject | Out-GridView
 
 	Shows directory listing with a column instead of a row for every file/directory
 	.EXAMPLE
-	ps | Transpose-Object | Export-Csv Processes.csv -Delimiter ';' -NoTypeInformation
+	ps | Invoke-TransposeObject | Export-Csv Processes.csv -Delimiter ';' -NoTypeInformation
 
 	Creates a CSV file with a column instead of a row for every process
 	.NOTES
-	Name: Transpose-Object
+	Name: Invoke-TransposeObject
 	Author: Markus Scholtes
 	Version: 1.0 - Initial version
 	Creation Date: 01/11/2019
