@@ -31,7 +31,7 @@ The required modules are fully available in the PowerShell Gallery and therefore
 ```powershell
 
 Install-Module MSAL.PS
-Install-Module PSWriteWord
+Install-Module PSWriteOffice
 Install-Module M365Documentation
 
 ```
@@ -124,7 +124,7 @@ For any issues or feedback related to this module, please register for GitHub, a
 
 @Microsoftgraph for the PowerShell Examples: <https://github.com/microsoftgraph/powershell-intune-samples>
 
-@guidooliveira / @PrzemyslawKlys for the PSWriteWord Module, which enables the creation of the Word file. <https://github.com/EvotecIT/PSWriteWord>
+@PrzemyslawKlys for the PSWriteWord Module, which enables the creation of the Word file. <https://github.com/EvotecIT/PSWriteOffice>
 
 @MScholtes for the Transponse-Object example <https://github.com/MScholtes/TechNet-Gallery>
 
