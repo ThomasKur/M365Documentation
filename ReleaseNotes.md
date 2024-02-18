@@ -2,10 +2,10 @@
 
 ## 3.2.2 18.02.2024
 
-- Add Security and Settings Catalog Profiles #37 #38
+- Add Intune Security and Settings Catalog Profiles #37 #38
 - Changed from PSWriteWord to PSWriteOfficve which is PS 7 compatible #21
-- Removed depentency to AzureAD Module which and Switched to PowerShell Graph SDK. #41
-- Bugfixe Markdown table
+- Removed dependency to AzureAD Module and switched to PowerShell Graph SDK. #41
+- Bugfix Markdown table
 
 ## 3.2.1 22.07.2023
 
