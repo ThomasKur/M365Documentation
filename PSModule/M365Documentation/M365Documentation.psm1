@@ -41,12 +41,12 @@ if($PSModuleMSAL){
     Import-Module -Name MSAL.PS -ErrorAction Stop
 }
 
-$PSModulePSWriteWord = Get-Module -Name PSWriteWord
-if($PSModulePSWriteWord){
-    Write-Verbose -Message "PSWriteWord PowerShell module is loaded."
+$PSModulePSWriteOffice = Get-Module -Name PSWriteOffice
+if($PSModulePSWriteOffice){
+    Write-Verbose -Message "PSWriteOffice PowerShell module is loaded."
 } else {
-    Write-Warning -Message "PSWriteWord PowerShell module is not loaded, trying to import it."
-    Import-Module -Name PSWriteWord -ErrorAction Stop
+    Write-Warning -Message "PSWriteOffice PowerShell module is not loaded, trying to import it."
+    Import-Module -Name PSWriteOffice -ErrorAction Stop
 }
 
 # Class definition

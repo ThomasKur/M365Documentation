@@ -40,15 +40,13 @@ Function Write-M365DocWord(){
         
         if((Test-Path -Path $FullDocumentationPath)){
             Write-Log "File ($FullDocumentationPath) already exists! Therefore, built-in template will not be used." -Type Warn
-            $WordDocument = New-WordDocument $FullDocumentationPath
+            $WordDocument = Get-OfficeWord -FilePath $FullDocumentationPath
         } else {
             Copy-Item "$PSScriptRoot\..\Data\Template.docx" -Destination $FullDocumentationPath
-            $WordDocument = Get-WordDocument $FullDocumentationPath.FullName
-            foreach ($Paragraph in $WordDocument.Paragraphs) {
-                $Paragraph.ReplaceText('DATE',(Get-Date -Format "HH:mm dd.MM.yyyy"))
-                $Paragraph.ReplaceText('SYSTEM',($Data.Components -join ", "))
-                $Paragraph.ReplaceText('TENANT',$Data.Organization)
-            }
+            $WordDocument = Get-OfficeWord -FilePath $FullDocumentationPath.FullName
+            $WordDocument.FindAndReplace("SYSTEM",($Data.Components -join ", ")) | Out-Null
+            $WordDocument.FindAndReplace("DATE",(Get-Date -Format "HH:mm dd.MM.yyyy")) | Out-Null
+            $WordDocument.FindAndReplace("TENANT",$Data.Organization) | Out-Null
         }
         Write-Progress -Id 10 -Activity "Create Word File" -Status "Prepared File template" -PercentComplete 10
         #endregion
@@ -59,10 +57,12 @@ Function Write-M365DocWord(){
             $progress++
             Write-Progress -Id 10 -Activity "Create Word File" -Status "Write Section" -CurrentOperation $Section.Title -PercentComplete (($progress / $Data.SubSections.count) * 100)
             Write-DocumentationWordSection -WordDocument $WordDocument -Data $Section -Level ($Level + 1)
-            Save-WordDocument $WordDocument -Supress $True -FilePath $FullDocumentationPath.FullName
         }
 
-        Save-WordDocument $WordDocument -Supress $True -FilePath $FullDocumentationPath.FullName
+        #Update the TOC
+        $WordDocument.TableOfContent.Update()
+
+        Save-OfficeWord -Document $WordDocument -FilePath $FullDocumentationPath.FullName
         Write-Progress -Id 10 -Activity "Create Word File" -Status "Finished creation" -Completed
 
         Write-Information "Press Ctrl + A and then F9 to Update the table of contents and other dynamic fields in the Word document."

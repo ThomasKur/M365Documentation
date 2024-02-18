@@ -11,28 +11,32 @@ Function Write-DocumentationWordSection(){
     NAME: Thomas Kurth / 3.3.2021
     #>
     param(
-        [object]$WordDocument,
+        [OfficeIMO.Word.WordDocument]$WordDocument,
         [DocSection]$Data,
         [int]$Level = 1
     )
     
     if($Data.Objects -or $Data.SubSections){
-        Add-WordText -WordDocument $WordDocument -HeadingType "Heading$Level" -Text $Data.Title -Supress $True
+        New-OfficeWordText -Document $WordDocument -Style "Heading$Level" -Text $Data.Title
         if($Data.Text){
-            Add-WordText -WordDocument $WordDocument -Text $Data.Text -Supress $True
+            New-OfficeWordText -Document $WordDocument -Text $Data.Text
         }
         if($Data.Objects){
             
             if($Data.Transpose){
                 foreach($singleObj in $Data.Objects){
                     if($singleObj.displayName -ne $Data.Title -and $Data.Title -ne $singleObj.'Display Name'){
-                        Add-WordText -WordDocument $WordDocument -HeadingType "Heading$($Level + 1)" -Text $singleObj.displayName -Supress $True
+                        New-OfficeWordText -Document $WordDocument -Style "Heading$($Level + 1)" -Text $singleObj.displayName
                     }
-                    Add-WordTable -WordDocument $WordDocument -DataTable $singleObj -Design LightListAccent2 -Supress $True -Transpose -AutoFit Window
+                    $table = New-OfficeWordTable -Document $WordDocument -DataTable ($singleObj | Invoke-TransposeObject) -Style GridTable4Accent3
+                    $table.Width = 5000
+                    $table.WidthType = "Pct"
                 }
                 
             } else {
-                Add-WordTable -WordDocument $WordDocument -DataTable $Data.Objects -Design LightListAccent2 -Supress $True -AutoFit Window
+                $table = New-OfficeWordTable -Document $WordDocument -DataTable $Data.Objects -Style GridTable4Accent3 
+                $table.Width = 5000
+                $table.WidthType = "Pct"
             }
             
         }
