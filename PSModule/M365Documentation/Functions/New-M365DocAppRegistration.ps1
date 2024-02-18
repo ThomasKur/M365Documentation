@@ -22,8 +22,8 @@ Function New-M365DocAppRegistration(){
     #>
     [CmdletBinding(SupportsShouldProcess, ConfirmImpact='Medium')]
     Param(
-        [int]
-        $TokenLifetimeDays = 365
+        [string]
+        $displayName = "WPNinjas.eu Automatic Documentation Custom"
     )
     
 
@@ -31,57 +31,74 @@ Function New-M365DocAppRegistration(){
     ########################################################
     Write-Log "Start Script $Scriptname"
 
-    $AzureAD = Get-Module -Name AzureAD
+    $AzureAD = Get-Module -Name Microsoft.Graph.Authentication
     if($AzureAD){
-        Write-Verbose -Message "AzureAD module is loaded."
+        Write-Verbose -Message "Microsoft.Graph.Authentication module is loaded."
     } else {
-        Write-Warning -Message "AzureAD module is not loaded, please install by 'Install-Module AzureAD'."
+        Write-Warning -Message "Microsoft.Graph.Authentication module is not loaded, please install by 'Install-Module Microsoft.Graph.Authentication'."
+    }
+    $AzureAD2 = Get-Module -Name Microsoft.Graph.Applications
+    if($AzureAD2){
+        Write-Verbose -Message "Microsoft.Graph.Applications module is loaded."
+    } else {
+        Write-Warning -Message "Microsoft.Graph.Applications module is not loaded, please install by 'Install-Module Microsoft.Graph.Applications'."
     }
 
     #region Authentication
     try{
-        Get-AzureADContract -ErrorAction Stop | Out-Null
+        Get-MgContract -ErrorAction Stop | Out-Null
     } catch {
-        Write-Error "You must call the Connect-AzureAD cmdlet before calling this cmdlet." -ErrorAction Stop
+        Connect-MgGraph -Scopes "Application.ReadWrite.All"
     }
     #endregion
     #region Main Script
     ########################################################
     
-    $displayName = "WPNinjas.eu Automatic Documentation Custom"
+    
     $appPermissionsRequired = @("AccessReview.Read.All","Agreement.Read.All","AppCatalog.Read.All","Application.Read.All","CloudPC.Read.All","ConsentRequest.Read.All","Device.Read.All","DeviceManagementApps.Read.All","DeviceManagementConfiguration.Read.All","DeviceManagementManagedDevices.Read.All","DeviceManagementRBAC.Read.All","DeviceManagementServiceConfig.Read.All","Directory.Read.All","Domain.Read.All","Organization.Read.All","Policy.Read.All","Policy.ReadWrite.AuthenticationMethod","Policy.ReadWrite.FeatureRollout","PrintConnector.Read.All","Printer.Read.All","PrinterShare.Read.All","PrintSettings.Read.All","PrivilegedAccess.Read.AzureAD","PrivilegedAccess.Read.AzureADGroup","PrivilegedAccess.Read.AzureResources","User.Read" ,"IdentityProvider.Read.All","InformationProtectionPolicy.Read.All"   )
     $targetServicePrincipalName = 'Microsoft Graph'
+    $context = "Application"
+    $appPermissionsRequiredResolved = Find-MgGraphPermission | Select-Object Name, PermissionType, Id | Where-Object { $_.Name -in $appPermissionsRequired } | Sort -Property Name
+        
 
-    if (!(Get-AzureADApplication -SearchString $displayName)) {
-        $app = New-AzureADApplication -DisplayName $displayName `
-            -Homepage "https://www.wpninjas.eu" `
-            -ReplyUrls "urn:ietf:wg:oauth:2.0:oob" `
-            -PublicClient $true
-
-
+    if (!(Get-MgApplication | Where-Object {$_.DisplayName -eq $displayName})) {
+        $app = New-MgApplication -DisplayName $displayName -SignInAudience "AzureADMyOrg" -Web @{ RedirectUris="urn:ietf:wg:oauth:2.0:oob"; }
+        $RequiredResourceAccessArray = @()
+        $permissions = $appPermissionsRequiredResolved | ForEach-Object {
+            if($_.PermissionType -eq "Application"){
+                $t = "Role"
+            } else {
+                $t = "Scope"
+            }
+            $RequiredResourceAccessArray += 
+                    @{
+                        Id = $_.Id
+                        Type = $t
+                    }
+                
+            }
+        
+        Update-MgApplication -ApplicationId $app.Id -RequiredResourceAccess @{
+            ResourceAppId = "00000003-0000-0000-c000-000000000000"
+            ResourceAccess = $RequiredResourceAccessArray
+        }
         # create SPN for App Registration
         Write-Debug ('Creating SPN for App Registration {0}' -f $displayName)
 
-        # create a password (spn key)
-        $startDate = Get-Date
-        $endDate = $startDate.AddDays($TokenLifetimeDays)
-        $appPwd = New-AzureADApplicationPasswordCredential -ObjectId $app.ObjectId -CustomKeyIdentifier ((New-Guid).Guid.Replace("-","").subString(0, 30)) -StartDate $startDate -EndDate $endDate
+        $graphSpId = $(Get-MgServicePrincipal -Filter "appId eq '00000003-0000-0000-c000-000000000000'").Id
+        $sp = New-MgServicePrincipal -AppId $app.appId
+        
+        
+        $permissions | ForEach-Object {
+            New-MgServicePrincipalAppRoleAssignment -ServicePrincipalId $sp.Id -PrincipalId $sp.Id -AppRoleId $_.Id -ResourceId $graphSpId
+        }
 
-        # create a service principal for your application
-        # you need this to be able to grant your application the required permission
-        $spForApp = New-AzureADServicePrincipal -AppId $app.AppId -PasswordCredentials @($appPwd)
-        Set-AzureADAppPermission -targetServicePrincipalName $targetServicePrincipalName -appPermissionsRequired $appPermissionsRequired -childApp $app -spForApp $spForApp
-    
+        # create a password (spn key)
+        $cred = Add-MgApplicationPassword -ApplicationId $app.id
+
+
     } else {
         Write-Debug ('App Registration {0} already exists' -f $displayName)
-        $app = Get-AzureADApplication -SearchString $displayName
-        $spForApp = Get-AzureADServicePrincipal -SearchString $app.AppId
-        # create a password (spn key)
-        $startDate = Get-Date
-        $endDate = $startDate.AddDays($TokenLifetimeDays)
-        $appPwd = New-AzureADApplicationPasswordCredential -ObjectId $app.ObjectId -CustomKeyIdentifier ((New-Guid).Guid.Replace("-","").subString(0, 30)) -StartDate $startDate -EndDate $endDate
-        Set-AzureADAppPermission -targetServicePrincipalName $targetServicePrincipalName -appPermissionsRequired $appPermissionsRequired -childApp $app -spForApp $spForApp -ErrorAction SilentlyContinue
-    
     }
 
     
@@ -92,9 +109,9 @@ Function New-M365DocAppRegistration(){
     ########################################################
     [PSCustomObject]@{
         ClientID = $app.AppId
-        ClientSecret = $appPwd.Value
-        ClientSecretExpiration = $appPwd.EndDate
-        TenantId = (Get-AzureADCurrentSessionInfo).TenantId
+        ClientSecret = $cred.secretText
+        ClientSecretExpiration = $cred.EndDateTime
+        TenantId = $($(Get-MgContext).TenantId)
     }
     Write-Log -Type Warn -Message "Please close the Powershell session and reopen it. Otherwise the connection may fail."
     Write-Log "End Script $Scriptname"
