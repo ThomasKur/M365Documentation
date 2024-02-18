@@ -48,7 +48,8 @@ function Invoke-TransposeObject {
 			{ # does object have a "Name" property?
 				$Property = $InputObject.M_DisplayName
 			} else { # no, take object itself as property name
-				$Property = $InputObject | Out-String
+				#$Property = $InputObject | Out-String
+				$Property = "Value"
 			}
 
 			if ($InstanceNames -contains $Property)
