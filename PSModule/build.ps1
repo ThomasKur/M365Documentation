@@ -51,20 +51,20 @@ switch ($result) {
         Update-ModuleManifest -Path "$ModulePath\M365Documentation.psd1" `
             -FunctionsToExport $ExportableFunctions `
             -ReleaseNotes $ReleaseNote `
-            -RequiredModules @("MSAL.PS","PSWriteWord") `
+            -RequiredModules @("MSAL.PS","PSWriteOffice") `
             -IconUri $Icon `
             -ModuleVersion $SuggestedNewVersion `
-            -ExternalModuleDependencies @("MSAL.PS","PSWriteWord")  
+            -ExternalModuleDependencies @("MSAL.PS","PSWriteOffice")  
     }
     1{
         Write-Host "You selected no. The version will not be increased."
         Update-ModuleManifest -Path "$ModulePath\M365Documentation.psd1" `
             -FunctionsToExport $ExportableFunctions `
             -ReleaseNotes $ReleaseNote `
-            -RequiredModules @("MSAL.PS","PSWriteWord") `
+            -RequiredModules @("MSAL.PS","PSWriteOffice") `
             -IconUri $Icon `
             -ModuleVersion $CurrentVersion `
-            -ExternalModuleDependencies @("MSAL.PS","PSWriteWord") 
+            -ExternalModuleDependencies @("MSAL.PS","PSWriteOffice") 
         
     }
     2{
