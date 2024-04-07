@@ -1,5 +1,10 @@
 # Release Notes
 
+## 3.3.0 07.04.2024
+
+- Bugfix API Limit 25 elements returned #45
+- Add nice formated Settings Catalog Path of all values from https://github.com/IntunePMFiles/DeviceConfig #44
+
 ## 3.2.2 18.02.2024
 
 - Add Intune Security and Settings Catalog Profiles #37 #38
