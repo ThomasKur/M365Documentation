@@ -27,7 +27,10 @@ Function Invoke-DocGraph(){
         [switch]$Beta,
 
         [Parameter(Mandatory=$false,ParameterSetName = "Path")]
-        [string]$AcceptLanguage
+        [string]$AcceptLanguage,
+
+        [Parameter(Mandatory=$false,ParameterSetName = "Path")]
+        [bool]$FollowNextLink =  $false
 
     )
     if($PSCmdlet.ParameterSetName -eq "Path"){
@@ -45,6 +48,14 @@ Function Invoke-DocGraph(){
             $header.Add("Accept-Language",$AcceptLanguage)
         }
         $value = Invoke-RestMethod -Headers $header -Uri  $FullUrl -Method Get -ErrorAction Stop
+        if($FollowNextLink -and -not [String]::IsNullOrEmpty($value.'@odata.nextLink')){
+            $NextLink = $value.'@odata.nextLink'
+            do{
+                $valueNext = Invoke-RestMethod -Headers $header -Uri $NextLink -Method Get -ErrorAction Stop
+                $NextLink = $valueNext.'@odata.nextLink'
+                $valueNext.value | ForEach-Object { $value.value += $_ }
+            } until(-not $NextLink)
+        }
     } catch {
         
         if($_.Exception.Response.StatusCode -eq "Forbidden"){

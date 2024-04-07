@@ -60,8 +60,8 @@ Function Get-MdmConfigurationPolicy(){
         return $SettingValues
     }
 
-    $Policies = Invoke-DocGraph -Path "/deviceManagement/ConfigurationPolicies" -Beta  #-ChildPath '?$filter=technologies eq ''mdm'''
-
+    $Policies = Invoke-DocGraph -Path "/deviceManagement/ConfigurationPolicies" -Beta -FollowNextLink $true  #-ChildPath '?$filter=technologies eq ''mdm'''
+    
     foreach($Policy in $Policies.Value) {
         $PolicyA = (Invoke-DocGraph -Path "/deviceManagement/ConfigurationPolicies/$($Policy.Id)/assignments" -Beta).value
 
@@ -71,7 +71,7 @@ Function Get-MdmConfigurationPolicy(){
         $DocSecSingleValue.Objects = @()
         $DocSecSingleValue.Transpose = $false
 
-        $settings = Invoke-DocGraph -Path (Join-Path -Path "/deviceManagement/ConfigurationPolicies/$($Policy.Id)/settings" -ChildPath '?$expand=settingDefinitions') -Beta
+        $settings = Invoke-DocGraph -Path (Join-Path -Path "/deviceManagement/ConfigurationPolicies/$($Policy.Id)/settings" -ChildPath '?$expand=settingDefinitions') -FollowNextLink $true -Beta
 
         foreach($setting in $settings.value) {
             $DocSecSingleValue.Objects += & $getValues -setting $setting
