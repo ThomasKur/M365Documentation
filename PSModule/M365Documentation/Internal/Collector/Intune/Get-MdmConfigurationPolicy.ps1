@@ -21,6 +21,10 @@ Function Get-MdmConfigurationPolicy(){
 
     $ReturnObj = @()
 
+    # Load Translations
+    $translation = Get-Content "$PSScriptRoot\..\..\..\Data\Settings Definitions Export Mar-9 2024.csv" | ConvertFrom-Csv -Delimiter ";" 
+            
+
     [scriptblock]$getValue = {
         Param (
             $Instance,
@@ -39,6 +43,7 @@ Function Get-MdmConfigurationPolicy(){
             $settingValue = [PSCustomObject]@{
                 DisplayName = $definition.displayName
                 ID = $definitionId
+                Path = $translation | Where-Object { $_.ItemId -eq $definitionId } | Select-Object -ExpandProperty CategoryName
                 Value = ($Instance.$ValueType.value.ToString()).Replace($definitionId+"_","")
                 ValueName = ($Definitions.options | Where-Object { $_.itemId -eq $Instance.$ValueType.value }).DisplayName
             }
