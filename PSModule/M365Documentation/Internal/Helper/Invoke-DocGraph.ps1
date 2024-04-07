@@ -30,7 +30,7 @@ Function Invoke-DocGraph(){
         [string]$AcceptLanguage,
 
         [Parameter(Mandatory=$false,ParameterSetName = "Path")]
-        [bool]$FollowNextLink =  $false
+        [bool]$FollowNextLink =  $true
 
     )
     if($PSCmdlet.ParameterSetName -eq "Path"){
