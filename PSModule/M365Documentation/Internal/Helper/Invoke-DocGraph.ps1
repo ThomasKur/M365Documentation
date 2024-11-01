@@ -43,6 +43,14 @@ Function Invoke-DocGraph(){
     }
 
     try{
+        if($script:token.ExpiresOn.UtcDateTime -gt $(Get-Date).ToUniversalTime().AddMinutes(5) )
+        {
+            Write-Debug "Token is still valid"
+        } else {
+            Write-Information "Token is expired, requesting new token"
+            Connect-M365Doc -Force
+        }
+
         $header = @{Authorization = "Bearer $($script:token.AccessToken)"}
         if($AcceptLanguage){
             $header.Add("Accept-Language",$AcceptLanguage)

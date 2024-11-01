@@ -28,6 +28,7 @@ Function Connect-M365Doc(){
         [parameter(Mandatory=$true, ParameterSetName='PublicClient-Silent')]
         [guid]$TenantId ,
         [parameter(Mandatory=$false, ParameterSetName='Interactive')]
+        [parameter(Mandatory=$true, ParameterSetName='Refresh')]
         [switch]$Force
     )
     switch -Wildcard ($PSCmdlet.ParameterSetName) {
@@ -40,6 +41,7 @@ Function Connect-M365Doc(){
             } else {
                 $script:token = $token
             }
+            $script:ClientId = ""
            break
         }
         "PublicClient-Silent" {
@@ -49,8 +51,8 @@ Function Connect-M365Doc(){
                 RedirectUri = "msal37f82fa9-674e-4cae-9286-4b21eb9a6389://auth"
                 TenantId = $TenantId
                 ClientSecret = $ClientSecret
-                
             }
+            $script:AuthParams = $params
             $script:token = Get-MsalToken @params
             # Verify token
             if (-not ($script:token -and $script:token.ExpiresOn.LocalDateTime -ge $(Get-Date))) {
@@ -64,7 +66,8 @@ Function Connect-M365Doc(){
                 ClientId    = "37f82fa9-674e-4cae-9286-4b21eb9a6389"
                 RedirectUri = "http://localhost"
             }
-
+            $script:AuthParams = $params
+            
             # Verify token
             if (-not ($token -and $token.ExpiresOn.LocalDateTime -ge $(Get-Date))) {
                 $script:token = Get-MsalToken @params
@@ -76,6 +79,13 @@ Function Connect-M365Doc(){
                     Write-Information "Already connected."
                 }
             }
+           break
+       }
+       "Refresh" {
+
+            Write-Information "Force reconnection"
+            $script:token = Get-MsalToken $script:AuthParams -ForceRefresh
+            
            break
        }
    }
