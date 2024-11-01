@@ -25,11 +25,93 @@ Function Get-M365Doc(){
         If there is already a file present, the documentation will be added at the end of the existing document.
 
     .PARAMETER ExcludeSections
-        The specified sections are excluded from the collection process. 
+        The specified sections are excluded from the collection process. The following sections are available:
+
+        AzureAD AADAdministrativeUnit
+        AzureAD AADAuthMethod
+        AzureAD AADBranding
+        AzureAD AADConditionalAccess
+        AzureAD AADConditionalAccessSplit
+        AzureAD AADDirectoryRole
+        AzureAD AADDomain
+        AzureAD AADIdentityProvider
+        AzureAD AADOrganization
+        AzureAD AADPolicy
+        AzureAD AADSubscription
+
+        CloudPrint CPConnector
+        CloudPrint 
+        
+        InformationProtection MIPLabel
+
+        Intune MdmAdmxConfigurationProfile
+        Intune MdmAppleConfiguration
+        Intune MdmAutopilotProfile
+        Intune MdmCompliancePolicy
+        Intune MdmConfigurationPolicy
+        Intune MdmConfigurationProfile
+        Intune MdmDeviceCategory
+        Intune MdmEnrollmentConfiguration
+        Intune MdmExchangeConnector
+        Intune MdmPartner
+        Intune MdmPowerShellScript
+        Intune MdmSecurityBaseline
+        Intune MdmTermsAndCondition
+        Intune MdmWindowsUpdate
+        Intune MobileApp
+        Intune MobileAppConfiguration
+        Intune MobileAppDetailed
+        Intune MobileAppManagement
+
+        Windows365 W365Image
+        Windows365 W365OnPremConnection
+        Windows365 W365ProvisionProfile
+        Windows365 W365UserSetting
 
     .PARAMETER IncludeSections
         Only the specified sections are collected. Keep in mind that you have also to specify the corresponding Componetn. For example if 
         you choose to include AADConditionalAccess section, but specify Intune as a Component, then nothing will be collected.  
+
+        AzureAD AADAdministrativeUnit
+        AzureAD AADAuthMethod
+        AzureAD AADBranding
+        AzureAD AADConditionalAccess
+        AzureAD AADConditionalAccessSplit
+        AzureAD AADDirectoryRole
+        AzureAD AADDomain
+        AzureAD AADIdentityProvider
+        AzureAD AADOrganization
+        AzureAD AADPolicy
+        AzureAD AADSubscription
+
+        CloudPrint CPConnector
+        CloudPrint 
+        
+        InformationProtection MIPLabel
+
+        Intune MdmAdmxConfigurationProfile
+        Intune MdmAppleConfiguration
+        Intune MdmAutopilotProfile
+        Intune MdmCompliancePolicy
+        Intune MdmConfigurationPolicy
+        Intune MdmConfigurationProfile
+        Intune MdmDeviceCategory
+        Intune MdmEnrollmentConfiguration
+        Intune MdmExchangeConnector
+        Intune MdmPartner
+        Intune MdmPowerShellScript
+        Intune MdmSecurityBaseline
+        Intune MdmTermsAndCondition
+        Intune MdmWindowsUpdate
+        Intune MobileApp
+        Intune MobileAppConfiguration
+        Intune MobileAppDetailed
+        Intune MobileAppManagement
+
+        Windows365 W365Image
+        Windows365 W365OnPremConnection
+        Windows365 W365ProvisionProfile
+        Windows365 W365UserSetting
 
     .PARAMETER BackupFile
         Path to a previously generated JSON file.

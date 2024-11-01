@@ -54,6 +54,54 @@ $doc | Write-M365DocWord -FullDocumentationPath "c:\temp\$($doc.CreationDate.ToS
 
 ```
 
+## Sections whihc you can choose from
+
+_Component: AzureAD_
+AADAdministrativeUnit
+AADAuthMethod
+AADBranding
+AADConditionalAccess
+AADConditionalAccessSplit
+AADDirectoryRole
+AADDomain
+AADIdentityProvider
+AADOrganization
+AADPolicy
+AADSubscription
+
+_Component: CloudPrint_
+CPConnector
+CPPrinter
+
+_InformationProtection_
+MIPLabel
+
+_Intune_
+MdmAdmxConfigurationProfile
+MdmAppleConfiguration
+MdmAutopilotProfile
+MdmCompliancePolicy
+MdmConfigurationPolicy
+MdmConfigurationProfile
+MdmDeviceCategory
+MdmEnrollmentConfiguration
+MdmExchangeConnector
+MdmPartner
+MdmPowerShellScript
+MdmSecurityBaseline
+MdmTermsAndCondition
+MdmWindowsUpdate
+MobileApp
+MobileAppConfiguration
+MobileAppDetailed
+MobileAppManagement
+
+_Windows365_
+W365Image
+W365OnPremConnection
+W365ProvisionProfile
+W365UserSetting
+
 ## Supported Components
 
 ### Microsoft Endpoint Manager / Intune
