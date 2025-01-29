@@ -54,7 +54,7 @@ $doc | Write-M365DocWord -FullDocumentationPath "c:\temp\$($doc.CreationDate.ToS
 
 ```
 
-## Sections whihc you can choose from
+## Sections which you can choose from
 
 _Component: AzureAD_
 AADAdministrativeUnit
@@ -131,7 +131,7 @@ The following entities are documented:
 The following entities are documented:
 
 - Azure AD Conditional Access Policies
-- Translate referenced id's to real object names (users, groups, roles and applications)
+- Translate referenced IDs to real object names (users, groups, roles and applications)
 - Domains
 - Feature Rollout Policy
 - Authentication policies
