@@ -168,7 +168,7 @@ For any issues or feedback related to this module, please register for GitHub, a
 
 ## Thanks to
 
-@MEM_MVP for the continious feedback and 10000 translations!!!! Thank you!
+@MEM_MVP for the continuous feedback and 10000 translations!!!! Thank you!
 
 @Microsoftgraph for the PowerShell Examples: <https://github.com/microsoftgraph/powershell-intune-samples>
 
