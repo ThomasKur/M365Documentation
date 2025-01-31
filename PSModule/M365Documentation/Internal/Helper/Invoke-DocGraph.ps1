@@ -42,42 +42,25 @@ Function Invoke-DocGraph(){
         $FullUrl = "$BaseUrl$version$Path"
     }
 
-    # Make sure our token isn't about to expire before the request processes.
-    if($script:token.ExpiresOn.LocalDateTime -le $(Get-Date).AddMinutes(-1)) {
-        if($script:tokenRequest.ClientSecret) {
-            # Using PublicClient-Silent
-            try {
-                $script:token = Connect-M365Doc -ClientId $script:tokenRequest.ClientId -ClientSecret $script:tokenRequest.ClientSecret -TenantId $script:tokenRequest.TenantId
-            } catch {
-                Throw "Could not refresh token. $($_.Exception.Message)."
-            }
-        } elseif ($script.tokenRequest) {
-            # Using Interactive
-            try {
-                $script:token = Connect-M365Doc -Force
-            } catch {
-                Throw "Could not refresh token. $($_.Exception.Message)."
-            }
-        } else {
-            # Using Custom Token.
-            Throw "Custom token expiring. Please create a new token."
-        }
-    }
-
-    Write-Verbose "Current token expires $($script:token.ExpiresOn.LocalDateTime)"
-
     try{
+
+        Test-TokenExpiration
         $header = @{Authorization = "Bearer $($script:token.AccessToken)"}
-        if($AcceptLanguage){
-            $header.Add("Accept-Language",$AcceptLanguage)
-        }
-        $value = Invoke-RestMethod -Headers $header -Uri  $FullUrl -Method Get -ErrorAction Stop
+        if($AcceptLanguage){ $header.Add("Accept-Language",$AcceptLanguage) }
+
+        $value = Invoke-RestMethod -Headers $header -Uri $FullUrl -Method Get -ErrorAction Stop
         if($FollowNextLink -and -not [String]::IsNullOrEmpty($value.'@odata.nextLink')){
             $NextLink = $value.'@odata.nextLink'
             do{
+                
+                Test-TokenExpiration
+                $header = @{Authorization = "Bearer $($script:token.AccessToken)"} # Need to recreate the header incase the bearer token changed on refresh.
+                if($AcceptLanguage){ $header.Add("Accept-Language",$AcceptLanguage) }       
+                
                 $valueNext = Invoke-RestMethod -Headers $header -Uri $NextLink -Method Get -ErrorAction Stop
                 $NextLink = $valueNext.'@odata.nextLink'
                 $valueNext.value | ForEach-Object { $value.value += $_ }
+
             } until(-not $NextLink)
         }
     } catch {
