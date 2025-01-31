@@ -69,7 +69,7 @@ Function Get-M365Doc(){
         Windows365 W365UserSetting
 
     .PARAMETER IncludeSections
-        Only the specified sections are collected. Keep in mind that you have also to specify the corresponding Componetn. For example if 
+        Only the specified sections are collected. Keep in mind that you have also to specify the corresponding Component. For example if 
         you choose to include AADConditionalAccess section, but specify Intune as a Component, then nothing will be collected.  
 
         AzureAD AADAdministrativeUnit
