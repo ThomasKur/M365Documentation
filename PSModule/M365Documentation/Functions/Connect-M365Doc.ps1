@@ -40,34 +40,39 @@ Function Connect-M365Doc(){
             } else {
                 $script:token = $token
             }
-           break
+            Write-Verbose "Custom Token expires: $($script:token.ExpiresOn.LocalDateTime)"
+            break
         }
         "PublicClient-Silent" {
            # Connect to Microsoft Intune PowerShell App
-            $params = @{
+            $script:tokenRequest = @{
                 ClientId = $ClientId
                 RedirectUri = "msal37f82fa9-674e-4cae-9286-4b21eb9a6389://auth"
                 TenantId = $TenantId
                 ClientSecret = $ClientSecret
-                
+                ForceRefresh = $True # We could be pulling a token from the MSAL Cache, ForceRefresh to ensure it's new and has the longest timeline.
             }
-            $script:token = Get-MsalToken @params
+            
+            $script:token = Get-MsalToken @script:tokenRequest
+            
             # Verify token
+            $token | Out-host
             if (-not ($script:token -and $script:token.ExpiresOn.LocalDateTime -ge $(Get-Date))) {
                 Write-Error "Connection failed."
             }
+            Write-Verbose "PublicClient-Silent Token expires: $($script:token.ExpiresOn.LocalDateTime)"
             break
         }
        "Interactive" {
             # Connect to Microsoft Intune PowerShell App
-            $params = @{
+            $script:tokenRequest = @{
                 ClientId    = "37f82fa9-674e-4cae-9286-4b21eb9a6389"
                 RedirectUri = "http://localhost"
+                ForceRefresh = $True # We could be pulling a token from the MSAL Cache, ForceRefresh to ensure it's new and has the longest timeline.
             }
-
             # Verify token
             if (-not ($token -and $token.ExpiresOn.LocalDateTime -ge $(Get-Date))) {
-                $script:token = Get-MsalToken @params
+                $script:token = Get-MsalToken @script:tokenRequest
             } else {
                 if($Force){
                     Write-Information "Force reconnection"
@@ -76,8 +81,8 @@ Function Connect-M365Doc(){
                     Write-Information "Already connected."
                 }
             }
-           break
+            Write-Verbose "Interactive Token expires: $($script:token.ExpiresOn.LocalDateTime)"
+            break
        }
    }
-    
 }
