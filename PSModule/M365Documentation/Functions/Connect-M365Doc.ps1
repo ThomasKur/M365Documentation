@@ -26,7 +26,10 @@ Function Connect-M365Doc(){
         [parameter(Mandatory=$true, ParameterSetName='PublicClient-Silent')]
         [Security.SecureString]$ClientSecret,
         [parameter(Mandatory=$true, ParameterSetName='PublicClient-Silent')]
-        [guid]$TenantId ,
+        [guid]$TenantId,
+        [parameter(Mandatory=$false, ParameterSetName='Interactive')]
+        [parameter(Mandatory=$false, ParameterSetName='PublicClient-Silent')]
+        [switch]$NeverRefreshToken,
         [parameter(Mandatory=$false, ParameterSetName='Interactive')]
         [switch]$Force
     )
@@ -52,7 +55,7 @@ Function Connect-M365Doc(){
                 ClientSecret = $ClientSecret
                 ForceRefresh = $True # We could be pulling a token from the MSAL Cache, ForceRefresh to ensure it's new and has the longest timeline.
             }
-            
+            if($NeverRefreshToken) { $script:tokenRequest.ForceRefresh = $False}
             $script:token = Get-MsalToken @script:tokenRequest
             
             # Verify token
@@ -70,6 +73,9 @@ Function Connect-M365Doc(){
                 RedirectUri = "http://localhost"
                 ForceRefresh = $True # We could be pulling a token from the MSAL Cache, ForceRefresh to ensure it's new and has the longest timeline.
             }
+
+            if($NeverRefreshToken) { $script:tokenRequest.ForceRefresh = $False}
+
             # Verify token
             if (-not ($token -and $token.ExpiresOn.LocalDateTime -ge $(Get-Date))) {
                 $script:token = Get-MsalToken @script:tokenRequest
