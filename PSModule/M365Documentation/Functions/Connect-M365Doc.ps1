@@ -56,10 +56,16 @@ Function Connect-M365Doc(){
                 ForceRefresh = $True # We could be pulling a token from the MSAL Cache, ForceRefresh to ensure it's new and has the longest timeline.
             }
             if($NeverRefreshToken) { $script:tokenRequest.ForceRefresh = $False}
+            
+            Write-Host "$(Get-Date -Format 'yyyy-MM-dd HH:mm:ss') Requesting New Token: " -ForegroundColor Cyan
+            Write-Host "$(Get-Date -Format 'yyyy-MM-dd HH:mm:ss')   ClientId = $($script:tokenRequest.ClientId) " -ForegroundColor Cyan
+            Write-Host "$(Get-Date -Format 'yyyy-MM-dd HH:mm:ss')   TenantId = $($script:tokenRequest.TenantId) " -ForegroundColor Cyan
+            Write-Host "$(Get-Date -Format 'yyyy-MM-dd HH:mm:ss')     Secret = $($script:tokenRequest.ClientSecret)" -ForegroundColor Cyan
             $script:token = Get-MsalToken @script:tokenRequest
             
+            $script:token | FL | Out-String
+
             # Verify token
-            $token | Out-host
             if (-not ($script:token -and $script:token.ExpiresOn.LocalDateTime -ge $(Get-Date))) {
                 Write-Error "Connection failed."
             }
