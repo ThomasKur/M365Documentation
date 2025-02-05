@@ -49,10 +49,10 @@ Function Invoke-DocGraph(){
         if($AcceptLanguage){ $header.Add("Accept-Language",$AcceptLanguage) }
 
         $value = Invoke-RestMethod -Headers $header -Uri $FullUrl -Method Get -ErrorAction Stop
+        
         if($FollowNextLink -and -not [String]::IsNullOrEmpty($value.'@odata.nextLink')){
             $NextLink = $value.'@odata.nextLink'
             do{
-                
                 Test-TokenExpiration
                 $header = @{Authorization = "Bearer $($script:token.AccessToken)"} # Need to recreate the header incase the bearer token changed on refresh.
                 if($AcceptLanguage){ $header.Add("Accept-Language",$AcceptLanguage) }       
@@ -69,7 +69,11 @@ Function Invoke-DocGraph(){
 
         try {
             # See if there is a valid error message to return in the json
-            $jsonResponse = $caughtError.ErrorDetails.Message | ConvertFrom-Json
+            if($caughtError.ErrorDetails.Message) {
+                $jsonResponse = $caughtError.ErrorDetails.Message | ConvertFrom-Json
+            } else {
+                $jsonResponse = @{}
+            }
         } catch {
             # There was no message or it wasn't formatted as json. Throw original error.
             $jsonResponse = @{}
