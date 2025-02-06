@@ -17,7 +17,7 @@ Function Get-MdmExchangeConnector(){
     $DocSec = New-Object DocSection
 
     $DocSec.Title = "Exchange Connector"
-    $DocSec.Text = "This section contains all Exchange COnnectors defined in Intune."
+    $DocSec.Text = "This section contains all Exchange Connectors defined in Intune."
 
     $ReturnObj = @()
 
