@@ -57,14 +57,8 @@ Function Connect-M365Doc(){
             }
             if($NeverRefreshToken) { $script:tokenRequest.ForceRefresh = $False}
             
-            Write-Host "$(Get-Date -Format 'yyyy-MM-dd HH:mm:ss') Requesting New Token: " -ForegroundColor Cyan
-            Write-Host "$(Get-Date -Format 'yyyy-MM-dd HH:mm:ss')   ClientId = $($script:tokenRequest.ClientId) " -ForegroundColor Cyan
-            Write-Host "$(Get-Date -Format 'yyyy-MM-dd HH:mm:ss')   TenantId = $($script:tokenRequest.TenantId) " -ForegroundColor Cyan
-            Write-Host "$(Get-Date -Format 'yyyy-MM-dd HH:mm:ss')     Secret = $($script:tokenRequest.ClientSecret)" -ForegroundColor Cyan
             $script:token = Get-MsalToken @script:tokenRequest
             
-            $script:token | FL | Out-String
-
             # Verify token
             if (-not ($script:token -and $script:token.ExpiresOn.LocalDateTime -ge $(Get-Date))) {
                 Write-Error "Connection failed."
