@@ -43,27 +43,54 @@ Function Invoke-DocGraph(){
     }
 
     try{
+
+        Test-TokenExpiration
         $header = @{Authorization = "Bearer $($script:token.AccessToken)"}
-        if($AcceptLanguage){
-            $header.Add("Accept-Language",$AcceptLanguage)
-        }
-        $value = Invoke-RestMethod -Headers $header -Uri  $FullUrl -Method Get -ErrorAction Stop
+        if($AcceptLanguage){ $header.Add("Accept-Language",$AcceptLanguage) }
+
+        $value = Invoke-RestMethod -Headers $header -Uri $FullUrl -Method Get -ErrorAction Stop
+        
         if($FollowNextLink -and -not [String]::IsNullOrEmpty($value.'@odata.nextLink')){
             $NextLink = $value.'@odata.nextLink'
             do{
+                Test-TokenExpiration
+                $header = @{Authorization = "Bearer $($script:token.AccessToken)"} # Need to recreate the header incase the bearer token changed on refresh.
+                if($AcceptLanguage){ $header.Add("Accept-Language",$AcceptLanguage) }       
+                
                 $valueNext = Invoke-RestMethod -Headers $header -Uri $NextLink -Method Get -ErrorAction Stop
                 $NextLink = $valueNext.'@odata.nextLink'
                 $valueNext.value | ForEach-Object { $value.value += $_ }
+
             } until(-not $NextLink)
         }
     } catch {
         
-        if($_.Exception.Response.StatusCode -eq "Forbidden"){
+        $caughtError = $_
+
+        try {
+            # See if there is a valid error message to return in the json
+            if($caughtError.ErrorDetails.Message) {
+                $jsonResponse = $caughtError.ErrorDetails.Message | ConvertFrom-Json
+            } else {
+                $jsonResponse = @{}
+            }
+        } catch {
+            # There was no message or it wasn't formatted as json. Throw original error.
+            $jsonResponse = @{}
+        }
+
+        if($caughtError.Exception.Response.StatusCode -eq "Forbidden"){
             throw "Used application does not have sufficiant permission to access: $FullUrl"
-        } elseif ($_.Exception.Response.StatusCode -eq "NotFound" -and $_.Exception.Response.ResponseUri -like "https://graph.microsoft.com/v1.0/groups*"){
+        } elseif ($caughtError.Exception.Response.StatusCode -eq "NotFound" -and $_.Exception.Response.ResponseUri -like "https://graph.microsoft.com/v1.0/groups*"){
             Write-Debug "Some Profiles/Apps are assigned to groups which do no longer exist. They are not displayed in the output $($_.Exception.Response.ResponseUri)."
         }  else  {
-            Write-Error $_
+            if($jsonResponse.ErrorDetails.Message) {
+                # If there was an error we can display, show it.
+                throw $jsonResponse.ErrorDetails.Message
+            } Else {
+                # No mesasge returned from Graph, return raw error.
+                throw $_
+            }
         }
     }
 

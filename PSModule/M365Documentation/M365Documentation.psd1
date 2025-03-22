@@ -12,7 +12,7 @@
 RootModule = 'M365Documentation.psm1'
 
 # Version number of this module.
-ModuleVersion = '3.3.0'
+ModuleVersion = '3.3.1'
 
 # Supported PSEditions
 # CompatiblePSEditions = @()
