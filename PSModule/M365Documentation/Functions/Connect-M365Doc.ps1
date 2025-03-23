@@ -77,7 +77,7 @@ Function Connect-M365Doc(){
             if($NeverRefreshToken) { $script:tokenRequest.ForceRefresh = $False}
 
             # Verify token
-            if (-not ($token -and $token.ExpiresOn.LocalDateTime -ge $(Get-Date))) {
+            if (-not ($script:token -and $script:token.ExpiresOn.LocalDateTime -ge $(Get-Date))) {
                 $script:token = Get-MsalToken @script:tokenRequest
             } else {
                 if($Force){
