@@ -39,7 +39,7 @@ Function Write-M365DocWord(){
         Write-Progress -Id 10 -Activity "Create Word File" -Status "Prepare File template" -PercentComplete 0
         
         if((Test-Path -Path $FullDocumentationPath)){
-            Write-Log "File ($FullDocumentationPath) already exists! Therefore, built-in template will not be used." -Type Warn
+            Write-Warning "File ($FullDocumentationPath) already exists! Therefore, built-in template will not be used." -WarningAction Continue
             $WordDocument = Get-OfficeWord -FilePath $FullDocumentationPath
         } else {
             Copy-Item "$PSScriptRoot\..\Data\Template.docx" -Destination $FullDocumentationPath

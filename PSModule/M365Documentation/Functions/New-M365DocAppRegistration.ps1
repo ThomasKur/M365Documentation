@@ -29,7 +29,6 @@ Function New-M365DocAppRegistration(){
 
     #region Initialization
     ########################################################
-    Write-Log "Start Script $Scriptname"
 
     $AzureAD = Get-Module -Name Microsoft.Graph.Authentication
     if($AzureAD){
@@ -56,9 +55,7 @@ Function New-M365DocAppRegistration(){
     
     
     $appPermissionsRequired = @("AccessReview.Read.All","Agreement.Read.All","AppCatalog.Read.All","Application.Read.All","CloudPC.Read.All","ConsentRequest.Read.All","Device.Read.All","DeviceManagementApps.Read.All","DeviceManagementConfiguration.Read.All","DeviceManagementManagedDevices.Read.All","DeviceManagementRBAC.Read.All","DeviceManagementServiceConfig.Read.All","Directory.Read.All","Domain.Read.All","Organization.Read.All","Policy.Read.All","Policy.ReadWrite.AuthenticationMethod","Policy.ReadWrite.FeatureRollout","PrintConnector.Read.All","Printer.Read.All","PrinterShare.Read.All","PrintSettings.Read.All","PrivilegedAccess.Read.AzureAD","PrivilegedAccess.Read.AzureADGroup","PrivilegedAccess.Read.AzureResources","User.Read" ,"IdentityProvider.Read.All","InformationProtectionPolicy.Read.All"   )
-    $targetServicePrincipalName = 'Microsoft Graph'
-    $context = "Application"
-    $appPermissionsRequiredResolved = Find-MgGraphPermission | Select-Object Name, PermissionType, Id | Where-Object { $_.Name -in $appPermissionsRequired } | Sort -Property Name
+    $appPermissionsRequiredResolved = Find-MgGraphPermission | Select-Object Name, PermissionType, Id | Where-Object { $_.Name -in $appPermissionsRequired } | Sort-Object -Property Name
         
 
     if (!(Get-MgApplication | Where-Object {$_.DisplayName -eq $displayName})) {
@@ -113,7 +110,6 @@ Function New-M365DocAppRegistration(){
         ClientSecretExpiration = $cred.EndDateTime
         TenantId = $($(Get-MgContext).TenantId)
     }
-    Write-Log -Type Warn -Message "Please close the Powershell session and reopen it. Otherwise the connection may fail."
-    Write-Log "End Script $Scriptname"
+    Write-Warning "Please close the Powershell session and reopen it. Otherwise the connection may fail."
     #endregion
 }

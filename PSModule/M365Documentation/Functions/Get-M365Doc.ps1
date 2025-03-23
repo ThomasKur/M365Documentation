@@ -213,7 +213,7 @@ Function Get-M365Doc(){
 
         #region Initialization
         ########################################################
-        Write-Log "Start Script $Scriptname"
+        Write-Verbose "Start Script $Scriptname"
         # Authentication
         # verify token
         if (-not ($script:token -and $script:token.ExpiresOn.LocalDateTime -ge $(Get-Date))) {

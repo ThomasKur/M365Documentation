@@ -51,7 +51,7 @@ Function Get-MdmAdmxConfigurationProfile(){
                     Value = $AdditionalConfig
                 }
             } catch {
-                Write-Log -Message "Error reading ADMX setting" -Type Warn -Exception $_.Exception
+                Write-Warning "Error reading ADMX setting $($_.Exception)" -WarningAction Continue
             }
         }
 

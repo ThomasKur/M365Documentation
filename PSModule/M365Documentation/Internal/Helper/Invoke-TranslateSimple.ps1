@@ -37,7 +37,7 @@ Function Invoke-TranslateSimple(){
             [DateTime]$Date = ([DateTime]::Parse($Value))
             $Value = "$($Date.ToShortDateString()) $($Date.ToShortTimeString())"
         } catch {
-            Write-Log "Cannot parse data" -Type Warn
+            Write-Warning "Cannot parse data" -WarningAction Continue
         }
     }
     return $value
