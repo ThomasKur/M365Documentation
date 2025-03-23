@@ -43,11 +43,11 @@ Function Invoke-DocGraph(){
     }
 
     try{
-
+        Write-Verbose "Requesting: $FullUrl"
         Test-TokenExpiration
         $header = @{Authorization = "Bearer $($script:token.AccessToken)"}
         if($AcceptLanguage){ $header.Add("Accept-Language",$AcceptLanguage) }
-
+        $header.Add("Accept","application/json")
         $value = Invoke-RestMethod -Headers $header -Uri $FullUrl -Method Get -ErrorAction Stop
         
         if($FollowNextLink -and -not [String]::IsNullOrEmpty($value.'@odata.nextLink')){
@@ -56,7 +56,7 @@ Function Invoke-DocGraph(){
                 Test-TokenExpiration
                 $header = @{Authorization = "Bearer $($script:token.AccessToken)"} # Need to recreate the header incase the bearer token changed on refresh.
                 if($AcceptLanguage){ $header.Add("Accept-Language",$AcceptLanguage) }       
-                
+                $header.Add("Accept","application/json")
                 $valueNext = Invoke-RestMethod -Headers $header -Uri $NextLink -Method Get -ErrorAction Stop
                 $NextLink = $valueNext.'@odata.nextLink'
                 $valueNext.value | ForEach-Object { $value.value += $_ }
@@ -66,7 +66,7 @@ Function Invoke-DocGraph(){
     } catch {
         
         $caughtError = $_
-
+        Write-Verbose "Error on requesting '$FullUrl'"
         try {
             # See if there is a valid error message to return in the json
             if($caughtError.ErrorDetails.Message) {
@@ -80,10 +80,17 @@ Function Invoke-DocGraph(){
         }
 
         if($caughtError.Exception.Response.StatusCode -eq "Forbidden"){
-            throw "Used application does not have sufficiant permission to access: $FullUrl"
+            Write-Warning "Forbidden: Used application does not have sufficiant permission to access. FullUrl: '$FullUrl'" -WarningAction Continue
+        } elseif ($caughtError.Exception.Response.StatusCode -eq "Unauthorized"){
+            Write-Warning "Unauthorized: The most common cause is an invalid, missing, or expired access token in the HTTP request header. It might also be a missing license assignment. FullUrl: '$FullUrl'" -WarningAction Continue
         } elseif ($caughtError.Exception.Response.StatusCode -eq "NotFound" -and $_.Exception.Response.ResponseUri -like "https://graph.microsoft.com/v1.0/groups*"){
-            Write-Debug "Some Profiles/Apps are assigned to groups which do no longer exist. They are not displayed in the output $($_.Exception.Response.ResponseUri)."
-        }  else  {
+            Write-Debug "NotFound: Some Profiles/Apps are assigned to groups which do no longer exist. They are not displayed in the output $($_.Exception.Response.ResponseUri). FullUrl: '$FullUrl'"
+        }  elseif ($caughtError.Exception.Response.StatusCode -eq "NotFound"){
+            Write-Warning "NotFound: The configuration or object might not exist in your tenant. FullUrl: '$FullUrl'"
+            $value = [PSCustomObject]@{
+                Status    = 'Not Found'
+            }
+        } else  {
             if($jsonResponse.ErrorDetails.Message) {
                 # If there was an error we can display, show it.
                 throw $jsonResponse.ErrorDetails.Message
