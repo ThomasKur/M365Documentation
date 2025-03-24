@@ -12,7 +12,7 @@
 RootModule = 'M365Documentation.psm1'
 
 # Version number of this module.
-ModuleVersion = '3.3.1'
+ModuleVersion = '3.4.0'
 
 # Supported PSEditions
 # CompatiblePSEditions = @()
@@ -27,7 +27,7 @@ Author = 'Thomas Kurth'
 CompanyName = 'WorkplaceNinjas'
 
 # Copyright statement for this module
-Copyright = '(c) 2024 Thomas Kurth. All rights reserved.'
+Copyright = '(c) 2025 Thomas Kurth. All rights reserved.'
 
 # Description of the functionality provided by this module
 Description = 'Automatic Documentation of M365 to simplify the life of admins and consultants.'
