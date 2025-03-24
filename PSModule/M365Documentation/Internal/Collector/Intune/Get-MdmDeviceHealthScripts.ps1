@@ -28,7 +28,7 @@ Function Get-MdmDeviceHealthScripts(){
         $currentScript = Invoke-DocGraph -Path "/deviceManagement/deviceHealthScripts/$($Policy.id)" -Beta
         $ScriptContent = [System.Text.Encoding]::UTF8.GetString([System.Convert]::FromBase64String($currentScript.remediationScriptContent))
         $ScriptContent = $ScriptContent -replace "`0", ""
-        if($ScriptContent -ne "" -and $ScriptContent -ne $null) {
+        if($ScriptContent -ne "" -and $null -ne $ScriptContent) {
             $ScriptContent = $ScriptContent.Substring(1)
         }
         $ScriptContentDet = [System.Text.Encoding]::UTF8.GetString([System.Convert]::FromBase64String($currentScript.detectionScriptContent))
