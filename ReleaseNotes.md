@@ -1,5 +1,13 @@
 # Release Notes
 
+## 3.3.1 23.3.2025
+
+- Improve Error Handling
+- Add Token Refresh for long running collections (big tenants)
+- Minor Spelling/Gramatical Fixes
+- Remove Write-Log internal command as it is now a PS core included cmdlet name
+- Added the following new Intune Objects: Device Compliance Scripts, Device Health Scripts and Shell Scripts
+
 ## 3.3.0 07.04.2024
 
 - Bugfix API Limit 25 elements returned #45
