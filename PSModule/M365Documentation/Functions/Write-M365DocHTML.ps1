@@ -40,10 +40,8 @@ Function Write-M365DocHTML(){
 
     }
     Process {
-        #region CopyTemplate
         Write-Progress -Id 10 -Activity "Create HTML File" -Status "Prepare template" -PercentComplete 0
-
-        #$htmlTemplate = Get-Content "$PSScriptRoot\..\Data\TemplateHTMLFragment.html"
+        # Read HTML Template
         $htmlTemplate = Get-Content "$tempPSScriptRoot\..\Data\TemplateHTMLBody.html" -raw
         
         # Replace Basic Data
@@ -54,6 +52,8 @@ Function Write-M365DocHTML(){
         Write-Progress -Id 10 -Activity "Create HTML File" -Status "Prepared template" -PercentComplete 10
 
         $progress = 0
+
+        # Run through secions and catch returns
         $codeObj = @()
         foreach($Section in $Data.SubSections){
             Write-Progress -Id 10 -Activity "Create HTML File" -Status "Write Section" -CurrentOperation $Section.Title -PercentComplete (($progress / $Data.SubSections.count) * 100)
@@ -61,10 +61,11 @@ Function Write-M365DocHTML(){
             $codeObj += Write-DocumentationHTMLSection -Data $Section
         }
 
+        # Replace the index in the HTML Template and add the HTML Body code
         $htmlTemplate = $htmlTemplate -replace "TOBEREPLACED-INDEX",$($codeObj.IndexCode -join " ")
-        
-
         $htmlTemplate += $codeObj.bodycode
+        
+        # Merge with top html template if no fragment is wanted
         if($fragment -eq $false) {
             $outputFile = Get-Content "$tempPSScriptRoot\..\Data\TemplateHTML.html" -Raw
             $outputFile = $outputFile -replace "TOBEREPLACED-BODY",$htmlTemplate
@@ -74,6 +75,7 @@ Function Write-M365DocHTML(){
 
         }
 
+        # Output File
         $outputFile | Out-File -FilePath $FullDocumentationPath
 
         Write-Progress -Id 10 -Activity "Create HTML File" -Status "Finished creation" -Completed

@@ -15,38 +15,45 @@ Function Write-DocumentationHTMLSection(){
         $Transpose
     )
 
+    # Define Object to be returned at the end
     $retObj = New-Object -TypeName PSObject
     $retObj | Add-Member -MemberType NoteProperty -Name "IndexCode" -Value ""
     $retObj | Add-Member -MemberType NoteProperty -Name "BodyCode" -Value ""
 
+    # Run through object
     if($Data.Objects -or $Data.SubSections){
+        # Clean Title to set Links from the Index to the Content
         $TitleClean = $Data.Title.ToLower().Replace(" ","-") -replace '[^a-zA-Z0-9/_/-]', ''
         if($data.Transpose -eq $true) { $Transpose = $true }
 
         if($Data.Objects){  
+            # Output an H3 Heading for Objects and add link for index
             $retObj.BodyCode += "<h3 id=""$titleClean"">$($Section.Title)</h3><p>$($Section.Text)</p>"
             $retObj.IndexCode += "<li><a href=""#$TitleClean"">$($Section.Title)</a></li>"
 
+            # Transpose Objects if needed
             if($Transpose -eq $true) { 
-                $subindex = "<ul>"
+                #$subindex = "<ul>" # Commented out for now - Index gets too big
                 foreach($object in $data.Objects) {
+                    # Output a heading for each object
                     if($object.displayName -or $object.M_DisplayName) {
                         if($object.displayName) { $dn = $object.displayName}
                         else {$dn = $object.M_DisplayName }
                         $displayNameClean = $Data.Title.ToLower().Replace(" ","-") -replace '[^a-zA-Z0-9/_/-]', ''
-                        $retObj.BodyCode += "<p id=""$displayNameClean"">$dn</p>"
-                        $retObj.IndexCode += "<li><a href=""#$displayNameClean"">$dn</a></li>"
+                        $retObj.BodyCode += "<h4 id=""$displayNameClean"">$dn</h4>"
+                        #$retObj.IndexCode += "<li><a href=""#$displayNameClean"">$dn</a></li>"  # Commented out for now - Index gets too big
                     }
                     $retObj.BodyCode += Invoke-TransposeObject -InputObject $object |  ConvertTo-PshtmlTable
 
                 }
-                $subindex += "</ul>"
+                # $subindex += "</ul>"  # Commented out for now - Index gets too big
             }
             else {
                 $retObj.BodyCode += $data.Objects |  ConvertTo-PshtmlTable
             }
         }
         else {
+            # Output an H2 Heading for SubSections and add link for index
             $retObj.BodyCode += "<h2 id=""$titleClean"">$($Section.Title)</h2><p>$($Section.Text)</p>"
             $retObj.IndexCode += "<li><a href=""#$TitleClean"">$($Section.Title)</a></li>"
         }
