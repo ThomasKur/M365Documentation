@@ -34,8 +34,15 @@ Function Get-MobileApp(){
                 if($null -ne $Assignment.target.groupId){
                     $Group = Invoke-DocGraph -Path "/groups/$($Assignment.target.groupId)"
                     $GroupName = $Group.displayName
-                    $AppGroups += $Group
-                    $Assignments += "$($GroupName)`n - Intent:$($Assignment.intent)"
+                    if($null -ne $Assignment.target.deviceAndAppManagementAssignmentFilterId){
+                        $Filter = Invoke-DocGraph -Path "/deviceManagement/assignmentFilters/$($Assignment.target.deviceAndAppManagementAssignmentFilterId)" -Beta
+                        $FilterString = "`n - Filter: $($Filter.displayName)`n - Filtertype: $($Assignment.target.deviceAndAppManagementAssignmentFilterType)"
+                    } else {
+                        $FilterString = $null
+                    }
+                    
+                    $Filter = $Assignment.target.groupType
+                    $Assignments += "$($GroupName)`n - Intent:$($Assignment.intent)$FilterString"
                 } else {
                     $Assignments += "$(($Assignment.target.'@odata.type' -replace "#microsoft.graph.",''))`n - Intent:$($Assignment.intent)"
                 }

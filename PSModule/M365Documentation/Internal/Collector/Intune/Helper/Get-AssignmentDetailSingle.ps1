@@ -47,6 +47,16 @@ Function Get-AssignmentDetailSingle(){
         if($null -eq $DynamicRule){
             $DynamicRule = "-"
         }
+        
+        if($null -ne $Assignment.target.deviceAndAppManagementAssignmentFilterId){
+            $Filter = Invoke-DocGraph -Path "/deviceManagement/assignmentFilters/$($Assignment.target.deviceAndAppManagementAssignmentFilterId)" -Beta
+            $FilterName = $Filter.displayName
+            $Filtertype = $Assignment.target.deviceAndAppManagementAssignmentFilterType
+        } else {
+            $FilterName = $null
+            $Filtertype = "none"
+        }
+        
         $returnObj =[PSCustomObject]@{
             Name = $Name
             MemberCount = $MemberCount
@@ -55,6 +65,8 @@ Function Get-AssignmentDetailSingle(){
             Intent = "-"
             Source = ""
             AssignType = "Include"
+            FilterName = $FilterName
+            FilterType = $Filtertype
         }
     } else {
 
@@ -63,6 +75,15 @@ Function Get-AssignmentDetailSingle(){
         {
             "allDevicesAssignmentTarget" { $Name = "All Devices" }
             "allLicensedUsersAssignmentTarget" { $Name = "All Users"  }
+        }
+
+        if($null -ne $Assignment.target.deviceAndAppManagementAssignmentFilterId){
+            $Filter = Invoke-DocGraph -Path "/deviceManagement/assignmentFilters/$($Assignment.target.deviceAndAppManagementAssignmentFilterId)"
+            $FilterName = $Filter.displayName
+            $Filtertype = $Assignment.target.deviceAndAppManagementAssignmentFilterType
+        } else {
+            $FilterName = $null
+            $Filtertype = $null
         }
         
         $returnObj =[PSCustomObject]@{
@@ -73,6 +94,8 @@ Function Get-AssignmentDetailSingle(){
             Intent = "-"
             Source = ""
             AssignType = "Include"
+            FilterName = $FilterName
+            FilterType = $Filtertype
         }
     } 
 
