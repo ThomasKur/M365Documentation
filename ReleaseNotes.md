@@ -1,5 +1,10 @@
 # Release Notes
 
+## 3.4.0 24.3.2025
+
+- Improve PIM Documentation in Entra ID
+- Add Device Filter Documentation in Intune as Detailed section and in the Assignments
+
 ## 3.3.1 23.3.2025
 
 - Improve Error Handling
