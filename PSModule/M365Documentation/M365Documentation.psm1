@@ -49,6 +49,14 @@ if($PSModulePSWriteOffice){
     Import-Module -Name PSWriteOffice -ErrorAction Stop
 }
 
+$PSModulePSHTML = Get-Module -Name PSHTML
+if($PSHTML){
+    Write-Verbose -Message "PSHTML PowerShell module is loaded."
+} else {
+    Write-Warning -Message "PSHTML PowerShell module is not loaded, trying to import it."
+    Import-Module -Name PSHTML -ErrorAction Stop
+}
+
 # Class definition
 class DocSection {
     [DocSection[]]$SubSections
