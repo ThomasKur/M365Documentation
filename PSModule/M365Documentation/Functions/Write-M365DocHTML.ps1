@@ -17,6 +17,9 @@ Function Write-M365DocHTML(){
     .PARAMETER Fragment
     If set to $true, the Output will only consist of the part between <body> and </body>. Useful if you want to put the content into another system like confluence.
 
+    .PARAMETER Template
+    Option to set a custom HTML Template
+
     .EXAMPLE
     Write-M365DocHTML -FullDocumentationPath $FullDocumentationPath -Data $Data -Fragment $true
 
@@ -31,18 +34,37 @@ Function Write-M365DocHTML(){
             return $true 
         })]
         [System.IO.FileInfo]$FullDocumentationPath = ".\$($Data.CreationDate.ToString("yyyyMMddHHmm"))-WPNinjas-HTML.html",
+        [ValidateScript({
+            if($_ -notmatch "(\.html)"){
+                throw "The template file specified in the path argument must be of type html."
+            }
+            return $true 
+        })]
+        [System.IO.FileInfo]$template = "$PSScriptRoot\..\Data\TemplateHTML.html",
         $fragment = $false,
         [Parameter(ValueFromPipeline,Mandatory)]
         $Data
         
     )
     Begin {
-
+        $PSModulePSHTML = Get-Module -Name PSHTML2
+        if($PSHTML){
+            #Write-Verbose -Message "PSHTML PowerShell module is loaded."
+        } else {
+            Write-Warning -Message "PSHTML PowerShell module is not loaded, trying to import it."
+            try {
+                Import-Module -Name PSHTML2 -ErrorAction Stop
+            }
+            catch {
+                Write-Warning -Message "This function requires PSHTML PowerShell module, which is currently not installed. Please install the module."
+                return
+            }
+        }
     }
     Process {
         Write-Progress -Id 10 -Activity "Create HTML File" -Status "Prepare template" -PercentComplete 0
         # Read HTML Template
-        $htmlTemplate = Get-Content "$tempPSScriptRoot\..\Data\TemplateHTMLBody.html" -raw
+        $htmlTemplate = Get-Content "$PSScriptRoot\..\Data\TemplateHTMLBody.html" -raw
         
         # Replace Basic Data
         $htmlTemplate = $htmlTemplate -replace "TOBEREPLACED-COMPONENTS",$($Data.Components -join ", ") `
@@ -67,7 +89,7 @@ Function Write-M365DocHTML(){
         
         # Merge with top html template if no fragment is wanted
         if($fragment -eq $false) {
-            $outputFile = Get-Content "$tempPSScriptRoot\..\Data\TemplateHTML.html" -Raw
+            $outputFile = Get-Content $template -Raw
             $outputFile = $outputFile -replace "TOBEREPLACED-BODY",$htmlTemplate
         }
         else {

@@ -135,7 +135,7 @@ The following entities are documented:
 - Domains
 - Feature Rollout Policy
 - Authentication policies
-- Role Assignments
+- Role Assignments & PIM Roles
 - Mobile Device Management Policies
 - Subscriptions / SKU
 - Organizational Settings

@@ -43,6 +43,16 @@ Function Write-DocumentationHTMLSection(){
                         $retObj.BodyCode += "<h4 id=""$displayNameClean"">$dn</h4>"
                         #$retObj.IndexCode += "<li><a href=""#$displayNameClean"">$dn</a></li>"  # Commented out for now - Index gets too big
                     }
+
+                    # Handle descriptions. Especially Mobile Apps can have unicode characters in their description making later handling of the files harder.
+                    if($object.description) {
+                        # HTML Encode things like umlauts, remove non latin characters and add proper linebreaks
+                        $object.description = [System.Net.WebUtility]::HtmlEncode($object.description)
+                        $object.description = $object.description -creplace '\P{IsBasicLatin}'
+                        $object.description = $($object.description).replace([System.Environment]::NewLine, "<br />")
+                        $object.description = $($object.description).replace('`r', "<br />")
+                    }
+
                     $retObj.BodyCode += Invoke-TransposeObject -InputObject $object |  ConvertTo-PshtmlTable
 
                 }
