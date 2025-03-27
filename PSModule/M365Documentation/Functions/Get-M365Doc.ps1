@@ -123,6 +123,10 @@ Function Get-M365Doc(){
     
     $doc = Get-M365Doc -BackupFile c:\temp\backup.json
 
+    .Example Select Sections in UI with Out-GridView allowing selection of sections
+    $Sections = Get-M365DocValidSection -Components Intune | Out-GridView -OutputMode Multiple | Select-Object -ExpandProperty SectionName
+    $doc = Get-M365Doc -Components Intune -IncludeSections $Sections
+
     .NOTES
     Author: Thomas Kurth/baseVISION
     Date:   01.04.2021
