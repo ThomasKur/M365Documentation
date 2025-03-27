@@ -84,9 +84,9 @@ Function Invoke-DocGraph(){
         } elseif ($caughtError.Exception.Response.StatusCode -eq "Unauthorized"){
             Write-Warning "Unauthorized: The most common cause is an invalid, missing, or expired access token in the HTTP request header. It might also be a missing license assignment. FullUrl: '$FullUrl'" -WarningAction Continue
         } elseif ($caughtError.Exception.Response.StatusCode -eq "NotFound" -and $_.Exception.Response.ResponseUri -like "https://graph.microsoft.com/v1.0/groups*"){
-            Write-Debug "NotFound: Some Profiles/Apps are assigned to groups which do no longer exist. They are not displayed in the output $($_.Exception.Response.ResponseUri). FullUrl: '$FullUrl'"
+            Write-Verbose "NotFound: Some Profiles/Apps are assigned to groups which do no longer exist. They are not displayed in the output $($_.Exception.Response.ResponseUri). FullUrl: '$FullUrl'" 
         } elseif ($caughtError.Exception.Response.StatusCode -eq "NotFound" -and $_.Exception.Response.ResponseUri -like "https://graph.microsoft.com/v1.0/users*"){
-            Write-Debug "NotFound: Some Profiles/Apps are assigned to users which do no longer exist. They are not displayed in the output $($_.Exception.Response.ResponseUri). FullUrl: '$FullUrl'"
+            Write-Verbose "NotFound: Some Profiles/Apps are assigned to users which do no longer exist. They are not displayed in the output $($_.Exception.Response.ResponseUri). FullUrl: '$FullUrl'"
         }  elseif ($caughtError.Exception.Response.StatusCode -eq "NotFound"){
             Write-Warning "NotFound: The configuration or object might not exist in your tenant. FullUrl: '$FullUrl'"
             $value = [PSCustomObject]@{
