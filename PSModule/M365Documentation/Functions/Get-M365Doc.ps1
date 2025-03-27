@@ -20,9 +20,7 @@ Function Get-M365Doc(){
     The Script is using the MSAL.PS Module and requires you to run Connect-Documentation. Therefore you have to install them first.
 
     .PARAMETER Components
-        Path including filename where the documentation should be created. The filename has to end with .docx.
-        Note:
-        If there is already a file present, the documentation will be added at the end of the existing document.
+        The components for which the available sections should be returned.
 
     .PARAMETER ExcludeSections
         The specified sections are excluded from the collection process. The following sections are available:
