@@ -21,8 +21,10 @@ Function Get-M365DocValidSection(){
     Get-M365DocValidSection -Components Intune,Exchange
 
     .Example Use in Get-M365Doc with Out-GridView allowing selection of sections
-    $Sections = Get-M365DocValidSection -Components Intune | Out-GridView -OutputMode Multiple | Select-Object -ExpandProperty SectionName
-    $doc = Get-M365Doc -Components Intune -IncludeSections $Sections
+    $Selection = Get-M365DocValidSection | Out-GridView -OutputMode Multiple
+    $Sections = $Selection | Select-Object -ExpandProperty SectionName
+    $Components = $Selection | Select-Object -ExpandProperty Component -Unique
+    $doc = Get-M365Doc -Components $Components -IncludeSections $Sections
 
     .NOTES
     Author: Thomas Kurth/baseVISION
@@ -69,7 +71,7 @@ Function Get-M365DocValidSection(){
         $Components = Get-ValidComponentsValue
     }
     foreach($Component in $Components){
-        $AllCommands = Get-ChildItem -Path "$PSScriptRoot\..\Internal\Collector\$Component" -File -Recurse -Depth 1
+        $AllCommands = Get-ChildItem -Path "$PSScriptRoot\..\Internal\Collector\$Component" -File -Recurse -Depth 0
         foreach($Command in $AllCommands){
             $Sections += [pscustomobject]@{
                 SectionName = $Command.Name.Replace(".ps1", "").Replace("Get-", "")
