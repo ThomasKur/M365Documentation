@@ -21,7 +21,7 @@ Function Write-DocumentationWordSection(){
         if($Data.Text){
             New-OfficeWordText -Document $WordDocument -Text $Data.Text
         }
-        if($Data.Objects){
+        if($Data.Objects -and $Data.Objects.Count -gt 0){
             
             if($Data.Transpose){
                 foreach($singleObj in $Data.Objects){
