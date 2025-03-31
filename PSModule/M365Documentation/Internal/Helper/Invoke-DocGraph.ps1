@@ -9,6 +9,10 @@ Function Invoke-DocGraph(){
     Returns "Type"
     .NOTES
     NAME: Thomas Kurth 3.3.2021
+
+    Nico Schmidtbauer 26.03.2025
+    Updated script to add retry behavior when Graph Api Returns Error 429 - This might happen on busy tenants
+
     #>
     [OutputType('System.Object[]')]
     [cmdletbinding()]
@@ -48,7 +52,44 @@ Function Invoke-DocGraph(){
         $header = @{Authorization = "Bearer $($script:token.AccessToken)"}
         if($AcceptLanguage){ $header.Add("Accept-Language",$AcceptLanguage) }
         $header.Add("Accept","application/json")
-        $value = Invoke-RestMethod -Headers $header -Uri $FullUrl -Method Get -ErrorAction Stop
+        
+        # Use try catch, to get a possible exception
+        try {
+            $value = Invoke-RestMethod -Headers $header -Uri $FullUrl -Method Get
+        }
+        catch {
+            $value = $_
+        }
+        
+        # If an exception occures, check if the status code is 429, if not, throw the exception, otherwise run in retry.
+        if($value.Exception) {
+            if([int]$value.Exception.Response.StatusCode -ne "429") {
+                throw $value
+            }
+            else {
+                $requestCounter = 1
+                # While the exception occures and is 429, retry up to 10 times and write a warning.
+                while([int]$value.Exception.Response.StatusCode -eq "429") {
+                    $maxRequests = 10
+                    Write-Warning -Message "Graph API is currently busy (Too many requests) - Retrying request ($requestCounter/$maxRequests)"
+                    try {
+                        $value = Invoke-RestMethod -Headers $header -Uri $FullUrl -Method Get
+                    }
+                    catch {
+                        $value = $_
+                    }
+                    if($requestCounter -gt $maxRequests -and [int]$value.Exception.Response.StatusCode -eq "429") {
+                        Write-Warning -Message "Graph API is currently busy (Too many requests) - Retrys limit exceeded"
+                        throw $value
+                    }
+                    Start-Sleep -seconds 1
+                }
+                # Just making sure if the last call returned an exception again, throw it here.
+                if([int]$value.Exception) {
+                    throw $value
+                }
+            }
+        }
         
         if($FollowNextLink -and -not [String]::IsNullOrEmpty($value.'@odata.nextLink')){
             $NextLink = $value.'@odata.nextLink'
@@ -57,7 +98,42 @@ Function Invoke-DocGraph(){
                 $header = @{Authorization = "Bearer $($script:token.AccessToken)"} # Need to recreate the header incase the bearer token changed on refresh.
                 if($AcceptLanguage){ $header.Add("Accept-Language",$AcceptLanguage) }       
                 $header.Add("Accept","application/json")
-                $valueNext = Invoke-RestMethod -Headers $header -Uri $NextLink -Method Get -ErrorAction Stop
+                
+                # Same exception / retry handling as above, just for possible '@odata.nextLink'
+                try {
+                    $valueNext = Invoke-RestMethod -Headers $header -Uri $NextLink -Method Get
+                }
+                catch {
+                    $valueNext = $_
+                }
+                
+                if($valueNext.Exception) {
+                    if([int]$valueNext.Exception.Response.StatusCode -ne "429") {
+                        throw $valueNext
+                    }
+                    else {
+                        $requestCounter = 1
+                        while([int]$valueNext.Exception.Response.StatusCode -eq "429") {
+                            $maxRequests = 10
+                            Write-Warning -Message "Graph API is currently busy (Too many requests) - Retrying request ($requestCounter/$maxRequests)"
+                            try {
+                                $valueNext = Invoke-RestMethod -Headers $header -Uri $NextLink -Method Get
+                            }
+                            catch {
+                                $valueNext = $_
+                            }
+                            if($requestCounter -gt $maxRequests -and [int]$valueNext.Exception.Response.StatusCode -eq "429") {
+                                Write-Warning -Message "Graph API is currently busy (Too many requests) - Retrys limit exceeded"
+                                throw $valueNext
+                            }
+                            Start-Sleep -seconds 1
+                        }
+                        if([int]$valueNext.Exception) {
+                            throw $valueNext
+                        }
+                    }
+                }
+                
                 $NextLink = $valueNext.'@odata.nextLink'
                 $valueNext.value | ForEach-Object { $value.value += $_ }
 
