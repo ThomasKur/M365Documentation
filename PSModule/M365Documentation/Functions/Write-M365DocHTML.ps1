@@ -3,13 +3,13 @@ Function Write-M365DocHTML(){
     .SYNOPSIS
     Outputs the documentation as HTML file.
     .DESCRIPTION
-    This function takes the passed data and is outputing it to a html file.
+    This function takes the passed data and is writing it to a html file.
 
     .PARAMETER FullDocumentationPath
-    Path including filename where the documentation should be created. The filename has to end with .docx.
+    Path including filename where the documentation should be created. The filename has to end with .html.
 
     Note:
-    If there is already a file present, the documentation will be added at the end of the existing document.
+    If there is already a file present, the file will be overwritten.
 
     .PARAMETER Data
     M365 documentation object which shoult be written to DOCX.
@@ -47,13 +47,13 @@ Function Write-M365DocHTML(){
         
     )
     Begin {
-        $PSModulePSHTML = Get-Module -Name PSHTML2
+        $PSHTML = Get-Module -Name PSHTML
         if($PSHTML){
             #Write-Verbose -Message "PSHTML PowerShell module is loaded."
         } else {
             Write-Warning -Message "PSHTML PowerShell module is not loaded, trying to import it."
             try {
-                Import-Module -Name PSHTML2 -ErrorAction Stop
+                Import-Module -Name PSHTML -ErrorAction Stop
             }
             catch {
                 Write-Warning -Message "This function requires PSHTML PowerShell module, which is currently not installed. Please install the module."

@@ -2,10 +2,12 @@ Function Write-DocumentationHTMLSection(){
     <#
     .SYNOPSIS
     Outputs a section of the documentation to HTML
+
     .DESCRIPTION
     This function takes the passed data and is outputing it to the HTML file.
+
     .EXAMPLE
-    Write-DocumentationHtmlSection -HtmlPath $-HtmlPath -Data $Section -Path "$(Get-Date -Format "yyyyMMddHHmm")-$($Section.Title)" -Template $template
+    Write-DocumentationHtmlSection -Data $Section -Transpose $true
 
     .NOTES
     NAME: Nico Schmidtbauer / 24.03.2025
@@ -33,30 +35,32 @@ Function Write-DocumentationHTMLSection(){
 
             # Transpose Objects if needed
             if($Transpose -eq $true) { 
-                #$subindex = "<ul>" # Commented out for now - Index gets too big
                 foreach($object in $data.Objects) {
                     # Output a heading for each object
                     if($object.displayName -or $object.M_DisplayName) {
                         if($object.displayName) { $dn = $object.displayName}
                         else {$dn = $object.M_DisplayName }
-                        $displayNameClean = $Data.Title.ToLower().Replace(" ","-") -replace '[^a-zA-Z0-9/_/-]', ''
-                        $retObj.BodyCode += "<h4 id=""$displayNameClean"">$dn</h4>"
-                        #$retObj.IndexCode += "<li><a href=""#$displayNameClean"">$dn</a></li>"  # Commented out for now - Index gets too big
+
+                        # If the $dn is same as the section title, we have already output it as H3, no need to output it again then.
+                        if($dn -ne $($Section.Title)) {
+                            $displayNameClean = $dn.ToLower().Replace(" ","-") -replace '[^a-zA-Z0-9/_/-]', ''
+                            $retObj.BodyCode += "<h4 id=""$displayNameClean"">$dn</h4>"
+                            $retObj.IndexCode += "<ul><li><a href=""#$displayNameClean"">$dn</a></li></ul>"  # Commented out for now - Index gets too big
+                        }
                     }
 
-                    # Handle descriptions. Especially Mobile Apps can have unicode characters in their description making later handling of the files harder.
-                    if($object.description) {
-                        # HTML Encode things like umlauts, remove non latin characters and add proper linebreaks
-                        $object.description = [System.Net.WebUtility]::HtmlEncode($object.description)
-                        $object.description = $object.description -creplace '\P{IsBasicLatin}'
-                        $object.description = $($object.description).replace([System.Environment]::NewLine, "<br />")
-                        $object.description = $($object.description).replace('`r', "<br />")
+                    # For all of the Objects Note Properties, Remove non Latin Characters and HTML Encode the content
+                    foreach ($key in $($object | get-member | where-object { $_.MemberType -eq "NoteProperty" }).Name) {
+                        if($null -ne $($object.$key)) {
+                            $object.$key = $object.$key -creplace '\P{IsBasicLatin}'
+                            $object.$key = [System.Net.WebUtility]::HtmlEncode($($object.$key))
+                            $object.$key = $($object.$key).replace("`n",'<br/>')
+                        }
                     }
 
                     $retObj.BodyCode += Invoke-TransposeObject -InputObject $object |  ConvertTo-PshtmlTable
 
                 }
-                # $subindex += "</ul>"  # Commented out for now - Index gets too big
             }
             else {
                 $retObj.BodyCode += $data.Objects |  ConvertTo-PshtmlTable

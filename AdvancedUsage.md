@@ -119,9 +119,9 @@ $doc | Write-M365DocCSV -FullDocumentationPath "c:\temp\"
 
 ### Output to HTML
 
-Output the data to a HTML file with options to Output as fragment (only the code in between the body tags for uploading it into documentation systems like confluence) and to use a custom template. Please see the "TemplateHTML.html" within the .\Data directory of the module for an example.
+Output the data to a HTML file. It's possible to output the data as fragment (which only outputs the data between the HTML body tags) and to use an own html template, if you want to add a header / footer for example.  Please see the "TemplateHTML.html" within the .\Data directory of the module for an example.
 
-This function will also encode several characters (like umlauts) to HTML code and remove some non-latin unicode characters, which can slip in to things like the description of Apps, when descriptions from the appstores are taken over. Those characters can break further automated handling of the files.
+This function will also encode several characters (like umlauts and line breaks) to HTML code and remove some non-latin unicode characters, which can slip in to things like the description of Apps, when descriptions from the appstores are taken over. Those characters can break further automated handling of the files.
 
 ```powershell
 
