@@ -1,5 +1,11 @@
 # Release Notes
 
+## 3.4.1 27.3.2025
+
+- Remove Empty tables from Word and Markdown output.
+- Multiple people reported to have issues to find the available section options. Now there is a dedicated cmdlet which can be used to get a list of them. This includes having an example on how to use with Out-Gridview to have a UI as well.
+- Error Handling when objects are not found in graph, especially users is improved.
+
 ## 3.4.0 24.3.2025
 
 - Improve PIM Documentation in Entra ID

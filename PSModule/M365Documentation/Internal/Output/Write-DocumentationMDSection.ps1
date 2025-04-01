@@ -39,7 +39,7 @@ Function Write-DocumentationMDSection(){
             $Data.Text | Out-File -LiteralPath $FullDocumentationPath -Append
             "" | Out-File -LiteralPath $FullDocumentationPath -Append
         }
-        if($Data.Objects){   
+        if($Data.Objects -and $Data.Objects.Count -gt 0){   
             if($Data.Transpose){
                 foreach($singleObj in $Data.Objects){
                     if($singleObj.displayName -ne $Data.Title -and $Data.Title -ne $singleObj.'Display Name' -and -not [String]::IsNullOrEmpty($singleObj.displayName)){

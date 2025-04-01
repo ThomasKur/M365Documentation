@@ -46,8 +46,11 @@ This section covers basic functionality for interactive usage. Advanced use case
 # Connect to your tenant
 Connect-M365Doc
 
-# Collect information for component Intune as an example 
-$doc = Get-M365Doc -Components Intune -ExcludeSections "MobileAppDetailed"
+# Collect information 
+$Selection = Get-M365DocValidSection | Out-GridView -OutputMode Multiple
+$Sections = $Selection | Select-Object -ExpandProperty SectionName
+$Components = $Selection | Select-Object -ExpandProperty Component -Unique
+$doc = Get-M365Doc -Components $Components -IncludeSections $Sections
 
 # Output the documentation to a Word file
 $doc | Write-M365DocWord -FullDocumentationPath "c:\temp\$($doc.CreationDate.ToString("yyyyMMddHHmm"))-WPNinjas-Doc.docx"
@@ -63,6 +66,7 @@ AADAuthMethod
 AADBranding
 AADConditionalAccess
 AADConditionalAccessSplit
+AADDirectoryPimRole
 AADDirectoryRole
 AADDomain
 AADIdentityProvider
@@ -84,11 +88,13 @@ MdmAutopilotProfile
 MdmCompliancePolicy
 MdmConfigurationPolicy
 MdmConfigurationProfile
+MdmDeviceAssignmentFilter
 MdmDeviceCategory
 MdmEnrollmentConfiguration
 MdmExchangeConnector
 MdmPartner
 MdmPowerShellScript
+MdmShellScript
 MdmSecurityBaseline
 MdmTermsAndCondition
 MdmWindowsUpdate
