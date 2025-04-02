@@ -117,6 +117,28 @@ $doc | Write-M365DocCSV -FullDocumentationPath "c:\temp\"
 
 ```
 
+### Output to HTML
+
+Output the data to a HTML file. It's possible to output the data as fragment (which only outputs the data between the HTML body tags) and to use an own html template, if you want to add a header / footer for example.  Please see the "TemplateHTML.html" within the .\Data directory of the module for an example.
+
+This function will also encode several characters (like umlauts and line breaks) to HTML code and remove some non-latin unicode characters, which can slip in to things like the description of Apps, when descriptions from the appstores are taken over. Those characters can break further automated handling of the files.
+
+```powershell
+
+Connect-M365Doc
+$doc = Get-M365Doc -Components Intune -ExcludeSections "MobileAppDetailed"
+
+# HTML export
+$doc | Write-M365DocHTML -FullDocumentationPath "c:\temp\export.html"
+
+# HTML export only as fragment (will not have any CSS Styles etc.)
+$doc | Write-M365DocHTML -FullDocumentationPath "c:\temp\export.html" -Fragment $true
+
+# HTML export with custom Template
+$doc | Write-M365DocHTML -FullDocumentationPath "c:\temp\export.html" -Templace "C:\Temp\MyTemplate.html"
+
+```
+
 ## Optimize and Translate Object names and values
 
 The documented names are normally the API names of the properties. Sometimes it's helpful to be able to document the correct name from the UI. For this we precreated many translation files which automatically does this job for you. You can even extend that for the objects which we haven't done this yet.
