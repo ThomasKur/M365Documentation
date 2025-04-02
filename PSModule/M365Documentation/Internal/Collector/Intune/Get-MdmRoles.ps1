@@ -9,6 +9,7 @@ Function Get-MdmRoles(){
     Returns the device management roles and assignments
     .NOTES
     NAME: Get-MdmRoles
+    Nico Schmditbauer 02.04.2025
     #>
     [OutputType('DocSection')]
     [cmdletbinding()]
