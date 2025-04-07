@@ -116,6 +116,23 @@ $doc = Get-M365Doc -Components Intune -ExcludeSections "MobileAppDetailed"
 $doc | Write-M365DocCSV -FullDocumentationPath "c:\temp\"
 
 ```
+### Output to Markdown
+
+Outputing the data to MD files. Markdown has become the de facto standard for writing documentation, primarily due to its simplicity, readability, and ease of use.
+
+```powershell
+
+Connect-M365Doc
+$doc = Get-M365Doc -Components Intune -ExcludeSections "MobileAppDetailed"
+
+# Output Raw Version as Markdown
+$doc | Write-M365DocMd -FullDocumentationPath "c:\temp\$($doc.CreationDate.ToString("yyyyMMddHHmm"))-WPNinjas-Doc.md"
+
+# Output Optimized Version as Markdown
+$docnew = $doc | Optimize-M365Doc -UseTranslationFiles -UseCamelCase -ExcludeProperties @("id","@odata.type") 
+$docnew | Write-M365DocMd -FullDocumentationPath "c:\temp\$($doc.CreationDate.ToString("yyyyMMddHHmm"))-WPNinjas-Doc-Translated.md"
+
+```
 
 ### Output to HTML
 
