@@ -94,6 +94,7 @@ MdmEnrollmentConfiguration
 MdmExchangeConnector
 MdmPartner
 MdmPowerShellScript
+MdmRoles
 MdmShellScript
 MdmSecurityBaseline
 MdmTermsAndCondition
