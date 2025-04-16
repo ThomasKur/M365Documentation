@@ -58,7 +58,7 @@ Function Write-DocumentationHTMLSection(){
                         }
                     }
 
-                    $retObj.BodyCode += Invoke-TransposeObject -InputObject $object |  ConvertTo-PshtmlTable
+                    $retObj.BodyCode += Invoke-TransposeObject -InputObject $objec |  ConvertTo-PshtmlTable
 
                 }
             }

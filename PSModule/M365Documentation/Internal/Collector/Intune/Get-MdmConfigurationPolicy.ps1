@@ -33,12 +33,12 @@ Function Get-MdmConfigurationPolicy(){
 
         $definitionId = $Instance.settingDefinitionId
         $definition = $Definitions | Where-Object { $_.ID -eq $definitionId }
-        $valueType = ($Instance.'@odata.type').Replace('#microsoft.graph.deviceManagementConfiguration', '').Replace('Instance', 'Value')
+        $global:valueType = ($Instance.'@odata.type').Replace('#microsoft.graph.deviceManagementConfiguration', '').Replace('Instance', 'Value')
 
-        if ($valueType -eq 'groupSettingCollectionValue') {
+        if ($valueType -eq 'groupSettingCollectionValue' -or $valueType -eq 'ChoiceSettingValue') {
             foreach ($child in $Instance.$ValueType.Children | Where-Object { $_ -ne $null }) {
                 & $getValue -instance $child -definition $Definitions
-            }
+            }       
         } else {
             $settingValue = [PSCustomObject]@{
                 DisplayName = $definition.displayName
@@ -47,6 +47,11 @@ Function Get-MdmConfigurationPolicy(){
                 Value = ($Instance.$ValueType.value.ToString()).Replace($definitionId+"_","")
                 ValueName = ($Definitions.options | Where-Object { $_.itemId -eq $Instance.$ValueType.value }).DisplayName
             }
+
+            if($settingValue.Value -eq "System.Object[]") {
+                $settingValue.Value = $Instance.$ValueType.value -join ", "
+            }
+
             return $settingValue
         }
     }
