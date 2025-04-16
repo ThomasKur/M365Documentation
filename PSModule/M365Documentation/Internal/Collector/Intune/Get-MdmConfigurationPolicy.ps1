@@ -35,10 +35,10 @@ Function Get-MdmConfigurationPolicy(){
         $definition = $Definitions | Where-Object { $_.ID -eq $definitionId }
         $global:valueType = ($Instance.'@odata.type').Replace('#microsoft.graph.deviceManagementConfiguration', '').Replace('Instance', 'Value')
 
-        if ($valueType -eq 'groupSettingCollectionValue' -or $valueType -eq 'ChoiceSettingValue') {
+        if ($valueType -eq 'groupSettingCollectionValue') {
             foreach ($child in $Instance.$ValueType.Children | Where-Object { $_ -ne $null }) {
                 & $getValue -instance $child -definition $Definitions
-            }       
+            }    
         } else {
             $settingValue = [PSCustomObject]@{
                 DisplayName = $definition.displayName
