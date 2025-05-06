@@ -1,14 +1,14 @@
-Function Get-MdmRoles(){
+Function Get-MdmRole(){
     <#
     .SYNOPSIS
     This function is used to get the all device management roles and assignments Graph API REST interface
     .DESCRIPTION
     The function connects to the Graph API Interface and gets the device management roles and their assignments
     .EXAMPLE
-    Get-MdmRoles
+    Get-MdmRole
     Returns the device management roles and assignments
     .NOTES
-    NAME: Get-MdmRoles
+    NAME: Get-MdmRole
     Nico Schmditbauer 02.04.2025
     #>
     [OutputType('DocSection')]
@@ -36,21 +36,21 @@ Function Get-MdmRoles(){
             # Members, Scope Members and resourceScopes only return member IDs. Resolve the directory objects, put them in a string and separate them by linebreak
             $AssignmentObject | Add-Member -MemberType NoteProperty -Name "Members" -Value @()
             foreach($member in $FullRoleAssignment.members) {
-                $req = Invoke-DocGraph -Path "/directoryObjects/$member" | select '@odata.type', "id", "displayName"
+                $req = Invoke-DocGraph -Path "/directoryObjects/$member" | Select-Object '@odata.type', "id", "displayName"
                 $AssignmentObject.Members += "$($req.displayName) ($($req.'@odata.type'))"
             }
             $AssignmentObject.Members = $AssignmentObject.Members -join " "
             
             $AssignmentObject | Add-Member -MemberType NoteProperty -Name "scopeMembers" -Value @()
             foreach($scopemember in $FullRoleAssignment.scopeMembers) {
-                $req = Invoke-DocGraph -Path "/directoryObjects/$scopemember" | select '@odata.type', "id", "displayName"
+                $req = Invoke-DocGraph -Path "/directoryObjects/$scopemember" | Select-Object '@odata.type', "id", "displayName"
                 $AssignmentObject.scopeMembers += "$($req.displayName) ($($req.'@odata.type'))"
             }
             $AssignmentObject.scopeMembers = $AssignmentObject.scopeMembers -join " "
 
             $AssignmentObject | Add-Member -MemberType NoteProperty -Name "resourceScopes" -Value @()
             foreach($resourceScope in $FullRoleAssignment.resourceScopes) {
-                $req = Invoke-DocGraph -Path "/directoryObjects/$resourceScope" | select '@odata.type', "id", "displayName"
+                $req = Invoke-DocGraph -Path "/directoryObjects/$resourceScope" | Select-Object '@odata.type', "id", "displayName"
                 $AssignmentObject.resourceScopes += "$($req.displayName) ($($req.'@odata.type'))"
             }
             $AssignmentObject.resourceScopes = $AssignmentObject.resourceScopes -join " "

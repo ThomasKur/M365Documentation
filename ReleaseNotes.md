@@ -1,5 +1,10 @@
 # Release Notes
 
+## 3.4.2 06.05.2025
+
+- Add HTML Output Option.
+- Add Intune Role documentation.
+
 ## 3.4.1 27.3.2025
 
 - Remove Empty tables from Word and Markdown output.

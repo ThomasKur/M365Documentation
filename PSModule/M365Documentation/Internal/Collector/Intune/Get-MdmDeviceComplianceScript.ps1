@@ -1,4 +1,4 @@
-Function Get-MdmDeviceComplianceScripts(){
+Function Get-MdmDeviceComplianceScript(){
     <#
     .SYNOPSIS
     This function is used to get the all Device Compliance Scripts from the Beta Graph API REST interface
@@ -8,7 +8,7 @@ Function Get-MdmDeviceComplianceScripts(){
     Get-MdmDeviceComplianceScript
     Returns the Device Compliance Scripts configured in Intune
     .NOTES
-    NAME: Get-MdmDeviceComplianceScripts
+    NAME: Get-MdmDeviceComplianceScript
     #>
     [OutputType('DocSection')]
     [cmdletbinding()]

@@ -60,7 +60,7 @@ $doc | Write-M365DocWord -FullDocumentationPath "c:\temp\$($doc.CreationDate.ToS
 
 ## Sections which you can choose from
 
-You can now use the *Get-M365DocValidSection -Components Intune* command to list the valid sectos which is always a correct list.
+You can now use the *Get-M365DocValidSection -Components Intune* command to list the complete list of valid sections.
 
 _Component: AzureAD_
 AADAdministrativeUnit
@@ -96,7 +96,7 @@ MdmEnrollmentConfiguration
 MdmExchangeConnector
 MdmPartner
 MdmPowerShellScript
-MdmRoles
+MdmRole
 MdmShellScript
 MdmSecurityBaseline
 MdmTermsAndCondition
@@ -105,6 +105,7 @@ MobileApp
 MobileAppConfiguration
 MobileAppDetailed
 MobileAppManagement
+... Use the Get-M365DocValidSection command to get a complete list.
 
 _Windows365_
 W365Image

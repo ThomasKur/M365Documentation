@@ -1,4 +1,4 @@
-Function Get-MdmDeviceHealthScripts(){
+Function Get-MdmDeviceHealthScript(){
     <#
     .SYNOPSIS
     This function is used to get the all Device Health Scripts from the Beta Graph API REST interface
@@ -8,7 +8,7 @@ Function Get-MdmDeviceHealthScripts(){
     Get-MdmDeviceHealthScript
     Returns the Device Health Scripts configured in Intune
     .NOTES
-    NAME: Get-MdmDeviceHealthScripts
+    NAME: Get-MdmDeviceHealthScript
     #>
     [OutputType('DocSection')]
     [cmdletbinding()]
