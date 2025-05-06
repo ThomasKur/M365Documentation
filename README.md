@@ -60,6 +60,8 @@ $doc | Write-M365DocWord -FullDocumentationPath "c:\temp\$($doc.CreationDate.ToS
 
 ## Sections which you can choose from
 
+You can now use the *Get-M365DocValidSection -Components Intune* command to list the valid sectos which is always a correct list.
+
 _Component: AzureAD_
 AADAdministrativeUnit
 AADAuthMethod
@@ -175,6 +177,8 @@ The following entities are documented:
 For any issues or feedback related to this module, please register for GitHub, and post your inquiry to this project's issue tracker.
 
 ## Thanks to
+
+@NicoSchmidtbauer for all the contributions around HTML output and other fixes and improvements
 
 @MEM_MVP for the continuous feedback and 10000 translations!!!! Thank you!
 
