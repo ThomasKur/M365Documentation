@@ -41,7 +41,8 @@ function Connect-M365Doc {
     [SecureString] $ClientSecret,
 
     [switch] $UseInteractive,
-    [switch] $PromptIfMissing = $true
+    [switch] $PromptIfMissing = $true,
+    [switch] $ForceRefresh
   )
 
   # ---------- Helper: GUID validator ----------
@@ -86,14 +87,16 @@ function Connect-M365Doc {
                              -ClientId     $ClientId `
                              -ClientSecret $ClientSecret `
                              -Authority    "$AuthorityHost/$TenantId" `
-                             -Scopes       $GraphScope
+                             -Scopes       $GraphScope `
+                             -ForceRefresh:$ForceRefresh
     } else {
       # Interactive / public client (your own public app with http://localhost redirect)
       $token = Get-MsalToken -TenantId   $TenantId `
                              -ClientId   $ClientId `
                              -Authority  "$AuthorityHost/$TenantId" `
                              -Scopes     $GraphScope `
-                             -RedirectUri 'http://localhost'
+                             -RedirectUri 'http://localhost'`
+                             -ForceRefresh:$ForceRefresh
     }
 
     if (-not $token -or -not $token.AccessToken) {
@@ -102,6 +105,7 @@ function Connect-M365Doc {
 
     # Store token + header where other functions can use them
     $script:token = $token
+    $script:M365Doc_Token = $token   # keep both names for callers that read either
     $script:M365Doc_AuthorizationHeader = @{ Authorization = "Bearer $($token.AccessToken)" }
 
     Write-Host ("Connected. Token expires at {0}." -f $token.ExpiresOn.LocalDateTime) -ForegroundColor Green
