@@ -12,7 +12,6 @@ Function Invoke-DocGraph(){
 
     Nico Schmidtbauer 26.03.2025
     Updated script to add retry behavior when Graph Api Returns Error 429 - This might happen on busy tenants
-
     #>
     [OutputType('System.Object[]')]
     [cmdletbinding()]
@@ -35,8 +34,12 @@ Function Invoke-DocGraph(){
 
         [Parameter(Mandatory=$false,ParameterSetName = "Path")]
         [bool]$FollowNextLink =  $true
-
     )
+
+    # --- ADDED: honor cloud base set by Connect-M365Doc and normalize trailing slash ---
+    if ($script:M365Doc_GraphBase) { $BaseUrl = $script:M365Doc_GraphBase }
+    if ($BaseUrl[-1] -ne '/') { $BaseUrl += '/' }
+
     if($PSCmdlet.ParameterSetName -eq "Path"){
         if($Beta){
             $version = "beta"
@@ -159,9 +162,10 @@ Function Invoke-DocGraph(){
             Write-Warning "Forbidden: Used application does not have sufficiant permission to access. FullUrl: '$FullUrl'" -WarningAction Continue
         } elseif ($caughtError.Exception.Response.StatusCode -eq "Unauthorized"){
             Write-Warning "Unauthorized: The most common cause is an invalid, missing, or expired access token in the HTTP request header. It might also be a missing license assignment. FullUrl: '$FullUrl'" -WarningAction Continue
-        } elseif ($caughtError.Exception.Response.StatusCode -eq "NotFound" -and $_.Exception.Response.ResponseUri -like "https://graph.microsoft.com/v1.0/groups*"){
+        # --- CHANGED: use $BaseUrl instead of hard-coded commercial URLs for NotFound checks ---
+        } elseif ($caughtError.Exception.Response.StatusCode -eq "NotFound" -and $_.Exception.Response.ResponseUri -like ("{0}v1.0/groups*" -f $BaseUrl)){
             Write-Verbose "NotFound: Some Profiles/Apps are assigned to groups which do no longer exist. They are not displayed in the output $($_.Exception.Response.ResponseUri). FullUrl: '$FullUrl'" 
-        } elseif ($caughtError.Exception.Response.StatusCode -eq "NotFound" -and $_.Exception.Response.ResponseUri -like "https://graph.microsoft.com/v1.0/users*"){
+        } elseif ($caughtError.Exception.Response.StatusCode -eq "NotFound" -and $_.Exception.Response.ResponseUri -like ("{0}v1.0/users*" -f $BaseUrl)){
             Write-Verbose "NotFound: Some Profiles/Apps are assigned to users which do no longer exist. They are not displayed in the output $($_.Exception.Response.ResponseUri). FullUrl: '$FullUrl'"
         }  elseif ($caughtError.Exception.Response.StatusCode -eq "NotFound"){
             Write-Warning "NotFound: The configuration or object might not exist in your tenant. FullUrl: '$FullUrl'"
