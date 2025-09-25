@@ -22,12 +22,13 @@ Function Write-M365DocMD(){
     #>
     param(
         [ValidateScript({
-            if($_ -notmatch "(\.md)"){
+            if($_ -notmatch "(\.md)$"){
                 throw "The file specified in the path argument must be of type md."
             }
-            return $true 
+            return $true
         })]
-        [System.IO.FileInfo]$FullDocumentationPath = ".\$($Data.CreationDate.ToString("yyyyMMddHHmm"))-WPNinjas-Doc.md",
+        # MINIMAL CHANGE: don't reference $Data here; use current time so default always works
+        [System.IO.FileInfo]$FullDocumentationPath = ".\$(Get-Date -Format 'yyyyMMddHHmm')-WPNinjas-Doc.md",
         [Parameter(ValueFromPipeline,Mandatory)]
         [Doc]$Data
     )
@@ -35,18 +36,25 @@ Function Write-M365DocMD(){
 
     }
     Process {
+        # MINIMAL ADD: normalize to a full path and ensure parent folder exists
+        $fullPath = [System.IO.Path]::GetFullPath($FullDocumentationPath)
+        $parent   = Split-Path -Parent $fullPath
+        if (-not (Test-Path -LiteralPath $parent -PathType Container)) {
+            New-Item -ItemType Directory -Path $parent -Force | Out-Null
+        }
+
         #region CopyTemplate
         Write-Progress -Id 10 -Activity "Create Markdown File" -Status "Prepare Markdown template" -PercentComplete 0
 
-        "# M365 Documentation" | Out-File -LiteralPath $FullDocumentationPath -Append
-        "" | Out-File -LiteralPath $FullDocumentationPath -Append
-        "Date: $(Get-Date -Format "HH:mm dd.MM.yyyy")" | Out-File -LiteralPath $FullDocumentationPath -Append
-        "Components: $($Data.Components -join ", ")" | Out-File -LiteralPath $FullDocumentationPath -Append
-        "Tenant: $($Data.Organization)" | Out-File -LiteralPath $FullDocumentationPath -Append
-        "" | Out-File -LiteralPath $FullDocumentationPath -Append
-        "## Contents" | Out-File -LiteralPath $FullDocumentationPath -Append
-        "" | Out-File -LiteralPath $FullDocumentationPath -Append
-        "_TOC_" | Out-File -LiteralPath $FullDocumentationPath -Append
+        "# M365 Documentation" | Out-File -LiteralPath $fullPath -Append
+        "" | Out-File -LiteralPath $fullPath -Append
+        "Date: $(Get-Date -Format "HH:mm dd.MM.yyyy")" | Out-File -LiteralPath $fullPath -Append
+        "Components: $($Data.Components -join ", ")" | Out-File -LiteralPath $fullPath -Append
+        "Tenant: $($Data.Organization)" | Out-File -LiteralPath $fullPath -Append
+        "" | Out-File -LiteralPath $fullPath -Append
+        "## Contents" | Out-File -LiteralPath $fullPath -Append
+        "" | Out-File -LiteralPath $fullPath -Append
+        "_TOC_" | Out-File -LiteralPath $fullPath -Append
 
         Write-Progress -Id 10 -Activity "Create Markdown File" -Status "Prepared Markdown template" -PercentComplete 10
         #endregion
@@ -58,14 +66,14 @@ Function Write-M365DocMD(){
         foreach($Section in $Data.SubSections){
             $progress++
             Write-Progress -Id 10 -Activity "Create Markdown File" -Status "Write Section" -CurrentOperation $Section.Title -PercentComplete (($progress / $Data.SubSections.count) * 100)
-            Write-DocumentationMDSection -FullDocumentationPath $FullDocumentationPath -Data $Section -Level 1
+            Write-DocumentationMDSection -FullDocumentationPath $fullPath -Data $Section -Level 1
         }
 
         # Write TOC
         Write-Progress -Id 10 -Activity "Create Markdown File" -Status "Write TOC" -PercentComplete 99
-        $content = Get-Content -LiteralPath $FullDocumentationPath -Raw 
+        $content = Get-Content -LiteralPath $fullPath -Raw 
         $content = $content.Replace("_TOC_",$script:toc)
-        $content | Out-File -LiteralPath $FullDocumentationPath -Force
+        $content | Out-File -LiteralPath $fullPath -Force
 
         Write-Progress -Id 10 -Activity "Create Markdown File" -Status "Finished creation" -Completed
     }

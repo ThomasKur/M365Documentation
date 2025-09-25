@@ -22,15 +22,17 @@ Function Write-M365DocWord(){
     #>
     param(
         [ValidateScript({
-            if($_ -notmatch "(\.docx)"){
+            if($_ -notmatch "(\.docx)$"){
                 throw "The file specified in the path argument must be of type docx."
             }
-            if(Test-Path -Path (Split-Path $_ -Parent) -PathType Container){
+            # MINIMAL FIX: throw if the parent folder does NOT exist (was inverted before)
+            if(-not (Test-Path -Path (Split-Path $_ -Parent) -PathType Container)){
                 throw "The path specified does not exist '$(Split-Path $_ -Parent)'."
             }
             return $true 
         })]
-        [System.IO.FileInfo]$FullDocumentationPath = ".\$($Data.CreationDate.ToString("yyyyMMddHHmm"))-WPNinjas-Doc.docx",
+        # MINIMAL CHANGE: avoid referencing $Data here
+        [System.IO.FileInfo]$FullDocumentationPath = ".\$(Get-Date -Format 'yyyyMMddHHmm')-WPNinjas-Doc.docx",
         [Parameter(ValueFromPipeline,Mandatory)]
         [Doc]$Data
     )
@@ -38,15 +40,22 @@ Function Write-M365DocWord(){
 
     }
     Process {
+        # MINIMAL ADD: normalize to a full string path and ensure parent folder exists
+        $fullPath = [System.IO.Path]::GetFullPath($FullDocumentationPath)
+        $parent   = Split-Path -Parent $fullPath
+        if (-not (Test-Path -LiteralPath $parent -PathType Container)) {
+            New-Item -ItemType Directory -Path $parent -Force | Out-Null
+        }
+
         #region CopyTemplate
         Write-Progress -Id 10 -Activity "Create Word File" -Status "Prepare File template" -PercentComplete 0
         
-        if((Test-Path -Path $FullDocumentationPath)){
-            Write-Warning "File ($FullDocumentationPath) already exists! Therefore, built-in template will not be used." -WarningAction Continue
-            $WordDocument = Get-OfficeWord -FilePath $FullDocumentationPath
+        if((Test-Path -Path $fullPath)){
+            Write-Warning "File ($fullPath) already exists! Therefore, built-in template will not be used." -WarningAction Continue
+            $WordDocument = Get-OfficeWord -FilePath $fullPath
         } else {
-            Copy-Item "$PSScriptRoot\..\Data\Template.docx" -Destination $FullDocumentationPath
-            $WordDocument = Get-OfficeWord -FilePath $FullDocumentationPath.FullName
+            Copy-Item "$PSScriptRoot\..\Data\Template.docx" -Destination $fullPath
+            $WordDocument = Get-OfficeWord -FilePath $fullPath
             $WordDocument.FindAndReplace("SYSTEM",($Data.Components -join ", ")) | Out-Null
             $WordDocument.FindAndReplace("DATE",(Get-Date -Format "HH:mm dd.MM.yyyy")) | Out-Null
             $WordDocument.FindAndReplace("TENANT",$Data.Organization) | Out-Null
@@ -54,7 +63,6 @@ Function Write-M365DocWord(){
         Write-Progress -Id 10 -Activity "Create Word File" -Status "Prepared File template" -PercentComplete 10
         #endregion
     
-        
         $progress = 0
         foreach($Section in $Data.SubSections){
             $progress++
@@ -65,7 +73,8 @@ Function Write-M365DocWord(){
         #Update the TOC
         $WordDocument.TableOfContent.Update()
 
-        Save-OfficeWord -Document $WordDocument -FilePath $FullDocumentationPath.FullName
+        # MINIMAL CHANGE: save using the normalized path
+        Save-OfficeWord -Document $WordDocument -FilePath $fullPath
         Write-Progress -Id 10 -Activity "Create Word File" -Status "Finished creation" -Completed
 
         Write-Information "Press Ctrl + A and then F9 to Update the table of contents and other dynamic fields in the Word document."
