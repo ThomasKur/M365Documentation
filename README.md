@@ -35,6 +35,9 @@ Install-Module MSAL.PS
 Install-Module PSWriteOffice
 Install-Module M365Documentation
 
+# for HTML reports
+Install-Module PSHTML
+
 # To use this repo version.  You may have to force uninstall previous M365Documentation Module first.
 Import-Module "xxxxxx\M365DocumentationGCCHigh\PSModule\M365Documentation\M365Documentation.psd1" -Force
 
