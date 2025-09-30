@@ -35,6 +35,9 @@ Install-Module MSAL.PS
 Install-Module PSWriteOffice
 Install-Module M365Documentation
 
+# for HTML reports
+Install-Module PSHTML
+
 ```
 
 ### Basic Usage to create docx
@@ -44,7 +47,8 @@ This section covers basic functionality for interactive usage. Advanced use case
 ```powershell
 
 # Connect to your tenant
-Connect-M365Doc
+# Default is Commercial, USGov for GCC High, or USGovDoD for DoD
+Connect-M365Doc -CloudEnvironment USGov -TenantId "xxxxx"
 
 # Collect information 
 $Selection = Get-M365DocValidSection | Out-GridView -OutputMode Multiple

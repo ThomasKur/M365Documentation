@@ -21,12 +21,13 @@ Function Write-M365DocJson(){
     #>
     param(
         [ValidateScript({
-            if($_ -notmatch "(\.json)"){
+            if($_ -notmatch "(\.json)$"){
                 throw "The file specified in the path argument must be of type json."
             }
             return $true 
         })]
-        [System.IO.FileInfo]$FullDocumentationPath,
+        # MINIMAL CHANGE: provide a safe default that doesn't reference $Data
+        [System.IO.FileInfo]$FullDocumentationPath = ".\$(Get-Date -Format 'yyyyMMddHHmm')-WPNinjas-Doc.json",
         [Parameter(ValueFromPipeline,Mandatory)]
         [Doc]$Data
     )
@@ -35,7 +36,16 @@ Function Write-M365DocJson(){
     }
     Process {
         Write-Progress -Id 10 -Activity "Create Json File" -Status "Create File" -PercentComplete 0
-        $Data | ConvertTo-Json -Depth 20 | Out-File -FilePath $FullDocumentationPath
+
+        # MINIMAL ADD: normalize to full path and ensure parent folder exists
+        $fullPath = [System.IO.Path]::GetFullPath($FullDocumentationPath)
+        $parent   = Split-Path -Parent $fullPath
+        if (-not (Test-Path -LiteralPath $parent -PathType Container)) {
+            New-Item -ItemType Directory -Path $parent -Force | Out-Null
+        }
+
+        $Data | ConvertTo-Json -Depth 20 | Out-File -LiteralPath $fullPath -Encoding UTF8
+
         Write-Progress -Id 10 -Activity "Create Json File" -Status "Finished creation" -Completed
     }
     End {

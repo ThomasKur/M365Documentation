@@ -28,14 +28,15 @@ Function Write-M365DocHTML(){
     #>
     param(
         [ValidateScript({
-            if($_ -notmatch "(\.html)"){
+            if($_ -notmatch "(\.html)$"){
                 throw "The file specified in the path argument must be of type html."
             }
             return $true 
         })]
-        [System.IO.FileInfo]$FullDocumentationPath = ".\$($Data.CreationDate.ToString("yyyyMMddHHmm"))-WPNinjas-HTML.html",
+        # MINIMAL CHANGE: avoid $Data here; use current time for a safe default
+        [System.IO.FileInfo]$FullDocumentationPath = ".\$(Get-Date -Format 'yyyyMMddHHmm')-WPNinjas-HTML.html",
         [ValidateScript({
-            if($_ -notmatch "(\.html)"){
+            if($_ -notmatch "(\.html)$"){
                 throw "The template file specified in the path argument must be of type html."
             }
             return $true 
@@ -44,7 +45,6 @@ Function Write-M365DocHTML(){
         $fragment = $false,
         [Parameter(ValueFromPipeline,Mandatory)]
         $Data
-        
     )
     Begin {
         $PSHTML = Get-Module -Name PSHTML
@@ -62,9 +62,16 @@ Function Write-M365DocHTML(){
         }
     }
     Process {
+        # MINIMAL ADD: normalize path & ensure parent folder exists
+        $fullPath = [System.IO.Path]::GetFullPath($FullDocumentationPath)
+        $parent   = Split-Path -Parent $fullPath
+        if (-not (Test-Path -LiteralPath $parent -PathType Container)) {
+            New-Item -ItemType Directory -Path $parent -Force | Out-Null
+        }
+
         Write-Progress -Id 10 -Activity "Create HTML File" -Status "Prepare template" -PercentComplete 0
-        # Read HTML Template
-        $htmlTemplate = Get-Content "$PSScriptRoot\..\Data\TemplateHTMLBody.html" -raw
+        # Read HTML Template (body)
+        $htmlTemplate = Get-Content "$PSScriptRoot\..\Data\TemplateHTMLBody.html" -Raw
         
         # Replace Basic Data
         $htmlTemplate = $htmlTemplate -replace "TOBEREPLACED-COMPONENTS",$($Data.Components -join ", ") `
@@ -94,11 +101,10 @@ Function Write-M365DocHTML(){
         }
         else {
             $outputFile = $htmlTemplate
-
         }
 
-        # Output File
-        $outputFile | Out-File -FilePath $FullDocumentationPath
+        # Output File (use normalized path)
+        $outputFile | Out-File -LiteralPath $fullPath
 
         Write-Progress -Id 10 -Activity "Create HTML File" -Status "Finished creation" -Completed
     }
