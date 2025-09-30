@@ -1,65 +1,68 @@
-function Connect-M365Doc {
+Function Connect-M365Doc(){
 <#
 .SYNOPSIS
-  Connects M365Documentation to Microsoft Graph and sets cloud-specific endpoints.
-
+    Connects M365Documentation to Microsoft Graph and sets cloud-specific endpoints.
 .DESCRIPTION
-  Uses MSAL.PS to acquire a token for Microsoft Graph. Supports Commercial, USGov (GCC High),
-  and USGovDoD. Publishes script-scoped variables used elsewhere in the module (Graph base/v1/beta and
-  the Authorization header). Secret-first auth; if no secret is supplied (or -UseInteractive is set),
-  it falls back to interactive.
+    Uses MSAL.PS to acquire a token for Microsoft Graph. Supports Commercial, USGov (GCC High),
+    and USGovDoD.
 
-.PARAMETER CloudEnvironment
-  Commercial | USGov | USGovDoD (default: Commercial)
+.PARAMETER token  
+    You can pass a token you have aquired seperately via Get-MsalToken. You have to make sure, that this token has all required scopes included.
 
-.PARAMETER TenantId
-  Your Azure AD tenant ID (GUID). If omitted and -PromptIfMissing, will prompt.
-
-.PARAMETER ClientId
-  Application (client) ID. For secret flow: confidential client. For interactive: public client
-  with http://localhost redirect and public client flows enabled. If omitted and -PromptIfMissing, will prompt.
+.PARAMETER ClientID
+    The ClientId of your App Registration. You can create the app registration in your tenant by using the New-M365DocAppRegistration command.
 
 .PARAMETER ClientSecret
-  SecureString app secret for confidential client auth. If omitted (and not forcing secret),
-  we fall back to interactive.
+    The ClientSecret of your App Registration. You can create the app registration in your tenant by using the New-M365DocAppRegistration command.
 
-.PARAMETER UseInteractive
-  Force interactive sign-in even if a secret is provided.
+.PARAMETER TenantId
+    The TenantId of your Azure AD Tenant.
 
-.PARAMETER PromptIfMissing
-  If set (default), the function will prompt for missing TenantId/ClientId.
+.PARAMETER NeverRefreshToken
+    By default the token will be refreshed automatically if it is expired. If you set this switch, the token will never be refreshed automatically.
+    You can still force a refresh by using the Force parameter.
+
+.PARAMETER Force
+    By default the function will check if a valid token is already available and will not request a new one. If you set this switch, a new token will be requested even if a valid token is already available.
+
+
+ 
+.EXAMPLE Interactive
+    Connect-M365Doc
+    Displays authentication prompt and allows you to sign in. 
+
+.EXAMPLE CustomToken
+    Connect-M365Doc -token $token
+
+    You can pass a token you have aquired seperately via Get-MsalToken. You have to make sure, that this token has all required scopes included.
+.EXAMPLE PublicClient-Silent
+    Connect-M365Doc -ClientId '00000000-0000-0000-0000-000000000000' -ClientSecret (ConvertTo-SecureString 'SuperSecretString' -AsPlainText -Force) -TenantId '00000000-0000-0000-0000-000000000000'
+    
+    Get token based on the submitted information. You can creat the app registration in your tenant by using the New-DocumentationAppRegistration command.
 #>
-
-  [CmdletBinding()]
+  
   param(
+    [CmdletBinding(DefaultParameterSetName = 'Interactive-Custom')]
+    [parameter(Mandatory=$true, ParameterSetName='CustomToken')]
+    [parameter(Mandatory=$false, ParameterSetName='PublicClient-Silent')]
     [ValidateSet('Commercial','USGov','USGovDoD')]
     [string] $CloudEnvironment = 'Commercial',
-
-    [string] $TenantId,
-    [string] $ClientId,
-
-    [SecureString] $ClientSecret,
-
-    [switch] $UseInteractive,
-    [switch] $PromptIfMissing = $true,
-    [switch] $ForceRefresh
+    [parameter(Mandatory=$true, ParameterSetName='CustomToken')]
+    [Microsoft.Identity.Client.AuthenticationResult]$token,
+    [parameter(Mandatory=$true, ParameterSetName='PublicClient-Silent')]
+    [CmdletBinding(DefaultParameterSetName = 'Interactive-Custom')]
+    [guid]$ClientID,
+    [parameter(Mandatory=$true, ParameterSetName='PublicClient-Silent')]
+    [Security.SecureString]$ClientSecret,
+    [parameter(Mandatory=$true, ParameterSetName='PublicClient-Silent')]
+    [CmdletBinding(DefaultParameterSetName = 'Interactive-Custom')]
+    [guid]$TenantId,
+    [parameter(Mandatory=$false, ParameterSetName='Interactive')]
+    [parameter(Mandatory=$false, ParameterSetName='PublicClient-Silent')]
+    [switch]$NeverRefreshToken,
+    [parameter(Mandatory=$false, ParameterSetName='Interactive')]
+    [switch]$Force
   )
-
-  # ---------- Helper: GUID validator ----------
-  function _IsGuid([string]$s) {
-    return [Guid]::TryParse($s, [ref]([Guid]::Empty))
-  }
-
-  # ---------- Prompt for missing IDs (optional) ----------
-  if ($PromptIfMissing) {
-    if (-not $TenantId)   { $TenantId  = Read-Host "Enter TenantId (GUID)" }
-    if (-not $ClientId)   { $ClientId  = Read-Host "Enter ClientId (App registration ID)" }
-  }
-
-  # ---------- Validate IDs if provided ----------
-  if (-not (_IsGuid $TenantId)) { throw "TenantId is required and must be a valid GUID." }
-  if (-not (_IsGuid $ClientId)) { throw "ClientId is required and must be a valid GUID." }
-
   # ---------- Map environment to endpoints ----------
   switch ($CloudEnvironment) {
     'Commercial' { $AuthorityHost='https://login.microsoftonline.com'; $GraphBase='https://graph.microsoft.com/'; }
@@ -71,48 +74,93 @@ function Connect-M365Doc {
   # Publish for the rest of the module (used by Invoke-DocGraph, etc.)
   $script:M365Doc_CloudEnvironment = $CloudEnvironment
   $script:M365Doc_GraphBase        = $GraphBase
-  $script:M365Doc_GraphV1          = ($GraphBase + 'v1.0/')
-  $script:M365Doc_GraphBeta        = ($GraphBase + 'beta/')
 
-  # Decide auth path
-  $useSecret = $PSBoundParameters.ContainsKey('ClientSecret') -and -not $UseInteractive
-  Write-Host ("Connecting to Microsoft Graph: Env={0}, Tenant={1}, Mode={2}" -f `
-              $CloudEnvironment, $TenantId, ($useSecret ? 'Confidential (secret)' : 'Interactive')) -ForegroundColor Cyan
+  switch -Wildcard ($PSCmdlet.ParameterSetName) {
+      "CustomToken" {
+          # Verify token
+          if ($token.ExpiresOn.LocalDateTime -le $(Get-Date)) {
+              Write-Error "Token expired, please pass a valid and not expired token."
+          } elseif($null -eq $token){
+              Write-Error "No Token passed as token parameter, please pass a valid and not expired token."
+          } else {
+              $script:token = $token
+          }
+          Write-Verbose "Custom Token expires: $($script:token.ExpiresOn.LocalDateTime)"
+          break
+      }
+      "PublicClient-Silent" {
+          # Connect to Microsoft Intune PowerShell App
+          $script:tokenRequest = @{
+              ClientId = $ClientId
+              RedirectUri = "msal37f82fa9-674e-4cae-9286-4b21eb9a6389://auth"
+              TenantId = $TenantId
+              Scopes = $GraphScope
+              Authority = "$AuthorityHost/$TenantId"
+              ClientSecret = $ClientSecret
+              ForceRefresh = $True # We could be pulling a token from the MSAL Cache, ForceRefresh to ensure it's new and has the longest timeline.
+          }
+          if($NeverRefreshToken) { $script:tokenRequest.ForceRefresh = $False}
+          
+          $script:token = Get-MsalToken @script:tokenRequest
+          
+          # Verify token
+          if (-not ($script:token -and $script:token.ExpiresOn.LocalDateTime -ge $(Get-Date))) {
+              Write-Error "Connection failed."
+          }
+          Write-Verbose "PublicClient-Silent Token expires: $($script:token.ExpiresOn.LocalDateTime)"
+          break
+      }
+      "Interactive" {
+          # Connect to M365 App
+          $script:tokenRequest = @{
+              ClientId    = "37f82fa9-674e-4cae-9286-4b21eb9a6389"
+              RedirectUri = "http://localhost"
+              Scopes = $GraphScope
+              ForceRefresh = $True # We could be pulling a token from the MSAL Cache, ForceRefresh to ensure it's new and has the longest timeline.
+          }
 
-  # ---------- Acquire token via MSAL.PS ----------
-  try {
-    if ($useSecret) {
-      # Confidential client (app secret)
-      $token = Get-MsalToken -TenantId     $TenantId `
-                             -ClientId     $ClientId `
-                             -ClientSecret $ClientSecret `
-                             -Authority    "$AuthorityHost/$TenantId" `
-                             -Scopes       $GraphScope `
-                             -ForceRefresh:$ForceRefresh
-    } else {
-      # Interactive / public client (your own public app with http://localhost redirect)
-      $token = Get-MsalToken -TenantId   $TenantId `
-                             -ClientId   $ClientId `
-                             -Authority  "$AuthorityHost/$TenantId" `
-                             -Scopes     $GraphScope `
-                             -RedirectUri 'http://localhost'`
-                             -ForceRefresh:$ForceRefresh
-    }
+          if($NeverRefreshToken) { $script:tokenRequest.ForceRefresh = $False}
 
-    if (-not $token -or -not $token.AccessToken) {
-      throw "Failed to obtain access token."
-    }
+          # Verify token
+          if (-not ($script:token -and $script:token.ExpiresOn.LocalDateTime -ge $(Get-Date))) {
+              $script:token = Get-MsalToken @script:tokenRequest
+          } else {
+              if($Force){
+                  Write-Information "Force reconnection"
+                  $script:token = Get-MsalToken @params
+              } else {
+                  Write-Information "Already connected."
+              }
+          }
+          Write-Verbose "Interactive Token expires: $($script:token.ExpiresOn.LocalDateTime)"
+          break
+      }
+      "Interactive-Custom" {
+          # Connect to M365 App
+          $script:tokenRequest = @{
+              ClientId    = $ClientID
+              TenantId    = $TenantID
+              Scopes = $GraphScope
+              Authority = "$AuthorityHost/$TenantId"
+              RedirectUri = "http://localhost"
+              ForceRefresh = $True # We could be pulling a token from the MSAL Cache, ForceRefresh to ensure it's new and has the longest timeline.
+          }
 
-    # Store token + header where other functions can use them
-    $script:token = $token
-    $script:M365Doc_Token = $token   # keep both names for callers that read either
-    $script:M365Doc_AuthorizationHeader = @{ Authorization = "Bearer $($token.AccessToken)" }
+          if($NeverRefreshToken) { $script:tokenRequest.ForceRefresh = $False}
 
-    Write-Host ("Connected. Token expires at {0}." -f $token.ExpiresOn.LocalDateTime) -ForegroundColor Green
-    Write-Verbose "Graph base: $($script:M365Doc_GraphBase)"
-  }
-  catch {
-    Write-Error "Connect-M365Doc failed: $($_.Exception.Message)"
-    throw
+          # Verify token
+          if (-not ($script:token -and $script:token.ExpiresOn.LocalDateTime -ge $(Get-Date))) {
+              $script:token = Get-MsalToken @script:tokenRequest
+          } else {
+              if($Force){
+                  Write-Information "Force reconnection"
+                  $script:token = Get-MsalToken @params
+              } else {
+                  Write-Information "Already connected."
+              }
+          }
+          Write-Verbose "Interactive Token expires: $($script:token.ExpiresOn.LocalDateTime)"
+          break
+      }
   }
 }

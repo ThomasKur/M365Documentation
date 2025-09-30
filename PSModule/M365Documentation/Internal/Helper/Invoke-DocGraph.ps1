@@ -24,7 +24,7 @@ Function Invoke-DocGraph(){
         [string]$Path,
 
         [Parameter(Mandatory=$false,ParameterSetName = "Path")]
-        [string]$BaseUrl = "https://graph.microsoft.com/",
+        [string]$BaseUrl,
 
         [Parameter(Mandatory=$false,ParameterSetName = "Path")]
         [switch]$Beta,
@@ -37,7 +37,7 @@ Function Invoke-DocGraph(){
     )
 
     # --- ADDED: honor cloud base set by Connect-M365Doc and normalize trailing slash ---
-    if ($script:M365Doc_GraphBase) { $BaseUrl = $script:M365Doc_GraphBase }
+    if ($script:M365Doc_GraphBase) { $BaseUrl = $script:M365Doc_GraphBase } else { $BaseUrl = "https://graph.microsoft.com/" }
     if ($BaseUrl[-1] -ne '/') { $BaseUrl += '/' }
 
     if($PSCmdlet.ParameterSetName -eq "Path"){
