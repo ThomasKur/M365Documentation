@@ -25,7 +25,7 @@ Function Write-M365DocWord(){
             if($_ -notmatch "(\.docx)$"){
                 throw "The file specified in the path argument must be of type docx."
             }
-            # MINIMAL FIX: throw if the parent folder does NOT exist (was inverted before)
+
             if(-not (Test-Path -Path (Split-Path $_ -Parent) -PathType Container)){
                 throw "The path specified does not exist '$(Split-Path $_ -Parent)'."
             }

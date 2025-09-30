@@ -78,7 +78,7 @@ Function Get-AssignmentDetailSingle(){
         }
 
         if($null -ne $Assignment.target.deviceAndAppManagementAssignmentFilterId){
-            $Filter = Invoke-DocGraph -Path "/deviceManagement/assignmentFilters/$($Assignment.target.deviceAndAppManagementAssignmentFilterId)"
+            $Filter = Invoke-DocGraph -Path "/deviceManagement/assignmentFilters/$($Assignment.target.deviceAndAppManagementAssignmentFilterId)" -Beta
             $FilterName = $Filter.displayName
             $Filtertype = $Assignment.target.deviceAndAppManagementAssignmentFilterType
         } else {
