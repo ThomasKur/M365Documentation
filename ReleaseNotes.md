@@ -1,5 +1,11 @@
 # Release Notes
 
+## 3.4.3 30.09.2025
+
+- Bugfix Path exists error in Word
+- Bugfix Documentation of Assignements to all Devices/Users with a filter
+- Remove Exchange Connector documentation as API is now removed by Microsoft
+
 ## 3.4.2 06.05.2025
 
 - Add HTML Output Option.
