@@ -74,7 +74,7 @@ FunctionsToExport = 'Connect-M365Doc', 'Get-M365Doc', 'Get-M365DocValidSection',
                'Invoke-M365DocTranslationUI', 'New-M365DocAppRegistration', 
                'Optimize-M365Doc', 'Write-M365DocCsv', 'Write-M365DocHTML', 
                'Write-M365DocJson', 'Write-M365DocMD', 'Write-M365DocWord',
-               'Test-M365DocConnection', 'Invoke-DocGraph'
+               'Test-M365DocConnection'
 
 # Cmdlets to export from this module, for best performance, do not use wildcards and do not delete the entry, use an empty array if there are no cmdlets to export.
 CmdletsToExport = @()
