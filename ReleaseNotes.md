@@ -1,5 +1,10 @@
 # Release Notes
 
+## 3.5.0-alpha 30.9.2025
+
+- Alpahrelease with GCC support
+ - Feedback regarding if it works as well for existing users is crucial as the connect command was updated.
+
 ## 3.4.3 30.09.2025
 
 - Bugfix Path exists error in Word
