@@ -37,6 +37,8 @@ Install-Module M365Documentation
 
 ```
 
+*PowerShell 7* is required.
+
 ### Basic Usage to create docx
 
 This section covers basic functionality for interactive usage. Advanced use cases like creating your own app registration is covered in the [advanced usage](https://github.com/ThomasKur/M365Documentation/blob/master/AdvancedUsage.md) section.
