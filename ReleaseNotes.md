@@ -1,5 +1,10 @@
 # Release Notes
 
+## 3.5.0
+
+- GCC support
+- Fix Build Process to correctly remove the depreciated Exchange Module
+
 ## 3.5.0-alpha 30.9.2025
 
 - Alpahrelease with GCC support

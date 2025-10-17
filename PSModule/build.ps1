@@ -75,6 +75,7 @@ Test-ModuleManifest -Path "$ModulePath\M365Documentation.psd1" -ErrorAction Stop
 #endregion
 
 #region Sign Scripts
+    Remove-Item -Path $env:TEMP\M365Documentation -Recurse -Force -ErrorAction SilentlyContinue
     Copy-Item -Path $ModulePath -Destination $env:TEMP -Recurse -Force
     $cert = get-item Cert:\CurrentUser\My\* -CodeSigningCert | Out-GridView -OutputMode Single
     $PSFiles = Get-ChildItem -Path $env:TEMP\M365Documentation -Recurse | Where-Object {$_.Extension -eq ".ps1" -or $_.Extension -eq ".psm1"}
