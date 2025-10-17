@@ -121,8 +121,6 @@ PrivateData = @{
 
  To see the complete history, checkout the Release Notes on Github'
 
-        # Prerelease string of this module
-        Prerelease = 'alpha'
 
         # Flag to indicate whether the module requires explicit user acceptance for install/update/save
         # RequireLicenseAcceptance = $false
