@@ -25,8 +25,9 @@ Function Connect-M365Doc(){
 .PARAMETER Force
     By default the function will check if a valid token is already available and will not request a new one. If you set this switch, a new token will be requested even if a valid token is already available.
 
+.PARAMETER CloudEnvironment
+    Specifies the cloud environment to connect to. Supported values are 'Commercial' (default), 'USGov', and 'USGovDoD'.
 
- 
 .EXAMPLE Interactive
     Connect-M365Doc
     Displays authentication prompt and allows you to sign in. 
@@ -43,7 +44,7 @@ Function Connect-M365Doc(){
   
   param(
     [CmdletBinding(DefaultParameterSetName = 'Interactive-Custom')]
-    [parameter(Mandatory=$true, ParameterSetName='CustomToken')]
+    [parameter(Mandatory=$false, ParameterSetName='CustomToken')]
     [parameter(Mandatory=$false, ParameterSetName='PublicClient-Silent')]
     [ValidateSet('Commercial','USGov','USGovDoD')]
     [string] $CloudEnvironment = 'Commercial',
