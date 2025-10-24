@@ -4,6 +4,7 @@
 
 - GCC support
 - Fix Build Process to correctly remove the depreciated Exchange Module
+- Improve Connect-M365 Documentation and parameters
 
 ## 3.5.0-alpha 30.9.2025
 
