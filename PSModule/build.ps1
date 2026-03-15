@@ -53,7 +53,8 @@ switch ($result) {
             -ReleaseNotes $ReleaseNote `
             -RequiredModules @("MSAL.PS","PSWriteOffice") `
             -IconUri $Icon `
-            -ModuleVersion $SuggestedNewVersion `
+            -ModuleVersion $SuggestedNewVersion`
+            -LicenseUri $License `
             -ExternalModuleDependencies @("MSAL.PS","PSWriteOffice")  
     }
     1{
@@ -63,7 +64,8 @@ switch ($result) {
             -ReleaseNotes $ReleaseNote `
             -RequiredModules @("MSAL.PS","PSWriteOffice") `
             -IconUri $Icon `
-            -ModuleVersion $CurrentVersion `
+            -ModuleVersion $CurrentVersion`
+            -LicenseUri $License`
             -ExternalModuleDependencies @("MSAL.PS","PSWriteOffice") 
         
     }
@@ -84,4 +86,4 @@ Test-ModuleManifest -Path "$ModulePath\M365Documentation.psd1" -ErrorAction Stop
     }
 #endregion
 $PSGallerAPIKey = Read-Host "Insert PSGallery API Key"
-Publish-Module -Path $env:TEMP\M365Documentation -NuGetApiKey $PSGallerAPIKey -IconUri $Icon -LicenseUri $License -Verbose
+Publish-Module -Path $env:TEMP\M365Documentation -NuGetApiKey $PSGallerAPIKey -IconUri $Icon -Verbose
