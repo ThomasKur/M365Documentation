@@ -64,9 +64,12 @@ Function Write-M365DocWord(){
         #endregion
     
         $progress = 0
-        foreach($Section in $Data.SubSections){
+        $orderedSections = Get-M365DocOrderedSections -Sections $Data.SubSections
+        $totalSections = [Math]::Max(1, $orderedSections.Count)
+
+        foreach($Section in $orderedSections){
             $progress++
-            Write-Progress -Id 10 -Activity "Create Word File" -Status "Write Section" -CurrentOperation $Section.Title -PercentComplete (($progress / $Data.SubSections.count) * 100)
+            Write-Progress -Id 10 -Activity "Create Word File" -Status "Write Section" -CurrentOperation $Section.Title -PercentComplete (($progress / $totalSections) * 100)
             Write-DocumentationWordSection -WordDocument $WordDocument -Data $Section -Level ($Level + 1)
         }
 

@@ -1,5 +1,17 @@
 # Release Notes
 
+## 3.6.0 15.03.2026
+
+- Advanced Conditional Access coverage
+- Identity Governance coverage
+- Cross-tenant and external identities coverage
+- Terms of Use coverage
+- Extended authentication method policy coverage
+- Consent governance coverage
+- Add EntitlementManagement.Read.All to New-M365DocAppRegistration required permissions
+- Management Summary for EntraId(AzureAD) and Intune
+- Improved Translations
+
 ## 3.5.0
 
 - GCC support
@@ -9,7 +21,7 @@
 ## 3.5.0-alpha 30.9.2025
 
 - Alpahrelease with GCC support
- - Feedback regarding if it works as well for existing users is crucial as the connect command was updated.
+  - Feedback regarding if it works as well for existing users is crucial as the connect command was updated.
 
 ## 3.4.3 30.09.2025
 

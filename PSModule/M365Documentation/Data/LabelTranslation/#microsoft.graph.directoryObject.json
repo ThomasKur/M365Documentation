@@ -1,0 +1,12 @@
+{
+  "displayName": {
+    "DataType": "System.String",
+    "Name": "Display Name",
+    "Section": "Metadata"
+  },
+  "userPrincipalName": {
+    "DataType": "System.String",
+    "Name": "User Principal Name",
+    "Section": " "
+  }
+}

@@ -71,7 +71,8 @@ Function Write-DocumentationHTMLSection(){
             $retObj.BodyCode += "<h2 id=""$titleClean"">$($Section.Title)</h2><p>$($Section.Text)</p>"
             $retObj.IndexCode += "<li><a href=""#$TitleClean"">$($Section.Title)</a></li>"
         }
-        foreach($Section in $Data.SubSections){
+        $orderedSubSections = Get-M365DocOrderedSections -Sections $Data.SubSections
+        foreach($Section in $orderedSubSections){
             $sectReturn = Write-DocumentationHTMLSection -Data $Section -Transpose $data.Transpose
             $retObj.BodyCode += $sectReturn.BodyCode
             if(-not [string]::IsNullOrEmpty($sectReturn.IndexCode)) {

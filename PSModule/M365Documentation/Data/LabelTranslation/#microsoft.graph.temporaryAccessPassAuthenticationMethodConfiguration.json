@@ -1,0 +1,54 @@
+{
+  "@odata.context": {
+    "DataType": "System.String",
+    "Name": "OData Context",
+    "Section": " "
+  },
+  "state": {
+    "DataType": "System.String",
+    "Name": "State",
+    "Section": " "
+  },
+  "defaultLifetimeInMinutes": {
+    "DataType": "System.Int64",
+    "Name": "Default Lifetime In Minutes",
+    "Section": " "
+  },
+  "defaultLength": {
+    "DataType": "System.Int64",
+    "Name": "Default Length",
+    "Section": " "
+  },
+  "minimumLifetimeInMinutes": {
+    "DataType": "System.Int64",
+    "Name": "Minimum Lifetime In Minutes",
+    "Section": " "
+  },
+  "maximumLifetimeInMinutes": {
+    "DataType": "System.Int64",
+    "Name": "Maximum Lifetime In Minutes",
+    "Section": " "
+  },
+  "isUsableOnce": {
+    "DataType": "System.Boolean",
+    "ValueFalse": "Not Configured",
+    "ValueTrue": "Block",
+    "Name": "Usable Once",
+    "Section": " "
+  },
+  "excludeTargets": {
+    "DataType": "System.Object[]",
+    "Name": "Excluded Targets",
+    "Section": " "
+  },
+  "includeTargets@odata.context": {
+    "DataType": "System.String",
+    "Name": "Include Targets OData Context",
+    "Section": " "
+  },
+  "includeTargets": {
+    "DataType": "System.Object[]",
+    "Name": "Included Targets",
+    "Section": " "
+  }
+}

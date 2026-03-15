@@ -61,7 +61,8 @@ Function Write-DocumentationMDSection(){
             }
             
         }
-        foreach($Section in $Data.SubSections){
+        $orderedSubSections = Get-M365DocOrderedSections -Sections $Data.SubSections
+        foreach($Section in $orderedSubSections){
             Write-DocumentationMDSection -FullDocumentationPath $FullDocumentationPath -Data $Section -Level ($Level + 1)
         }
     }

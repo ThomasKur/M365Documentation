@@ -40,7 +40,8 @@ Function Write-DocumentationWordSection(){
             }
             
         }
-        foreach($Section in $Data.SubSections){
+        $orderedSubSections = Get-M365DocOrderedSections -Sections $Data.SubSections
+        foreach($Section in $orderedSubSections){
             Write-DocumentationWordSection -WordDocument $WordDocument -Data $Section -Level ($Level + 1)
         }
     }

@@ -27,15 +27,23 @@ Function Get-M365Doc(){
 
         AzureAD AADAdministrativeUnit
         AzureAD AADAuthMethod
+        AzureAD AADAuthMethodAdvanced
         AzureAD AADBranding
         AzureAD AADConditionalAccess
+        AzureAD AADConditionalAccessAdvanced
         AzureAD AADConditionalAccessSplit
+        AzureAD AADConsentGovernance
+        AzureAD AADCrossTenantAccess
+        AzureAD AADDirectoryPimRole
         AzureAD AADDirectoryRole
         AzureAD AADDomain
         AzureAD AADIdentityProvider
+        AzureAD AADIdentityGovernance
+        AzureAD AADManagementSummary
         AzureAD AADOrganization
         AzureAD AADPolicy
         AzureAD AADSubscription
+        AzureAD AADTermsOfUse
 
         CloudPrint CPConnector
         CloudPrint 
@@ -51,6 +59,7 @@ Function Get-M365Doc(){
         Intune MdmDeviceCategory
         Intune MdmEnrollmentConfiguration
         Intune MdmExchangeConnector
+        Intune MdmManagementSummary
         Intune MdmPartner
         Intune MdmPowerShellScript
         Intune MdmSecurityBaseline
@@ -72,15 +81,23 @@ Function Get-M365Doc(){
 
         AzureAD AADAdministrativeUnit
         AzureAD AADAuthMethod
+        AzureAD AADAuthMethodAdvanced
         AzureAD AADBranding
         AzureAD AADConditionalAccess
+        AzureAD AADConditionalAccessAdvanced
         AzureAD AADConditionalAccessSplit
+        AzureAD AADConsentGovernance
+        AzureAD AADCrossTenantAccess
+        AzureAD AADDirectoryPimRole
         AzureAD AADDirectoryRole
         AzureAD AADDomain
         AzureAD AADIdentityProvider
+        AzureAD AADIdentityGovernance
+        AzureAD AADManagementSummary
         AzureAD AADOrganization
         AzureAD AADPolicy
         AzureAD AADSubscription
+        AzureAD AADTermsOfUse
 
         CloudPrint CPConnector
         CloudPrint 
@@ -96,6 +113,7 @@ Function Get-M365Doc(){
         Intune MdmDeviceCategory
         Intune MdmEnrollmentConfiguration
         Intune MdmExchangeConnector
+        Intune MdmManagementSummary
         Intune MdmPartner
         Intune MdmPowerShellScript
         Intune MdmSecurityBaseline

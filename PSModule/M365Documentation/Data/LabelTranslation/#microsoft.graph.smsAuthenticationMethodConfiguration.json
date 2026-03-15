@@ -1,0 +1,27 @@
+{
+  "@odata.context": {
+    "DataType": "System.String",
+    "Name": "OData Context",
+    "Section": " "
+  },
+  "state": {
+    "DataType": "System.String",
+    "Name": "State",
+    "Section": " "
+  },
+  "excludeTargets": {
+    "DataType": "System.Object[]",
+    "Name": "Excluded Targets",
+    "Section": " "
+  },
+  "includeTargets@odata.context": {
+    "DataType": "System.String",
+    "Name": "Include Targets OData Context",
+    "Section": " "
+  },
+  "includeTargets": {
+    "DataType": "System.Object[]",
+    "Name": "Included Targets",
+    "Section": " "
+  }
+}

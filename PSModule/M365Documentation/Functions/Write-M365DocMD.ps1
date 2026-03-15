@@ -63,9 +63,12 @@ Function Write-M365DocMD(){
         $script:toc = ""
         
         $progress = 0
-        foreach($Section in $Data.SubSections){
+        $orderedSections = Get-M365DocOrderedSections -Sections $Data.SubSections
+        $totalSections = [Math]::Max(1, $orderedSections.Count)
+
+        foreach($Section in $orderedSections){
             $progress++
-            Write-Progress -Id 10 -Activity "Create Markdown File" -Status "Write Section" -CurrentOperation $Section.Title -PercentComplete (($progress / $Data.SubSections.count) * 100)
+            Write-Progress -Id 10 -Activity "Create Markdown File" -Status "Write Section" -CurrentOperation $Section.Title -PercentComplete (($progress / $totalSections) * 100)
             Write-DocumentationMDSection -FullDocumentationPath $fullPath -Data $Section -Level 1
         }
 

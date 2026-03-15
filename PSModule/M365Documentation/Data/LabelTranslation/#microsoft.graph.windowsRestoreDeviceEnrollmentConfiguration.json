@@ -1,55 +1,45 @@
 {
-  "@odata.type": {
-    "DataType": "System.String",
-    "Name": "OData Type",
-    "Section": "Basic"
-  },
-  "id": {
-    "DataType": "System.String",
-    "Name": "ID",
-    "Section": "Basic"
-  },
   "displayName": {
     "DataType": "System.String",
-    "Name": "Display name",
-    "Section": "Basic"
+    "Name": "Displayname",
+    "Section": "Metadata"
   },
   "description": {
     "DataType": "System.String",
     "Name": "Description",
-    "Section": "Basic"
+    "Section": "Metadata"
   },
   "priority": {
     "DataType": "System.Int64",
-    "Name": "Priority",
-    "Section": "Basic"
+    "Name": "",
+    "Section": " "
   },
   "createdDateTime": {
     "DataType": "System.DateTime",
     "Name": "Created at",
-    "Section": "Basic"
+    "Section": "Metadata"
   },
   "lastModifiedDateTime": {
     "DataType": "System.DateTime",
     "Name": "Modified at",
-    "Section": "Basic"
+    "Section": "Metadata"
   },
   "version": {
     "DataType": "System.Int64",
     "Name": "Version",
-    "Section": "Basic"
-  },
-  "limit": {
-    "DataType": "System.Int64",
-    "Name": "Device Limit",
-    "Section": "General"
+    "Section": "Metadata"
   },
   "roleScopeTagIds": {
-    "Section": "Scope Tags",
+    "DataType": "System.Object[]",
     "Name": "Role Scopes Tags",
-    "DataType": "System.Object[]"
+    "Section": "Metadata"
   },
   "deviceEnrollmentConfigurationType": {
+    "DataType": "System.String",
+    "Name": "",
+    "Section": " "
+  },
+  "state": {
     "DataType": "System.String",
     "Name": "",
     "Section": " "

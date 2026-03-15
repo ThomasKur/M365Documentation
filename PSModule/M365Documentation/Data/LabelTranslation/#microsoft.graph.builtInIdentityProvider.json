@@ -1,0 +1,22 @@
+{
+  "displayName": {
+    "DataType": "System.String",
+    "Name": "Display Name",
+    "Section": "Metadata"
+  },
+  "supportedTenantTypes": {
+    "DataType": "System.String",
+    "Name": "Supported Tenant Types",
+    "Section": " "
+  },
+  "identityProviderType": {
+    "DataType": "System.String",
+    "Name": "Identity Provider Type",
+    "Section": " "
+  },
+  "state": {
+    "DataType": "System.Object",
+    "Name": "State",
+    "Section": " "
+  }
+}

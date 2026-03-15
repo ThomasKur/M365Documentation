@@ -81,11 +81,13 @@ Function Write-M365DocHTML(){
         Write-Progress -Id 10 -Activity "Create HTML File" -Status "Prepared template" -PercentComplete 10
 
         $progress = 0
+        $orderedSections = Get-M365DocOrderedSections -Sections $Data.SubSections
+        $totalSections = [Math]::Max(1, $orderedSections.Count)
 
         # Run through secions and catch returns
         $codeObj = @()
-        foreach($Section in $Data.SubSections){
-            Write-Progress -Id 10 -Activity "Create HTML File" -Status "Write Section" -CurrentOperation $Section.Title -PercentComplete (($progress / $Data.SubSections.count) * 100)
+        foreach($Section in $orderedSections){
+            Write-Progress -Id 10 -Activity "Create HTML File" -Status "Write Section" -CurrentOperation $Section.Title -PercentComplete (($progress / $totalSections) * 100)
             $progress++
             $codeObj += Write-DocumentationHTMLSection -Data $Section
         }
