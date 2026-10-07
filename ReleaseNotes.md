@@ -2,6 +2,10 @@
 
 ## 3.7.0
 
+- Fix #88: Add User.Read.All, AuditLog.Read.All and Policy.Read.PermissionGrant application permissions for guest sign-in activity and Consent Governance documentation.
+- Request both delegated and application permissions where available in New-M365DocAppRegistration using the live Graph permission catalog, validate that every required permission resolves, and fix application role consent assignment. Warn when permissions resolve only as delegated and cannot be used by app-only tokens.
+- Existing app registrations must have the missing application permissions added and admin consent granted, followed by acquiring a new token; they are not automatically updated.
+- Correct "sufficiant" to "sufficient" in the Microsoft Graph Forbidden warning.
 - Continue tenant documentation when Microsoft Graph returns AadPremiumLicenseRequired, with a licensing-specific warning identifying the skipped request.
 - Fix CAE endpoint 404 error as feature is no longer a seperate API endpoint
 

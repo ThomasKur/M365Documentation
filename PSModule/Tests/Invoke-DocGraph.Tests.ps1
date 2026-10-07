@@ -88,6 +88,18 @@ Describe 'Invoke-DocGraph licensing failures' {
         Should -Invoke Write-Warning -Times 1 -Exactly -ParameterFilter { $Message -like 'NotFound:*' }
     }
 
+    It 'uses the corrected permission warning for Forbidden requests' {
+        $script:graphError = Get-TestGraphError -StatusCode ([System.Net.HttpStatusCode]::Forbidden) -Code 'Authorization_RequestDenied'
+        Mock Invoke-RestMethod { throw $script:graphError }
+
+        Invoke-DocGraph -Path '/policies/permissionGrantPolicies' | Out-Null
+
+        Should -Invoke Write-Warning -Times 1 -Exactly -ParameterFilter {
+            $Message -eq "Forbidden: Used application does not have sufficient permission to access. FullUrl: 'https://graph.microsoft.com/v1.0/policies/permissionGrantPolicies'" -and
+            $WarningAction -eq 'Continue'
+        }
+    }
+
     It 'does not swallow unrelated unexpected Graph errors' {
         $script:graphError = Get-TestGraphError -StatusCode 500 -Code 'InternalServerError'
         Mock Invoke-RestMethod { throw $script:graphError }
