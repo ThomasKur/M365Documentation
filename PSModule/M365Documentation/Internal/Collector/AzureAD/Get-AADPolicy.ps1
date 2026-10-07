@@ -131,19 +131,6 @@ Function Get-AADPolicy(){
     $DocSecSingle.Transpose = $true
     $DocSec.SubSections += $DocSecSingle
 
-    # Continuous Access Evaluation Policy
-    $DocSecSingle = New-Object DocSection
-    $DocSecSingle.Title = "Continuous Access Evaluation Policy"
-    $DocSecSingle.Text = "Continuous Access Evaluation (CAE) manages authentication sessions in real time. CAE allows customers to handle access to resources by supporting instant revocation events."
-    $DocSecSingle.SubSections = @()
-    try{
-        $DocSecSingle.Objects = (Invoke-DocGraph -Path "/identity/continuousAccessEvaluationPolicy" -Beta)
-    } catch {
-        Write-Verbose "Failed to get Continuous Access Evaluation (CAE) Policy Configuration. This may be because it is not configured in your tenant."
-    }
-    $DocSecSingle.Transpose = $true
-    $DocSec.SubSections += $DocSecSingle
-
     # Authorization Policy
     $DocSecSingle = New-Object DocSection
     $DocSecSingle.Title = "Authorization Policy"
