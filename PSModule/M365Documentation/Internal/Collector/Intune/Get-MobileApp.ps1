@@ -44,7 +44,18 @@ Function Get-MobileApp(){
                     $Filter = $Assignment.target.groupType
                     $Assignments += "$($GroupName)`n - Intent:$($Assignment.intent)$FilterString"
                 } else {
-                    $Assignments += "$(($Assignment.target.'@odata.type' -replace "#microsoft.graph.",''))`n - Intent:$($Assignment.intent)"
+                    $TargetName = switch -Regex ($Assignment.target.'@odata.type') {
+                        "allDevicesAssignmentTarget" { "All Devices"; break }
+                        "all(Licensed)?UsersAssignmentTarget" { "All Users"; break }
+                        default { $Assignment.target.'@odata.type' -replace "#microsoft.graph.",'' }
+                    }
+                    if($null -ne $Assignment.target.deviceAndAppManagementAssignmentFilterId){
+                        $Filter = Invoke-DocGraph -Path "/deviceManagement/assignmentFilters/$($Assignment.target.deviceAndAppManagementAssignmentFilterId)" -Beta
+                        $FilterString = "`n - Filter: $($Filter.displayName)`n - Filtertype: $($Assignment.target.deviceAndAppManagementAssignmentFilterType)"
+                    } else {
+                        $FilterString = $null
+                    }
+                    $Assignments += "$TargetName`n - Intent:$($Assignment.intent)$FilterString"
                 }
             }
             $Intune_App | Add-Member Noteproperty "Assignments" ($Assignments -join "`n")

@@ -11,7 +11,7 @@ Function Write-DocumentationWordSection(){
     NAME: Thomas Kurth / 3.3.2021
     #>
     param(
-        [OfficeIMO.Word.WordDocument]$WordDocument,
+        $WordDocument,
         [DocSection]$Data,
         [int]$Level = 1
     )

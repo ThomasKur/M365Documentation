@@ -21,7 +21,9 @@ Per default the module will use an app registration hosted in my tenant, which i
 You can create the app registration on your own with these permission. If you can't grant specific permissions, then the documentation module will still work but the part which requires the permission will not be documented.
 
 Current list of scopes:
-"AccessReview.Read.All","Agreement.Read.All","AppCatalog.Read.All","Application.Read.All","CloudPC.Read.All","ConsentRequest.Read.All","Device.Read.All","DeviceManagementApps.Read.All","DeviceManagementConfiguration.Read.All","DeviceManagementManagedDevices.Read.All","DeviceManagementRBAC.Read.All","DeviceManagementServiceConfig.Read.All","Directory.Read.All","Domain.Read.All","Organization.Read.All","Policy.Read.All","Policy.ReadWrite.AuthenticationMethod","Policy.ReadWrite.FeatureRollout","PrintConnector.Read.All","Printer.Read.All","PrinterShare.Read.All","PrintSettings.Read.All","PrivilegedAccess.Read.AzureAD","PrivilegedAccess.Read.AzureADGroup","PrivilegedAccess.Read.AzureResources","User.Read"
+"AccessReview.Read.All","Agreement.Read.All","AppCatalog.Read.All","Application.Read.All","CloudPC.Read.All","ConsentRequest.Read.All","Device.Read.All","DeviceManagementApps.Read.All","DeviceManagementConfiguration.Read.All","DeviceManagementManagedDevices.Read.All","DeviceManagementRBAC.Read.All","DeviceManagementServiceConfig.Read.All","Directory.Read.All","Domain.Read.All","EntitlementManagement.Read.All","Organization.Read.All","Policy.Read.All","Policy.Read.PermissionGrant","Policy.ReadWrite.AuthenticationMethod","Policy.ReadWrite.FeatureRollout","PrintConnector.Read.All","Printer.Read.All","PrinterShare.Read.All","PrintSettings.Read.All","PrivilegedAccess.Read.AzureAD","PrivilegedAccess.Read.AzureADGroup","PrivilegedAccess.Read.AzureResources","User.Read","User.Read.All","IdentityProvider.Read.All","InformationProtectionPolicy.Read.All","PrivilegedEligibilitySchedule.Read.AzureADGroup","RoleEligibilitySchedule.Read.Directory"
+
+The permission list above includes application permissions used by the sections collected by this module. If you configure permissions manually, grant admin consent for the application permissions. Missing permissions can leave the related section unavailable.
 
 ```powershell
 
@@ -55,6 +57,8 @@ The Connect-M365Doc command is built around the MSAL.PS (Get-MsalToken) module w
 Connect-M365Doc -token $yourtoken
 
 ```
+
+Tokens supplied with `-token` are managed by the caller and cannot be refreshed automatically by the module because the module does not have the token's acquisition context. For long-running collections, refresh the token using its original authentication flow and reconnect with `Connect-M365Doc -token` before the current token expires.
 
 ## Data Collection
 
@@ -137,6 +141,12 @@ $docnew | Write-M365DocMd -FullDocumentationPath "c:\temp\$($doc.CreationDate.To
 ### Output to HTML
 
 Output the data to a HTML file. It's possible to output the data as fragment (which only outputs the data between the HTML body tags) and to use an own html template, if you want to add a header / footer for example.  Please see the "TemplateHTML.html" within the .\Data directory of the module for an example.
+
+Install the required PSHTML module before using `Write-M365DocHTML`:
+
+```powershell
+Install-Module PSHTML
+```
 
 This function will also encode several characters (like umlauts and line breaks) to HTML code and remove some non-latin unicode characters, which can slip in to things like the description of Apps, when descriptions from the appstores are taken over. Those characters can break further automated handling of the files.
 

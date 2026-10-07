@@ -34,7 +34,8 @@ Function Write-M365DocWord(){
         # MINIMAL CHANGE: avoid referencing $Data here
         [System.IO.FileInfo]$FullDocumentationPath = ".\$(Get-Date -Format 'yyyyMMddHHmm')-WPNinjas-Doc.docx",
         [Parameter(ValueFromPipeline,Mandatory)]
-        [Doc]$Data
+        [Doc]$Data,
+        [int]$Level = 1
     )
     Begin {
 

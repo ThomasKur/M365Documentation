@@ -36,7 +36,8 @@ function Test-TokenExpiration {
             Throw "Could not refresh token. $($_.Exception.Message)."
         }
     } else {
-        # Using a custom token. Cannot automatically refresh. Let it fail naturally if the token expires.
+        # A caller-supplied token cannot be refreshed without its acquisition context.
+        Throw "The caller-supplied token has expired. Refresh it with its original authentication flow, then reconnect with Connect-M365Doc -token."
     }
 
 }

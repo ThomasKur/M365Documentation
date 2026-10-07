@@ -105,6 +105,8 @@ Function Get-AADConditionalAccess(){
         $ResultCAPolicy | Add-Member Noteproperty "S_PersistentBrowserMode" ($CAPolicy.sessionControls.persistentBrowser.mode)
         $ResultCAPolicy | Add-Member Noteproperty "S_SignInFrequency" ($CAPolicy.sessionControls.signInFrequency.isEnabled)
         $ResultCAPolicy | Add-Member Noteproperty "S_SignInFrequencyTimeframe" ("" + $CAPolicy.sessionControls.signInFrequency.value +" "+ $CAPolicy.sessionControls.signInFrequency.type)
+        $ResultCAPolicy | Add-Member Noteproperty "S_ContinuousAccessEvaluation" $CAPolicy.sessionControls.continuousAccessEvaluation
+        $ResultCAPolicy | Add-Member Noteproperty "S_DisableResilienceDefaults" $CAPolicy.sessionControls.disableResilienceDefaults
         
         $ReturnObj += $ResultCAPolicy
     } 

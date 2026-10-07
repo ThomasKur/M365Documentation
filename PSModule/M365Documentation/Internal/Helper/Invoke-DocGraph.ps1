@@ -158,8 +158,16 @@ Function Invoke-DocGraph(){
             $jsonResponse = @{}
         }
 
-        if($caughtError.Exception.Response.StatusCode -eq "Forbidden"){
-            Write-Warning "Forbidden: Used application does not have sufficiant permission to access. FullUrl: '$FullUrl'" -WarningAction Continue
+        $errorCode = $jsonResponse.error.code
+        if($errorCode -eq "AadPremiumLicenseRequired" -or $errorCode -eq "AadLicenseRequired"){
+            Write-Warning "License required to access this Graph resource. The section will be skipped. Error: '$errorCode'. FullUrl: '$FullUrl'" -WarningAction Continue
+            $value = [PSCustomObject]@{
+                Status = 'Skipped'
+                Reason = 'License required'
+                ErrorCode = $errorCode
+            }
+        } elseif($caughtError.Exception.Response.StatusCode -eq "Forbidden"){
+            Write-Warning "Forbidden: Used application does not have sufficient permission to access. FullUrl: '$FullUrl'" -WarningAction Continue
         } elseif ($caughtError.Exception.Response.StatusCode -eq "Unauthorized"){
             Write-Warning "Unauthorized: The most common cause is an invalid, missing, or expired access token in the HTTP request header. It might also be a missing license assignment. FullUrl: '$FullUrl'" -WarningAction Continue
         # --- CHANGED: use $BaseUrl instead of hard-coded commercial URLs for NotFound checks ---
@@ -177,7 +185,7 @@ Function Invoke-DocGraph(){
                 # If there was an error we can display, show it.
                 throw $jsonResponse.ErrorDetails.Message
             } Else {
-                # No mesasge returned from Graph, return raw error.
+                # No message returned from Graph, return raw error.
                 throw $_
             }
         }

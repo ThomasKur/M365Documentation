@@ -54,7 +54,7 @@ Function New-M365DocAppRegistration(){
     ########################################################
     
     
-    $appPermissionsRequired = @("AccessReview.Read.All","Agreement.Read.All","AppCatalog.Read.All","Application.Read.All","CloudPC.Read.All","ConsentRequest.Read.All","Device.Read.All","DeviceManagementApps.Read.All","DeviceManagementConfiguration.Read.All","DeviceManagementManagedDevices.Read.All","DeviceManagementRBAC.Read.All","DeviceManagementServiceConfig.Read.All","Directory.Read.All","Domain.Read.All","EntitlementManagement.Read.All","Organization.Read.All","Policy.Read.All","Policy.ReadWrite.AuthenticationMethod","Policy.ReadWrite.FeatureRollout","PrintConnector.Read.All","Printer.Read.All","PrinterShare.Read.All","PrintSettings.Read.All","PrivilegedAccess.Read.AzureAD","PrivilegedAccess.Read.AzureADGroup","PrivilegedAccess.Read.AzureResources","User.Read" ,"IdentityProvider.Read.All","InformationProtectionPolicy.Read.All","PrivilegedEligibilitySchedule.Read.AzureADGroup","RoleEligibilitySchedule.Read.Directory"  )
+    $appPermissionsRequired = @("AccessReview.Read.All","Agreement.Read.All","AppCatalog.Read.All","Application.Read.All","CloudPC.Read.All","ConsentRequest.Read.All","Device.Read.All","DeviceManagementApps.Read.All","DeviceManagementConfiguration.Read.All","DeviceManagementManagedDevices.Read.All","DeviceManagementRBAC.Read.All","DeviceManagementServiceConfig.Read.All","Directory.Read.All","Domain.Read.All","EntitlementManagement.Read.All","Organization.Read.All","Policy.Read.All","Policy.Read.PermissionGrant","Policy.ReadWrite.AuthenticationMethod","Policy.ReadWrite.FeatureRollout","PrintConnector.Read.All","Printer.Read.All","PrinterShare.Read.All","PrintSettings.Read.All","PrivilegedAccess.Read.AzureAD","PrivilegedAccess.Read.AzureADGroup","PrivilegedAccess.Read.AzureResources","User.Read","User.Read.All","IdentityProvider.Read.All","InformationProtectionPolicy.Read.All","PrivilegedEligibilitySchedule.Read.AzureADGroup","RoleEligibilitySchedule.Read.Directory")
     $appPermissionsRequiredResolved = Find-MgGraphPermission | Select-Object Name, PermissionType, Id | Where-Object { $_.Name -in $appPermissionsRequired } | Sort-Object -Property Name
         
 
@@ -86,7 +86,7 @@ Function New-M365DocAppRegistration(){
         $sp = New-MgServicePrincipal -AppId $app.appId
         
         
-        $permissions | ForEach-Object {
+        $appPermissionsRequiredResolved | Where-Object { $_.PermissionType -eq "Application" } | ForEach-Object {
             New-MgServicePrincipalAppRoleAssignment -ServicePrincipalId $sp.Id -PrincipalId $sp.Id -AppRoleId $_.Id -ResourceId $graphSpId
         }
 

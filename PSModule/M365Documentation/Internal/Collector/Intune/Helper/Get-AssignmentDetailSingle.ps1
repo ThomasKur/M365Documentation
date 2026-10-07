@@ -74,7 +74,7 @@ Function Get-AssignmentDetailSingle(){
         switch ( $Name )
         {
             "allDevicesAssignmentTarget" { $Name = "All Devices" }
-            "allLicensedUsersAssignmentTarget" { $Name = "All Users"  }
+            { $_ -in "allLicensedUsersAssignmentTarget", "allUsersAssignmentTarget" } { $Name = "All Users" }
         }
 
         if($null -ne $Assignment.target.deviceAndAppManagementAssignmentFilterId){

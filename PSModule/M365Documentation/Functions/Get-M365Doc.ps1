@@ -301,7 +301,11 @@ Function Get-M365Doc(){
             foreach($SelectedCommand in $SelectedCommands){
                 $progress++
                 Write-Progress -Id 1 -Activity "Collecting Data" -Status (($SelectedCommand.Name -replace ".ps1","") -replace "Get-","") -PercentComplete (($progress / $SelectedCommands.count) * 100)
-                $CollectedData += Invoke-Expression -Command ($SelectedCommand.Name -replace ".ps1","")
+                try {
+                    $CollectedData += Invoke-Expression -Command ($SelectedCommand.Name -replace ".ps1","") -ErrorAction Stop
+                } catch {
+                    Write-Warning "Section '$($SelectedCommand.Name -replace '.ps1','')' could not be collected and will be skipped. $($_.Exception.Message)"
+                }
             }
             Write-Progress -Id 1 -Activity "Collecting Data" -Status "Finished collection" -Completed
             
