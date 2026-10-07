@@ -1,5 +1,9 @@
 # Release Notes
 
+## 3.7.0
+
+- Continue tenant documentation when Microsoft Graph returns AadPremiumLicenseRequired, with a licensing-specific warning identifying the skipped request.
+
 ## 3.6.0 15.03.2026
 
 - Advanced Conditional Access coverage

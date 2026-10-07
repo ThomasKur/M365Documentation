@@ -88,7 +88,7 @@ Function Invoke-DocGraph(){
                     Start-Sleep -seconds 1
                 }
                 # Just making sure if the last call returned an exception again, throw it here.
-                if([int]$value.Exception) {
+                if($value.Exception) {
                     throw $value
                 }
             }
@@ -131,7 +131,7 @@ Function Invoke-DocGraph(){
                             }
                             Start-Sleep -seconds 1
                         }
-                        if([int]$valueNext.Exception) {
+                        if($valueNext.Exception) {
                             throw $valueNext
                         }
                     }
@@ -158,7 +158,10 @@ Function Invoke-DocGraph(){
             $jsonResponse = @{}
         }
 
-        if($caughtError.Exception.Response.StatusCode -eq "Forbidden"){
+        if($jsonResponse.error.code -eq "AadPremiumLicenseRequired"){
+            Write-Warning "AadPremiumLicenseRequired: Skipping Graph request because the tenant needs Microsoft Entra ID P2 or Microsoft Entra ID Governance licensing. FullUrl: '$FullUrl'" -WarningAction Continue
+            return $null
+        } elseif($caughtError.Exception.Response.StatusCode -eq "Forbidden"){
             Write-Warning "Forbidden: Used application does not have sufficiant permission to access. FullUrl: '$FullUrl'" -WarningAction Continue
         } elseif ($caughtError.Exception.Response.StatusCode -eq "Unauthorized"){
             Write-Warning "Unauthorized: The most common cause is an invalid, missing, or expired access token in the HTTP request header. It might also be a missing license assignment. FullUrl: '$FullUrl'" -WarningAction Continue
