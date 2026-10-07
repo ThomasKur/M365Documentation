@@ -44,6 +44,10 @@ Connect-M365Doc -ClientId '00000000-0000-0000-0000-000000000000' -ClientSecret (
 
 ```
 
+### Information Protection labels
+
+The `MIPLabel` section uses the Microsoft Graph beta sensitivity labels API. App-only authentication returns organization labels and requires the `InformationProtectionPolicy.Read.All` application permission with admin consent. Interactive authentication returns only labels available to the signed-in user and requires the `InformationProtectionPolicy.Read` delegated permission. An interactive connection using a custom app registration is still delegated authentication.
+
 ### Others
 
 The Connect-M365Doc command is built around the MSAL.PS (Get-MsalToken) module which allows to use any authentication methods Azure AD supports. Because of that it is possible to provide just an authentication token which should be used by the module:

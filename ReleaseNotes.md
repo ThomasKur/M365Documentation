@@ -8,6 +8,8 @@
 - Correct "sufficiant" to "sufficient" in the Microsoft Graph Forbidden warning.
 - Continue tenant documentation when Microsoft Graph returns AadPremiumLicenseRequired, with a licensing-specific warning identifying the skipped request.
 - Fix CAE endpoint 404 error as feature is no longer a seperate API endpoint
+- Fix Cloud Print printer subsection titles being executed as commands instead of strings.
+- Replace the retired Information Protection labels endpoint with the beta sensitivity labels API, using organization labels for app-only authentication and user labels for interactive authentication. Request InformationProtectionPolicy.Read for delegated access and skip unsupported US Government clouds with a warning.
 
 ## 3.6.0 15.03.2026
 

@@ -26,7 +26,7 @@ BeforeAll {
         'Policy.Read.PermissionGrant', 'Policy.ReadWrite.AuthenticationMethod', 'Policy.ReadWrite.FeatureRollout',
         'PrintConnector.Read.All', 'Printer.Read.All', 'PrinterShare.Read.All', 'PrintSettings.Read.All',
         'PrivilegedAccess.Read.AzureAD', 'PrivilegedAccess.Read.AzureADGroup', 'PrivilegedAccess.Read.AzureResources',
-        'User.Read.All', 'IdentityProvider.Read.All', 'InformationProtectionPolicy.Read.All',
+        'User.Read.All', 'IdentityProvider.Read.All', 'InformationProtectionPolicy.Read', 'InformationProtectionPolicy.Read.All',
         'PrivilegedEligibilitySchedule.Read.AzureADGroup', 'RoleEligibilitySchedule.Read.Directory'
     )
     $script:applicationPermissions = @($script:requiredNames | ForEach-Object {
@@ -111,6 +111,7 @@ Describe 'New-M365DocAppRegistration permissions' {
         @{ Name = 'CloudPC.Read.All' }
         @{ Name = 'PrinterShare.Read.All' }
         @{ Name = 'Agreement.Read.All' }
+        @{ Name = 'InformationProtectionPolicy.Read' }
     ) {
         $script:resolvedPermissions = @($script:resolvedPermissions | Where-Object {
             $_.Name -ne $Name
@@ -122,16 +123,19 @@ Describe 'New-M365DocAppRegistration permissions' {
         Should -Invoke New-MgServicePrincipalAppRoleAssignment -Times 0 -Exactly
     }
 
-    It 'warns about delegated-only permissions without trying to grant them as application roles' {
+    It 'warns about delegated-only <Name> without trying to grant it as an application role' -ForEach @(
+        @{ Name = 'PrinterShare.Read.All' }
+        @{ Name = 'InformationProtectionPolicy.Read' }
+    ) {
         $script:resolvedPermissions = @($script:resolvedPermissions | Where-Object {
-            $_.Name -ne 'PrinterShare.Read.All' -or $_.PermissionType -ne 'Application'
+            $_.Name -ne $Name -or $_.PermissionType -ne 'Application'
         })
 
         $result = New-M365DocAppRegistration
 
         $result.ClientID | Should -Be 'application-client'
         Should -Invoke Write-Warning -Times 1 -Exactly -ParameterFilter {
-            $Message -eq 'The following Microsoft Graph permissions resolved only as delegated: PrinterShare.Read.All. App-only tokens cannot use these permissions.'
+            $Message -eq "The following Microsoft Graph permissions resolved only as delegated: $Name. App-only tokens cannot use these permissions."
         }
         Should -Invoke New-MgServicePrincipalAppRoleAssignment -Times ($script:requiredNames.Count - 1) -Exactly
         Should -Invoke New-MgServicePrincipalAppRoleAssignment -Times 0 -Exactly -ParameterFilter {
@@ -139,7 +143,7 @@ Describe 'New-M365DocAppRegistration permissions' {
         }
         Should -Invoke Update-MgApplication -Times 1 -Exactly -ParameterFilter {
             @($RequiredResourceAccess.ResourceAccess | Where-Object {
-                $_.Id -eq ($script:delegatedPermissions | Where-Object Name -eq 'PrinterShare.Read.All').Id -and
+                $_.Id -eq ($script:delegatedPermissions | Where-Object Name -eq $Name).Id -and
                 $_.Type -eq 'Scope'
             }).Count -eq 1
         }

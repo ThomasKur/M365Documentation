@@ -14,12 +14,23 @@ Function Get-MIPLabel(){
     [cmdletbinding()]
     param()
 
+    if($script:M365Doc_CloudEnvironment -in @("USGov", "USGovDoD")){
+        Write-Warning -Message "InformationProtection: Skipping sensitivity labels because the Microsoft Graph sensitivity labels API is not available in $($script:M365Doc_CloudEnvironment)."
+        return $null
+    }
+
+    Test-TokenExpiration
+    $path = "/security/informationProtection/sensitivityLabels"
+    if($null -ne $script:token.Account){
+        $path = "/me/security/informationProtection/sensitivityLabels"
+        Write-Warning -Message "InformationProtection only documents labels available to the signed-in user when running interactive. Use app-only authentication with InformationProtectionPolicy.Read.All to document organization labels."
+    }
+
     $DocSec = New-Object DocSection
 
     $DocSec.Title = "Labels"
-    $DocSec.Text = "Lists all labels that have been configured in Microsoft Information Protection."
-    Write-Warning -Message "InformationProtection only documents all labels when executed with an app registration and not when running interactive."
-    $DocSec.Objects = (Invoke-DocGraph -Path "/informationProtection/policy/labels").Value
+    $DocSec.Text = "Lists sensitivity labels available to the organization or signed-in user in Microsoft Information Protection."
+    $DocSec.Objects = (Invoke-DocGraph -Path $path -Beta).Value
     $DocSec.Transpose = $false
     if($null -eq $DocSec.Objects){
         return $null
