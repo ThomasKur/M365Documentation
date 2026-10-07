@@ -66,7 +66,7 @@ function Invoke-TransposeObject {
 		# retrieve property values and add them to the property's PSCustomobject
 		$COUNTER = 0
 		$PropNames | ForEach-Object{
-			if ($InputObject.($_))
+			if ($InputObject.PSObject.Properties[$_])
 			{ # property exists for current object
 				$Props[$COUNTER] | Add-Member -Name $Property -Type NoteProperty -Value $InputObject.($_)
 			} else { # property does not exist for current object, add $NULL value

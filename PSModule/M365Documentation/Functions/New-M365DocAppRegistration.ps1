@@ -61,7 +61,7 @@ Function New-M365DocAppRegistration(){
     if (!(Get-MgApplication | Where-Object {$_.DisplayName -eq $displayName})) {
         $app = New-MgApplication -DisplayName $displayName -SignInAudience "AzureADMyOrg" -Web @{ RedirectUris="urn:ietf:wg:oauth:2.0:oob"; }
         $RequiredResourceAccessArray = @()
-        $permissions = $appPermissionsRequiredResolved | ForEach-Object {
+        $appPermissionsRequiredResolved | ForEach-Object {
             if($_.PermissionType -eq "Application"){
                 $t = "Role"
             } else {
