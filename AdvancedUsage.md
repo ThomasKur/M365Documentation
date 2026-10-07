@@ -140,6 +140,12 @@ $docnew | Write-M365DocMd -FullDocumentationPath "c:\temp\$($doc.CreationDate.To
 
 ### Output to HTML
 
+HTML export requires the **PSHTML** PowerShell module, which must be installed separately. `Write-M365DocHTML` imports it automatically when needed.
+
+```powershell
+Install-Module -Name PSHTML -Force
+```
+
 Output the data to a HTML file. It's possible to output the data as fragment (which only outputs the data between the HTML body tags) and to use an own html template, if you want to add a header / footer for example.  Please see the "TemplateHTML.html" within the .\Data directory of the module for an example.
 
 This function will also encode several characters (like umlauts and line breaks) to HTML code and remove some non-latin unicode characters, which can slip in to things like the description of Apps, when descriptions from the appstores are taken over. Those characters can break further automated handling of the files.
