@@ -14,7 +14,9 @@ This is the successor to the IntuneDocumentation module and has much more option
 
 - Output to Json
   - Backup your configuration and create documentation later
-  - Compare your configuration over time for example with <http://www.jsondiff.com/>
+  - Compare your configuration over time, for example with
+    [JSON Diff](https://jsondiff.com/) or
+    [JSONViewerTool JSON Compare](https://jsonviewertool.com/json-compare)
 - Output to CSV
 - Output to Markdown/MD
 - Output to HTML
