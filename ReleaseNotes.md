@@ -3,6 +3,7 @@
 ## 3.7.0
 
 - Continue tenant documentation when Microsoft Graph returns AadPremiumLicenseRequired, with a licensing-specific warning identifying the skipped request.
+- Fix CAE endpoint 404 error as feature is no longer a seperate API endpoint
 
 ## 3.6.0 15.03.2026
 
