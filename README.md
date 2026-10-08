@@ -34,12 +34,17 @@ The required modules are fully available in the PowerShell Gallery and therefore
 ```powershell
 
 Install-Module MSAL.PS
-Install-Module PSWriteOffice
+Install-Module PSWriteOffice -MinimumVersion 1.0.2
 Install-Module M365Documentation
 
 ```
 
 *PowerShell 7* is required.
+
+Word export requires *PSWriteOffice 1.0.2 or later*. Older PSWriteOffice releases
+(including 0.2.0) are no longer supported. After updating PSWriteOffice, start a
+new PowerShell session so the new assemblies are loaded.
+Word export has been tested with PSWriteOffice 1.0.2 and 3.0.8.
 
 ### Basic Usage to create docx
 

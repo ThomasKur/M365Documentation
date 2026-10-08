@@ -52,7 +52,7 @@ PowerShellVersion = '7.0'
 
 # Modules that must be imported into the global environment prior to importing this module
 RequiredModules = @('MSAL.PS', 
-               'PSWriteOffice')
+               @{ ModuleName = 'PSWriteOffice'; ModuleVersion = '1.0.2' })
 
 # Assemblies that must be loaded prior to importing this module
 # RequiredAssemblies = @()
@@ -148,4 +148,3 @@ PrivateData = @{
 # DefaultCommandPrefix = ''
 
 }
-

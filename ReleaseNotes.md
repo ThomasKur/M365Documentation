@@ -2,6 +2,12 @@
 
 ## 3.7.0
 
+- Skip empty or whitespace-only section and object headings in Word export while preserving their content.
+- Resolve transposed Word object headings from displayName, Display Name, M_DisplayName, or M_Display Name, skipping titles that duplicate the section heading.
+- Skip absent nested sections during documentation optimization, matching the existing top-level behavior when collectors return no data.
+- Fix #85: Update Word export to the PSWriteOffice 1.0.2 API and require version 1.0.2 or later. Remove the concrete Word document parameter type dependency. Older PSWriteOffice versions are no longer supported; restart PowerShell after upgrading.
+- Enforce the PSWriteOffice minimum version for direct module-script imports and load the manifest in local test scripts so dependency checks cannot be bypassed.
+- Support PSWriteOffice 3.0.8 as well as 1.0.2 by updating the table of contents through the shared document API rather than the renamed cmdlet.
 - Fix #88: Add User.Read.All, AuditLog.Read.All and Policy.Read.PermissionGrant application permissions for guest sign-in activity and Consent Governance documentation.
 - Request both delegated and application permissions where available in New-M365DocAppRegistration using the live Graph permission catalog, validate that every required permission resolves, and fix application role consent assignment. Warn when permissions resolve only as delegated and cannot be used by app-only tokens.
 - Existing app registrations must have the missing application permissions added and admin consent granted, followed by acquiring a new token; they are not automatically updated.

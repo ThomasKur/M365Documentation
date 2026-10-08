@@ -1,7 +1,7 @@
 $scriptPath = split-path -parent $MyInvocation.MyCommand.Definition
-import-module "$scriptPath\M365Documentation\M365Documentation.psm1" -force 
+Import-Module "$scriptPath\M365Documentation\M365Documentation.psd1" -Force -ErrorAction Stop
 Connect-M365Doc -Force
-$doc = Get-M365Doc -Components @("AzureAD") -ExcludeSections @("MobileAppDetailed","MobileApp")
+$doc = Get-M365Doc -Components @("AzureAD","Intune","CloudPrint","InformationProtection") -ExcludeSections @("MobileAppDetailed","MobileApp")
 
 $doc | Write-M365DocWord -FullDocumentationPath "c:\temp\$($doc.CreationDate.ToString("yyyyMMddHHmm"))-WPNinjas-Doc.docx"
 #$doc | Write-M365DocJson -FullDocumentationPath "c:\temp\$($doc.CreationDate.ToString("yyyyMMddHHmm"))-WPNinjas-Doc.json"
@@ -18,4 +18,3 @@ $docnew | Write-M365DocMd -FullDocumentationPath "c:\temp\$($doc.CreationDate.To
 #$docnew = $bkp | Optimize-M365Doc -UseTranslationFiles -UseCamelCase -ExcludeProperties @("id","@odata.type") 
 #$docnew | Write-M365DocWord -FullDocumentationPath "c:\temp\$($doc.CreationDate.ToString("yyyyMMddHHmm"))-WPNinjas-Doc-Translated.docx"
 Write-Host "Created Documentation"
-

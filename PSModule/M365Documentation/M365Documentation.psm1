@@ -42,11 +42,14 @@ if($PSModuleMSAL){
 }
 
 $PSModulePSWriteOffice = Get-Module -Name PSWriteOffice
+if ($PSModulePSWriteOffice | Where-Object { $_.Version -lt [version]'1.0.2' }) {
+    throw "PSWriteOffice older than 1.0.2 is already loaded. Install PSWriteOffice 1.0.2 or later and restart PowerShell before importing M365Documentation."
+}
 if($PSModulePSWriteOffice){
     Write-Verbose -Message "PSWriteOffice PowerShell module is loaded."
 } else {
     Write-Warning -Message "PSWriteOffice PowerShell module is not loaded, trying to import it."
-    Import-Module -Name PSWriteOffice -ErrorAction Stop
+    Import-Module -Name PSWriteOffice -MinimumVersion 1.0.2 -ErrorAction Stop
 }
 
 # Class definition

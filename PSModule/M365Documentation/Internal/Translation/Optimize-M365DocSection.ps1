@@ -56,7 +56,9 @@ Function Optimize-M365DocSection(){
         ########################################################
 
         foreach($Section2 in $Section.SubSections){
-            $DataNew.SubSections += Optimize-M365DocSection -Section $Section2 -UseTranslationFiles:$UseTranslationFiles -UseCamelCase:$UseCamelCase -MaxStringLengthSettings $MaxStringLengthSettings -ExcludeEmptyValues:$ExcludeEmptyValues -ExcludeValues:$ExcludeValues -ExcludeProperties $ExcludeProperties
+            if($Section2){
+                $DataNew.SubSections += Optimize-M365DocSection -Section $Section2 -UseTranslationFiles:$UseTranslationFiles -UseCamelCase:$UseCamelCase -MaxStringLengthSettings $MaxStringLengthSettings -ExcludeEmptyValues:$ExcludeEmptyValues -ExcludeValues:$ExcludeValues -ExcludeProperties $ExcludeProperties
+            }
         }
 
         foreach($Object in $Section.Objects){

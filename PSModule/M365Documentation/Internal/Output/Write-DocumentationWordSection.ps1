@@ -11,32 +11,42 @@ Function Write-DocumentationWordSection(){
     NAME: Thomas Kurth / 3.3.2021
     #>
     param(
-        [OfficeIMO.Word.WordDocument]$WordDocument,
+        [Parameter(Mandatory)]
+        [ValidateNotNull()]
+        $WordDocument,
         [DocSection]$Data,
         [int]$Level = 1
     )
     
     if($Data.Objects -or $Data.SubSections){
-        New-OfficeWordText -Document $WordDocument -Style "Heading$Level" -Text $Data.Title
+        if(-not [string]::IsNullOrWhiteSpace($Data.Title)){
+            $paragraph = $WordDocument.AddParagraph($Data.Title)
+            $paragraph.Style = "Heading$Level"
+        }
         if($Data.Text){
-            New-OfficeWordText -Document $WordDocument -Text $Data.Text
+            $WordDocument.AddParagraph($Data.Text) | Out-Null
         }
         if($Data.Objects -and $Data.Objects.Count -gt 0){
             
             if($Data.Transpose){
                 foreach($singleObj in $Data.Objects){
-                    if($singleObj.displayName -ne $Data.Title -and $Data.Title -ne $singleObj.'Display Name'){
-                        New-OfficeWordText -Document $WordDocument -Style "Heading$($Level + 1)" -Text $singleObj.displayName
+                    $objectTitle = $null
+                    foreach($propertyName in @('displayName', 'Display Name', 'M_DisplayName', 'M_Display Name')){
+                        $candidateTitle = [string]$singleObj.$propertyName
+                        if(-not [string]::IsNullOrWhiteSpace($candidateTitle)){
+                            $objectTitle = $candidateTitle
+                            break
+                        }
                     }
-                    $table = New-OfficeWordTable -Document $WordDocument -DataTable ($singleObj | Invoke-TransposeObject) -Style GridTable4Accent3
-                    $table.Width = 5000
-                    $table.WidthType = "Pct"
+                    if(-not [string]::IsNullOrWhiteSpace($objectTitle) -and $objectTitle -ne $Data.Title){
+                        $paragraph = $WordDocument.AddParagraph($objectTitle)
+                        $paragraph.Style = "Heading$($Level + 1)"
+                    }
+                    Write-DocumentationWordTable -WordDocument $WordDocument -Objects ($singleObj | Invoke-TransposeObject)
                 }
                 
             } else {
-                $table = New-OfficeWordTable -Document $WordDocument -DataTable $Data.Objects -Style GridTable4Accent3 
-                $table.Width = 5000
-                $table.WidthType = "Pct"
+                Write-DocumentationWordTable -WordDocument $WordDocument -Objects $Data.Objects
             }
             
         }

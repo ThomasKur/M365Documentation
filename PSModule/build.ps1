@@ -51,7 +51,7 @@ switch ($result) {
         Update-ModuleManifest -Path "$ModulePath\M365Documentation.psd1" `
             -FunctionsToExport $ExportableFunctions `
             -ReleaseNotes $ReleaseNote `
-            -RequiredModules @("MSAL.PS","PSWriteOffice") `
+            -RequiredModules @("MSAL.PS", @{ ModuleName = "PSWriteOffice"; ModuleVersion = "1.0.2" }) `
             -IconUri $Icon `
             -ModuleVersion $SuggestedNewVersion`
             -LicenseUri $License `
@@ -62,7 +62,7 @@ switch ($result) {
         Update-ModuleManifest -Path "$ModulePath\M365Documentation.psd1" `
             -FunctionsToExport $ExportableFunctions `
             -ReleaseNotes $ReleaseNote `
-            -RequiredModules @("MSAL.PS","PSWriteOffice") `
+            -RequiredModules @("MSAL.PS", @{ ModuleName = "PSWriteOffice"; ModuleVersion = "1.0.2" }) `
             -IconUri $Icon `
             -ModuleVersion $CurrentVersion`
             -LicenseUri $License`
