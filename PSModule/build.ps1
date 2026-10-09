@@ -45,34 +45,29 @@ $SuggestedNewVersion = [Version]::new($CurrentVersion.Major,$CurrentVersion.Mino
 $title = "Increment Version" 
 $message = "Would you like to increase Module Version from $($CurrentVersion) to $($SuggestedNewVersion)?"
 $result = $host.ui.PromptForChoice($title, $message, $options, 1)
+$ManifestParameters = @{
+    Path = "$ModulePath\M365Documentation.psd1"
+    FunctionsToExport = $ExportableFunctions
+    ReleaseNotes = $ReleaseNote
+    RequiredModules = @("MSAL.PS", @{ ModuleName = "PSWriteOffice"; ModuleVersion = "1.0.2" })
+    IconUri = $Icon
+    LicenseUri = $License
+    ExternalModuleDependencies = @("MSAL.PS","PSWriteOffice")
+}
 switch ($result) {
     0{
-        Write-Information "You selected yes to increase the version. Updating Mnaifest..."
-        Update-ModuleManifest -Path "$ModulePath\M365Documentation.psd1" `
-            -FunctionsToExport $ExportableFunctions `
-            -ReleaseNotes $ReleaseNote `
-            -RequiredModules @("MSAL.PS", @{ ModuleName = "PSWriteOffice"; ModuleVersion = "1.0.2" }) `
-            -IconUri $Icon `
-            -ModuleVersion $SuggestedNewVersion`
-            -LicenseUri $License `
-            -ExternalModuleDependencies @("MSAL.PS","PSWriteOffice")  
+        Write-Information "You selected yes to increase the version. Updating manifest..."
+        $ManifestParameters.ModuleVersion = $SuggestedNewVersion
     }
     1{
         Write-Host "You selected no. The version will not be increased."
-        Update-ModuleManifest -Path "$ModulePath\M365Documentation.psd1" `
-            -FunctionsToExport $ExportableFunctions `
-            -ReleaseNotes $ReleaseNote `
-            -RequiredModules @("MSAL.PS", @{ ModuleName = "PSWriteOffice"; ModuleVersion = "1.0.2" }) `
-            -IconUri $Icon `
-            -ModuleVersion $CurrentVersion`
-            -LicenseUri $License`
-            -ExternalModuleDependencies @("MSAL.PS","PSWriteOffice") 
-        
+        $ManifestParameters.ModuleVersion = $CurrentVersion
     }
     2{
         Write-Error "Canceled Publishing Process" -ErrorAction Stop
     }
 }
+Update-ModuleManifest @ManifestParameters
 Test-ModuleManifest -Path "$ModulePath\M365Documentation.psd1" -ErrorAction Stop
 #endregion
 

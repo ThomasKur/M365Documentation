@@ -1,6 +1,6 @@
 # Release Notes
 
-## 3.7.0
+## 3.7.0 - 09.10.2026
 
 - Skip empty or whitespace-only section and object headings in Word export while preserving their content.
 - Resolve transposed Word object headings from displayName, Display Name, M_DisplayName, or M_Display Name, skipping titles that duplicate the section heading.
@@ -16,6 +16,8 @@
 - Fix CAE endpoint 404 error as feature is no longer a seperate API endpoint
 - Fix Cloud Print printer subsection titles being executed as commands instead of strings.
 - Replace the retired Information Protection labels endpoint with the beta sensitivity labels API, using organization labels for app-only authentication and user labels for interactive authentication. Request InformationProtectionPolicy.Read for delegated access and skip unsupported US Government clouds with a warning.
+- Add a Copilot component for Copilot policy settings, admin limited mode, and agent identity blueprints with communication configuration.
+- Add AgentIdentityBlueprint.Read.All and AgentCommunicationConfiguration.ReadWrite.All to the application registration permissions for agent identity blueprint documentation.
 
 ## 3.6.0 15.03.2026
 

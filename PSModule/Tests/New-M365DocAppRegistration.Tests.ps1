@@ -17,7 +17,8 @@ BeforeAll {
     function Get-MgContext {}
 
     $script:requiredNames = @(
-        'AccessReview.Read.All', 'Agreement.Read.All', 'AppCatalog.Read.All', 'Application.Read.All',
+        'AccessReview.Read.All', 'Agreement.Read.All', 'AgentCommunicationConfiguration.ReadWrite.All',
+        'AgentIdentityBlueprint.Read.All', 'AppCatalog.Read.All', 'Application.Read.All',
         'AuditLog.Read.All', 'CloudPC.Read.All', 'ConsentRequest.Read.All', 'Device.Read.All',
         'DeviceManagementApps.Read.All', 'DeviceManagementConfiguration.Read.All',
         'DeviceManagementManagedDevices.Read.All', 'DeviceManagementRBAC.Read.All',

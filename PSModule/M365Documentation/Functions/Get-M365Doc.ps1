@@ -47,6 +47,10 @@ Function Get-M365Doc(){
 
         CloudPrint CPConnector
         CloudPrint 
+
+        Copilot CopilotPolicySetting
+        Copilot CopilotAdminLimitedMode
+        Copilot CopilotAgentIdentityBlueprint
         
         InformationProtection MIPLabel
 
@@ -101,6 +105,10 @@ Function Get-M365Doc(){
 
         CloudPrint CPConnector
         CloudPrint 
+
+        Copilot CopilotPolicySetting
+        Copilot CopilotAdminLimitedMode
+        Copilot CopilotAgentIdentityBlueprint
         
         InformationProtection MIPLabel
 
