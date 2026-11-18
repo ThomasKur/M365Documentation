@@ -163,8 +163,11 @@ Function Invoke-DocGraph(){
             return $null
         } elseif($caughtError.Exception.Response.StatusCode -eq "Forbidden"){
             Write-Warning "Forbidden: Used application does not have sufficient permission to access. FullUrl: '$FullUrl'" -WarningAction Continue
+            # $value still holds the caught ErrorRecord here; returning it would put the error object into the documentation.
+            return $null
         } elseif ($caughtError.Exception.Response.StatusCode -eq "Unauthorized"){
             Write-Warning "Unauthorized: The most common cause is an invalid, missing, or expired access token in the HTTP request header. It might also be a missing license assignment. FullUrl: '$FullUrl'" -WarningAction Continue
+            return $null
         # --- CHANGED: use $BaseUrl instead of hard-coded commercial URLs for NotFound checks ---
         } elseif ($caughtError.Exception.Response.StatusCode -eq "NotFound" -and $_.Exception.Response.ResponseUri -like ("{0}v1.0/groups*" -f $BaseUrl)){
             Write-Verbose "NotFound: Some Profiles/Apps are assigned to groups which do no longer exist. They are not displayed in the output $($_.Exception.Response.ResponseUri). FullUrl: '$FullUrl'" 
