@@ -38,8 +38,17 @@ Function Connect-M365Doc(){
     You can pass a token you have aquired seperately via Get-MsalToken. You have to make sure, that this token has all required scopes included.
 .EXAMPLE PublicClient-Silent
     Connect-M365Doc -ClientId '00000000-0000-0000-0000-000000000000' -ClientSecret (ConvertTo-SecureString 'SuperSecretString' -AsPlainText -Force) -TenantId '00000000-0000-0000-0000-000000000000'
-    
+
     Get token based on the submitted information. You can creat the app registration in your tenant by using the New-DocumentationAppRegistration command.
+
+.EXAMPLE
+    Connect-MgGraph -Scopes 'Directory.Read.All','DeviceManagementConfiguration.Read.All'
+    # ... caller extracts the raw bearer token from the MgGraph session ...
+    Connect-M365Doc -AccessToken $rawBearer -TokenExpiresOn (Get-Date).AddMinutes(55)
+
+    Accept a raw bearer token the caller already has from Connect-MgGraph or
+    any other Graph session, so a workflow that has already signed in does not
+    need a second browser consent. MSAL.PS is not needed for this parameter set.
 #>
   
   param(
@@ -49,7 +58,9 @@ Function Connect-M365Doc(){
     [ValidateSet('Commercial','USGov','USGovDoD')]
     [string] $CloudEnvironment = 'Commercial',
     [parameter(Mandatory=$true, ParameterSetName='CustomToken')]
-    [Microsoft.Identity.Client.AuthenticationResult]$token,
+    # Typed by name so calling with -AccessToken does not require MSAL.PS to be loaded.
+    [ValidateScript({ $_.GetType().FullName -eq 'Microsoft.Identity.Client.AuthenticationResult' })]
+    [object]$token,
     [parameter(Mandatory=$true, ParameterSetName='PublicClient-Silent')]
     [CmdletBinding(DefaultParameterSetName = 'Interactive-Custom')]
     [guid]$ClientID,
@@ -62,7 +73,16 @@ Function Connect-M365Doc(){
     [parameter(Mandatory=$false, ParameterSetName='PublicClient-Silent')]
     [switch]$NeverRefreshToken,
     [parameter(Mandatory=$false, ParameterSetName='Interactive')]
-    [switch]$Force
+    [switch]$Force,
+    # ---------- RawToken parameter set ----------
+    # Accept a raw bearer-token string the caller already owns (e.g. from
+    # Connect-MgGraph), avoiding a second browser consent. The token is used
+    # only for Graph calls via Invoke-DocGraph, which reads $script:token.AccessToken.
+    [parameter(Mandatory=$true, ParameterSetName='RawToken')]
+    [ValidateNotNullOrEmpty()]
+    [string]$AccessToken,
+    [parameter(Mandatory=$false, ParameterSetName='RawToken')]
+    [DateTime]$TokenExpiresOn = (Get-Date).AddMinutes(55)
   )
   # ---------- Map environment to endpoints ----------
   switch ($CloudEnvironment) {
@@ -76,7 +96,30 @@ Function Connect-M365Doc(){
   $script:M365Doc_CloudEnvironment = $CloudEnvironment
   $script:M365Doc_GraphBase        = $GraphBase
 
+  # Only the MSAL-based sign-in paths need MSAL.PS; a caller-supplied raw token does not.
+  if ($PSCmdlet.ParameterSetName -ne 'RawToken' -and -not (Get-Module -Name MSAL.PS)) {
+      Import-Module -Name MSAL.PS -ErrorAction Stop
+  }
+
   switch -Wildcard ($PSCmdlet.ParameterSetName) {
+      "RawToken" {
+          # Shim a raw bearer token into the shape the
+          # rest of the module expects: an object with .AccessToken (used by
+          # Invoke-DocGraph) and .ExpiresOn.LocalDateTime (used by
+          # Test-TokenExpiration). We do NOT refresh this token; the caller
+          # owns refresh. If it expires mid-run, Invoke-DocGraph will surface
+          # the 401 and the caller can re-acquire.
+          if ($TokenExpiresOn -le (Get-Date)) {
+              Write-Error "AccessToken already expired at $TokenExpiresOn; refresh and retry."
+              return
+          }
+          $script:token = [PSCustomObject]@{
+              AccessToken = $AccessToken
+              ExpiresOn   = [PSCustomObject]@{ LocalDateTime = $TokenExpiresOn }
+          }
+          Write-Verbose "RawToken accepted, expires: $TokenExpiresOn"
+          break
+      }
       "CustomToken" {
           # Verify token
           if ($token.ExpiresOn.LocalDateTime -le $(Get-Date)) {

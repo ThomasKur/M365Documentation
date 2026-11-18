@@ -33,14 +33,6 @@ ForEach ($folder in $functionFolders) {
 }
 
 
-$PSModuleMSAL = Get-Module -Name MSAL.PS
-if($PSModuleMSAL){
-    Write-Verbose -Message "MSAL.PS PowerShell module is loaded."
-} else {
-    Write-Warning -Message "MSAL.PS PowerShell module is not loaded, trying to import it."
-    Import-Module -Name MSAL.PS -ErrorAction Stop
-}
-
 $PSModulePSWriteOffice = Get-Module -Name PSWriteOffice
 if ($PSModulePSWriteOffice | Where-Object { $_.Version -lt [version]'1.0.2' }) {
     throw "PSWriteOffice older than 1.0.2 is already loaded. Install PSWriteOffice 1.0.2 or later and restart PowerShell before importing M365Documentation."

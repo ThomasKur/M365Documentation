@@ -51,8 +51,7 @@ PowerShellVersion = '7.0'
 # ProcessorArchitecture = ''
 
 # Modules that must be imported into the global environment prior to importing this module
-RequiredModules = @('MSAL.PS', 
-               @{ModuleName = 'PSWriteOffice'; ModuleVersion = '1.0.2'; })
+RequiredModules = @(@{ModuleName = 'PSWriteOffice'; ModuleVersion = '1.0.2'; })
 
 # Assemblies that must be loaded prior to importing this module
 # RequiredAssemblies = @()
